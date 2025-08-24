@@ -18,7 +18,7 @@ export async function updateUserProfile(formData: FormData) {
     height: formData.get('height') ? parseFloat(formData.get('height') as string) : null,
     weight: formData.get('weight') ? parseFloat(formData.get('weight') as string) : null,
     gender: formData.get('gender') as string,
-    activity_level: formData.get('activityLevel') as string,
+    activity_level: formData.get('activity_level') as string,
     dietery_preferences: formData.get('dietery_preferences') as string,
     preferred_cuisine: formData.get('preferredCuisine') as string,
     medical_conditions: formData.get('medicalConditions') as string,

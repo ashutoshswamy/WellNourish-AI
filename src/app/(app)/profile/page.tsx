@@ -60,9 +60,9 @@ export default async function ProfilePage() {
                 </Select>
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="activityLevel">Activity Level</Label>
-                <Select name="activityLevel" defaultValue={profile?.activity_level ?? ''}>
-                    <SelectTrigger id="activityLevel">
+                <Label htmlFor="activity_level">Activity Level</Label>
+                <Select name="activity_level" defaultValue={profile?.activity_level ?? ''}>
+                    <SelectTrigger id="activity_level">
                         <SelectValue placeholder="Select activity level" />
                     </SelectTrigger>
                     <SelectContent>
