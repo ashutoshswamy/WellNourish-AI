@@ -1,45 +1,18 @@
 # WellNourish AI
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) and configured for use with Firebase Studio.
+This is a [Next.js](https://nextjs.org/) project, bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) and configured for use with Firebase Studio.
 
-## Getting Started
+WellNourish AI is a modern wellness application that leverages the power of Artificial Intelligence to provide users with personalized diet and workout plans. It's built with a robust, modern tech stack designed for performance, scalability, and a great user experience.
 
-First, install the dependencies:
+## Features
 
-```bash
-npm install
-```
+- **AI-Powered Plans:** Utilizes Google's Gemini models via Genkit to generate custom diet and workout routines based on user profiles.
+- **User Authentication:** Secure user sign-up and login functionality powered by Supabase.
+- **Profile Management:** Allows users to create and update a detailed health profile to fine-tune AI recommendations.
+- **Plan Management:** Users can save, view, and manage their generated wellness plans.
+- **Responsive UI:** Built with ShadCN UI components and Tailwind CSS for a clean, modern, and responsive interface that works on all devices.
 
-Then, run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:9002](http://localhost:9002) with your browser to see the result.
-
-You can start editing the page by modifying `src/app/page.tsx`. The page auto-updates as you edit the file.
-
-This project also uses [Genkit](https://firebase.google.com/docs/genkit) for its AI capabilities. To run the Genkit flows in development, use the following command in a separate terminal:
-
-```bash
-npm run genkit:watch
-```
-
-## Environment Variables
-
-Create a `.env.local` file in the root of your project and add the necessary environment variables:
-
-```
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
-
-# Google AI
-GEMINI_API_KEY=YOUR_GEMINI_API_KEY
-```
-
-## Learn More
+## Technology Stack
 
 To learn more about the technologies used in this project, take a look at the following resources:
 
