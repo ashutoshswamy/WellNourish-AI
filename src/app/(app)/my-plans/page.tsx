@@ -120,13 +120,16 @@ export default async function MyPlansPage() {
           {plans && plans.length > 0 ? (
             <Accordion type="single" collapsible className="w-full">
               {plans.map((plan: any) => {
-                const isDiet = plan.type === 'diet' || plan.type === 'hybrid';
-                const isWorkout = plan.type === 'workout' || plan.type === 'hybrid';
+                const isDiet = plan.type === 'diet';
+                const isWorkout = plan.type === 'workout';
+                
                 return (
                   <AccordionItem value={String(plan.id)} key={plan.id}>
                     <AccordionTrigger className="text-lg font-body hover:no-underline">
                       <div className="flex items-center gap-4">
-                        {isDiet ? <Salad className="h-6 w-6 text-primary" /> : <Dumbbell className="h-6 w-6 text-primary" />}
+                        <div className="flex items-center gap-2">
+                          {isDiet ? <Salad className="h-6 w-6 text-primary" /> : <Dumbbell className="h-6 w-6 text-primary" />}
+                        </div>
                         <div className="text-left">
                           <span>{plan.name}</span>
                           <p className="text-sm text-muted-foreground font-normal">
@@ -134,15 +137,15 @@ export default async function MyPlansPage() {
                           </p>
                         </div>
                       </div>
-                      <Badge variant={plan.type === 'diet' ? 'default' : 'secondary'} className="capitalize">{plan.type}</Badge>
+                      <Badge variant={isDiet ? 'default' : 'secondary'} className="capitalize">{plan.type}</Badge>
                     </AccordionTrigger>
-                    <AccordionContent className="p-4 bg-muted/20 rounded-md space-y-4">
+                    <AccordionContent className="p-4 bg-muted/20 rounded-md space-y-6">
                       {isDiet && <DietPlanDisplay plan={plan.diet_plan_details} />}
                       {isWorkout && <WorkoutPlanDisplay plan={plan.workout_plan_details} />}
                       
                       {plan.health_tips && plan.health_tips.length > 0 && (
-                        <div>
-                          <h2 className="text-xl font-bold font-headline mt-4 border-t pt-4">Health Tips</h2>
+                        <div className="border-t pt-4">
+                          <h2 className="text-xl font-bold font-headline">Health Tips</h2>
                           <ul className="list-disc pl-5 space-y-1 mt-2 text-sm">
                             {plan.health_tips.map((tip: string, i: number) => <li key={i}>{tip}</li>)}
                           </ul>
