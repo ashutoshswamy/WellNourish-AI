@@ -69,18 +69,15 @@ export default function Home() {
         </section>
 
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-last md:order-first">
+          <div className="grid md:grid-cols-1 gap-12 items-center text-center">
+            <div>
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Nourish Your Body, Fuel Your Life.</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
+              <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
                 Our AI considers everything from your medical history to your taste in food to create a diet that's not just healthy, but also enjoyable. Say goodbye to restrictive, one-size-fits-all diets.
               </p>
               <Button asChild size="lg" className="mt-6">
                 <Link href="/login">Find Your Perfect Diet</Link>
               </Button>
-            </div>
-            <div>
-               <Image src="https://placehold.co/600x400.png" alt="Healthy food" width={600} height={400} className="rounded-lg shadow-xl" data-ai-hint="healthy food" />
             </div>
           </div>
         </section>
