@@ -5,7 +5,7 @@ import { generateCustomWorkoutPlan, type GenerateCustomWorkoutPlanInput } from '
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function createDietPlan(generationDetails: any) {
+export async function createDietPlan() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('User not authenticated')
@@ -18,18 +18,17 @@ export async function createDietPlan(generationDetails: any) {
     weight: profile?.weight,
     gender: profile?.gender,
     activityLevel: profile?.activity_level,
-    fitnessGoals: profile?.fitness_goals || 'General health',
     medicalConditions: profile?.medical_conditions,
-    dietaryPreferences: profile?.dietary_preferences,
+    dietaryPreferences: profile?.dietery_preferences, // Corrected typo in user schema
     preferredCuisine: profile?.preferred_cuisine,
     allergies: profile?.allergies,
   }
 
   const plan = await generatePersonalizedDietPlan(aiInput)
-  return plan
+  return { ...plan, profile_data: profile }
 }
 
-export async function createWorkoutPlan(generationDetails: any) {
+export async function createWorkoutPlan() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('User not authenticated')
@@ -37,16 +36,20 @@ export async function createWorkoutPlan(generationDetails: any) {
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
   const aiInput: GenerateCustomWorkoutPlanInput = {
-    fitnessGoals: profile?.fitness_goals || 'General fitness',
+    age: profile?.age,
+    height: profile?.height,
+    weight: profile?.weight,
+    gender: profile?.gender,
     activityLevel: profile?.activity_level || 'Sedentary',
     medicalConditions: profile?.medical_conditions,
+    allergies: profile?.allergies,
   }
 
   const plan = await generateCustomWorkoutPlan(aiInput)
-  return plan
+  return { ...plan, profile_data: profile }
 }
 
-export async function savePlan(planData: { diet_plan: string | null, workout_plan: string | null, health_tips: string | null, generation_details: any }) {
+export async function savePlan(planData: { diet_plan: string | null, workout_plan: string | null, health_tips: string | null, profile_data: any }) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -59,7 +62,7 @@ export async function savePlan(planData: { diet_plan: string | null, workout_pla
     diet_plan: planData.diet_plan,
     workout_plan: planData.workout_plan,
     health_tips: planData.health_tips,
-    generation_details: planData.generation_details,
+    profile_data: planData.profile_data,
   });
 
   if (error) {

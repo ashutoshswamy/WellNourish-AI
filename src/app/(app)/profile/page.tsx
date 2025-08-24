@@ -32,45 +32,68 @@ export default async function ProfilePage() {
         </CardHeader>
         <CardContent>
           <form action={updateUserProfile} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
-                <Input id="fullName" name="fullName" defaultValue={profile?.full_name ?? ''} />
+                <Label htmlFor="age">Age</Label>
+                <Input id="age" name="age" type="number" defaultValue={profile?.age ?? ''} />
               </div>
                <div className="space-y-2">
-                <Label htmlFor="fitnessLevel">Fitness Level</Label>
-                <Select name="fitnessLevel" defaultValue={profile?.fitness_level ?? 'Beginner'}>
-                  <SelectTrigger id="fitnessLevel">
-                    <SelectValue placeholder="Select fitness level" />
+                <Label htmlFor="height">Height (cm)</Label>
+                <Input id="height" name="height" type="number" step="0.1" defaultValue={profile?.height ?? ''} />
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor="weight">Weight (kg)</Label>
+                <Input id="weight" name="weight" type="number" step="0.1" defaultValue={profile?.weight ?? ''} />
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor="gender">Gender</Label>
+                <Select name="gender" defaultValue={profile?.gender ?? ''}>
+                  <SelectTrigger id="gender">
+                    <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Beginner">Beginner</SelectItem>
-                    <SelectItem value="Intermediate">Intermediate</SelectItem>
-                    <SelectItem value="Advanced">Advanced</SelectItem>
+                    <SelectItem value="Male">Male</SelectItem>
+                    <SelectItem value="Female">Female</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                    <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
                   </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="activityLevel">Activity Level</Label>
+                <Select name="activityLevel" defaultValue={profile?.activity_level ?? ''}>
+                    <SelectTrigger id="activityLevel">
+                        <SelectValue placeholder="Select activity level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Sedentary">Sedentary (little or no exercise)</SelectItem>
+                        <SelectItem value="Lightly active">Lightly active (light exercise/sports 1-3 days/week)</SelectItem>
+                        <SelectItem value="Moderately active">Moderately active (moderate exercise/sports 3-5 days/week)</SelectItem>
+                        <SelectItem value="Very active">Very active (hard exercise/sports 6-7 days a week)</SelectItem>
+                        <SelectItem value="Extra active">Extra active (very hard exercise/sports & physical job)</SelectItem>
+                    </SelectContent>
                 </Select>
               </div>
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="goals">Health & Fitness Goals</Label>
-              <Textarea id="goals" name="goals" placeholder="e.g., Lose 10 pounds, build muscle, improve cardio..." defaultValue={profile?.goals ?? ''} />
+              <Label htmlFor="dietaryPreferences">Dietary Preferences</Label>
+              <Textarea id="dietaryPreferences" name="dietaryPreferences" placeholder="e.g., Vegetarian, Vegan, Gluten-Free, prefer quick meals, dislike spicy food." defaultValue={profile?.dietery_preferences ?? ''} />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="healthProfile">Health Profile</Label>
-              <Textarea id="healthProfile" name="healthProfile" placeholder="Include any relevant medical history, lifestyle details (e.g., sedentary job), allergies, and dietary restrictions." defaultValue={profile?.health_profile ?? ''}/>
-              <p className="text-sm text-muted-foreground">This information is kept confidential and is only used to personalize your plans.</p>
+              <Label htmlFor="preferredCuisine">Preferred Cuisine</Label>
+              <Textarea id="preferredCuisine" name="preferredCuisine" placeholder="e.g., I love Mediterranean food, Mexican, Italian." defaultValue={profile?.preferred_cuisine ?? ''}/>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="preferences">Dietary Preferences</Label>
-              <Textarea id="preferences" name="preferences" placeholder="e.g., I love Mediterranean food, prefer quick meals, dislike spicy food." defaultValue={profile?.preferences ?? ''}/>
+              <Label htmlFor="medicalConditions">Medical Conditions</Label>
+              <Textarea id="medicalConditions" name="medicalConditions" placeholder="Please list any medical conditions, e.g., diabetes, high blood pressure, etc." defaultValue={profile?.medical_conditions ?? ''}/>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="equipment">Available Equipment</Label>
-              <Textarea id="equipment" name="equipment" placeholder="e.g., Dumbbells, resistance bands, treadmill, or 'bodyweight only'." defaultValue={profile?.equipment ?? ''}/>
+              <Label htmlFor="allergies">Allergies</Label>
+              <Textarea id="allergies" name="allergies" placeholder="Please list any food allergies, e.g., peanuts, shellfish, etc." defaultValue={profile?.allergies ?? ''}/>
             </div>
 
             <div className="flex justify-end">

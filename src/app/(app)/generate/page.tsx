@@ -7,14 +7,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Loader2, Save, WandSparkles } from 'lucide-react'
 import { Markdown } from '@/components/Markdown'
 import { useToast } from '@/hooks/use-toast'
-import type { GeneratePersonalizedDietPlanOutput } from '@/ai/flows/generate-personalized-diet-plan'
-import type { GenerateCustomWorkoutPlanOutput } from '@/ai/flows/generate-custom-workout-plan'
 
 type PlanResult = {
   dietPlan?: string | null
   workoutPlan?: string | null
   healthTips?: string | null
-  generationDetails?: any
+  profile_data?: any
 } | null
 
 export default function GeneratePage() {
@@ -28,10 +26,9 @@ export default function GeneratePage() {
     startTransition(async () => {
       setGeneratedPlan(null)
       setGenerationType('diet');
-      const generationDetails = { type: 'diet' };
-      const result = await createDietPlan(generationDetails)
+      const result = await createDietPlan()
       if (result.dietPlan) {
-        setGeneratedPlan({ dietPlan: result.dietPlan, healthTips: result.healthTips, generationDetails })
+        setGeneratedPlan({ dietPlan: result.dietPlan, healthTips: result.healthTips, profile_data: result.profile_data })
       } else {
         toast({
           variant: "destructive",
@@ -47,10 +44,9 @@ export default function GeneratePage() {
     startTransition(async () => {
       setGeneratedPlan(null)
       setGenerationType('workout');
-      const generationDetails = { type: 'workout' };
-      const result = await createWorkoutPlan(generationDetails)
+      const result = await createWorkoutPlan()
       if (result.workoutPlan) {
-        setGeneratedPlan({ workoutPlan: result.workoutPlan, generationDetails })
+        setGeneratedPlan({ workoutPlan: result.workoutPlan, profile_data: result.profile_data })
       } else {
         toast({
           variant: "destructive",
@@ -70,7 +66,7 @@ export default function GeneratePage() {
             diet_plan: generatedPlan.dietPlan || null,
             workout_plan: generatedPlan.workoutPlan || null,
             health_tips: generatedPlan.healthTips || null,
-            generation_details: generatedPlan.generationDetails,
+            profile_data: generatedPlan.profile_data,
         });
         if (result.success) {
             toast({ title: "Plan Saved!", description: "Your plan has been saved to 'My Plans'." })

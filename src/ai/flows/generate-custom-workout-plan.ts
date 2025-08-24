@@ -11,7 +11,10 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GenerateCustomWorkoutPlanInputSchema = z.object({
-  fitnessGoals: z.string().describe('The user fitness goals.'),
+  age: z.number().optional().describe('The age of the user.'),
+  height: z.number().optional().describe('The height of the user in centimeters.'),
+  weight: z.number().optional().describe('The weight of the user in kilograms.'),
+  gender: z.string().optional().describe('The gender of the user.'),
   activityLevel: z
     .string()
     .describe(
@@ -21,6 +24,7 @@ const GenerateCustomWorkoutPlanInputSchema = z.object({
     .string()
     .optional()
     .describe('Any medical conditions the user has.'),
+  allergies: z.string().optional().describe('Any allergies the user has.'),
 });
 export type GenerateCustomWorkoutPlanInput = z.infer<
   typeof GenerateCustomWorkoutPlanInputSchema
@@ -45,11 +49,15 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateCustomWorkoutPlanOutputSchema},
   prompt: `You are a personal trainer who creates workout plans.
 
-Create a custom workout plan based on the user's fitness goals and activity level. Consider any medical conditions provided.
+Create a custom workout plan based on the user's profile. Consider any medical conditions provided.
 
-- Fitness Goals: {{{fitnessGoals}}}
+- Age: {{age}}
+- Height: {{height}} cm
+- Weight: {{weight}} kg
+- Gender: {{gender}}
 - Activity Level: {{{activityLevel}}}
 - Medical Conditions: {{{medicalConditions}}}
+- Allergies: {{{allergies}}}
 
 Provide a detailed workout plan.`,
 });
