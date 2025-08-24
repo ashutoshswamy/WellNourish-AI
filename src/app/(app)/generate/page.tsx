@@ -4,42 +4,34 @@ import React, { useState, useTransition } from 'react'
 import { createDietPlan, createWorkoutPlan, savePlan } from '@/app/actions/plans'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Loader2, Save } from 'lucide-react'
+import { Loader2, Save, WandSparkles } from 'lucide-react'
 import { Markdown } from '@/components/Markdown'
 import { useToast } from '@/hooks/use-toast'
 import type { GeneratePersonalizedDietPlanOutput } from '@/ai/flows/generate-personalized-diet-plan'
 import type { GenerateCustomWorkoutPlanOutput } from '@/ai/flows/generate-custom-workout-plan'
 
 type PlanResult = {
-  type: 'diet' | 'workout'
-  content: string
+  dietPlan?: string | null
+  workoutPlan?: string | null
+  healthTips?: string | null
+  generationDetails?: any
 } | null
 
 export default function GeneratePage() {
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
 
-  // Diet Plan State
-  const [dietPreferences, setDietPreferences] = useState('')
-  const [dietGoals, setDietGoals] = useState('')
-
-  // Workout Plan State
-  const [workoutFitnessLevel, setWorkoutFitnessLevel] = useState('Beginner')
-  const [workoutGoals, setWorkoutGoals] = useState('')
-  const [workoutEquipment, setWorkoutEquipment] = useState('')
-
   const [generatedPlan, setGeneratedPlan] = useState<PlanResult>(null)
+  const [generationType, setGenerationType] = useState<'diet' | 'workout' | null>(null);
 
   const handleGenerateDietPlan = () => {
     startTransition(async () => {
       setGeneratedPlan(null)
-      const result = await createDietPlan({ preferences: dietPreferences, goals: dietGoals })
+      setGenerationType('diet');
+      const generationDetails = { type: 'diet' };
+      const result = await createDietPlan(generationDetails)
       if (result.dietPlan) {
-        setGeneratedPlan({ type: 'diet', content: result.dietPlan })
+        setGeneratedPlan({ dietPlan: result.dietPlan, healthTips: result.healthTips, generationDetails })
       } else {
         toast({
           variant: "destructive",
@@ -47,15 +39,18 @@ export default function GeneratePage() {
           description: "Could not generate diet plan. Please try again.",
         })
       }
+      setGenerationType(null);
     })
   }
 
   const handleGenerateWorkoutPlan = () => {
     startTransition(async () => {
       setGeneratedPlan(null)
-      const result = await createWorkoutPlan({ fitnessLevel: workoutFitnessLevel, goals: workoutGoals, equipment: workoutEquipment })
+      setGenerationType('workout');
+      const generationDetails = { type: 'workout' };
+      const result = await createWorkoutPlan(generationDetails)
       if (result.workoutPlan) {
-        setGeneratedPlan({ type: 'workout', content: result.workoutPlan })
+        setGeneratedPlan({ workoutPlan: result.workoutPlan, generationDetails })
       } else {
         toast({
           variant: "destructive",
@@ -63,6 +58,7 @@ export default function GeneratePage() {
           description: "Could not generate workout plan. Please try again.",
         })
       }
+      setGenerationType(null);
     })
   }
 
@@ -70,90 +66,57 @@ export default function GeneratePage() {
     if (!generatedPlan) return;
 
     startTransition(async () => {
-        const planName = prompt(`Enter a name for your ${generatedPlan.type} plan:`, `My ${generatedPlan.type} plan - ${new Date().toLocaleDateString()}`)
-        if (planName) {
-            const result = await savePlan({ name: planName, type: generatedPlan.type, content: generatedPlan.content })
-            if (result.success) {
-                toast({ title: "Plan Saved!", description: "Your plan has been saved to 'My Plans'." })
-            } else {
-                toast({ variant: "destructive", title: "Error Saving Plan", description: result.error })
-            }
+        const result = await savePlan({
+            diet_plan: generatedPlan.dietPlan || null,
+            workout_plan: generatedPlan.workoutPlan || null,
+            health_tips: generatedPlan.healthTips || null,
+            generation_details: generatedPlan.generationDetails,
+        });
+        if (result.success) {
+            toast({ title: "Plan Saved!", description: "Your plan has been saved to 'My Plans'." })
+        } else {
+            toast({ variant: "destructive", title: "Error Saving Plan", description: result.error })
         }
     });
   }
+
+  const isGenerating = isPending && generationType !== null;
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">Generate Your Plan</h1>
         <p className="text-muted-foreground mt-1">
-          Use our AI to create personalized diet and workout plans in seconds.
+          Use our AI to create personalized diet and workout plans based on your profile.
         </p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Tabs defaultValue="diet" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="diet">Diet Plan</TabsTrigger>
-            <TabsTrigger value="workout">Workout Plan</TabsTrigger>
-          </TabsList>
-          <TabsContent value="diet">
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-headline">AI Dietitian</CardTitle>
-                <CardDescription>Describe your preferences and goals for a custom meal plan.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="diet-preferences">Dietary Preferences & Restrictions</Label>
-                  <Textarea id="diet-preferences" value={dietPreferences} onChange={(e) => setDietPreferences(e.target.value)} placeholder="e.g., Vegan, gluten-free, love Italian food, quick 30-min meals..." />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="diet-goals">Diet Goals</Label>
-                  <Textarea id="diet-goals" value={dietGoals} onChange={(e) => setDietGoals(e.target.value)} placeholder="e.g., Weight loss, muscle gain, more energy..." />
-                </div>
-                <Button onClick={handleGenerateDietPlan} disabled={isPending || !dietPreferences || !dietGoals} className="w-full">
-                  {isPending && !generatedPlan ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  Generate Diet Plan
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="workout">
-            <Card>
-              <CardHeader>
-                <CardTitle className="font-headline">AI Personal Trainer</CardTitle>
-                <CardDescription>Tell us about your fitness level and goals for a tailored workout.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                 <div className="space-y-2">
-                    <Label htmlFor="fitness-level">Fitness Level</Label>
-                    <Select value={workoutFitnessLevel} onValueChange={setWorkoutFitnessLevel}>
-                      <SelectTrigger id="fitness-level">
-                        <SelectValue placeholder="Select your fitness level" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Beginner">Beginner</SelectItem>
-                        <SelectItem value="Intermediate">Intermediate</SelectItem>
-                        <SelectItem value="Advanced">Advanced</SelectItem>
-                      </SelectContent>
-                    </Select>
-                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="workout-goals">Workout Goals</Label>
-                  <Textarea id="workout-goals" value={workoutGoals} onChange={(e) => setWorkoutGoals(e.target.value)} placeholder="e.g., Build chest muscle, improve running endurance, 30-day weight loss challenge..." />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="workout-equipment">Available Equipment</Label>
-                  <Textarea id="workout-equipment" value={workoutEquipment} onChange={(e) => setWorkoutEquipment(e.target.value)} placeholder="e.g., Full gym access, dumbbells and bench, resistance bands, bodyweight only..." />
-                </div>
-                <Button onClick={handleGenerateWorkoutPlan} disabled={isPending || !workoutGoals || !workoutEquipment} className="w-full">
-                  {isPending && !generatedPlan ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  Generate Workout Plan
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        <div className="space-y-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-headline">AI Dietitian</CardTitle>
+              <CardDescription>Generates a meal plan based on your profile data.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={handleGenerateDietPlan} disabled={isGenerating} className="w-full">
+                {isGenerating && generationType === 'diet' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <WandSparkles />}
+                Generate Diet Plan
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-headline">AI Personal Trainer</CardTitle>
+              <CardDescription>Creates a workout routine tailored to your goals.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={handleGenerateWorkoutPlan} disabled={isGenerating} className="w-full">
+                {isGenerating && generationType === 'workout' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <WandSparkles />}
+                Generate Workout Plan
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
         
         <div className="lg:col-span-1">
           <Card className="sticky top-20">
@@ -170,18 +133,27 @@ export default function GeneratePage() {
               )}
             </CardHeader>
             <CardContent className="min-h-[400px] max-h-[60vh] overflow-y-auto">
-              {isPending && (
+              {isGenerating && (
                 <div className="flex flex-col items-center justify-center h-full">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  <p className="mt-4 text-muted-foreground">Generating your plan...</p>
+                  <p className="mt-4 text-muted-foreground">Generating your {generationType} plan...</p>
                 </div>
               )}
-              {generatedPlan && (
-                <Markdown content={generatedPlan.content} />
+              {generatedPlan?.dietPlan && (
+                <Markdown content={generatedPlan.dietPlan} />
               )}
-              {!isPending && !generatedPlan && (
+              {generatedPlan?.workoutPlan && (
+                <Markdown content={generatedPlan.workoutPlan} />
+              )}
+               {generatedPlan?.healthTips && (
+                <>
+                    <h2 className="text-xl font-bold mt-4 font-headline">Health Tips</h2>
+                    <Markdown content={generatedPlan.healthTips} />
+                </>
+              )}
+              {!isGenerating && !generatedPlan && (
                 <div className="flex flex-col items-center justify-center h-full text-center">
-                  <p className="text-muted-foreground">Fill out the form on the left and click "Generate" to see your personalized plan.</p>
+                  <p className="text-muted-foreground">Click a "Generate" button to create a personalized plan.</p>
                 </div>
               )}
             </CardContent>
