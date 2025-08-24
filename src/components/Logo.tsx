@@ -2,10 +2,36 @@ import type { SVGProps } from 'react';
 
 export function Logo(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path d="M50 95C74.8528 95 95 74.8528 95 50C95 25.1472 74.8528 5 50 5C25.1472 5 5 25.1472 5 50C5 74.8528 25.1472 95 50 95Z" fill="currentColor" fillOpacity="0.1"/>
-      <path d="M39.1431 69.9999C44.4721 72.8447 50.8385 73.6558 56.8571 72.1428M39.1431 69.9999C35.1979 69.052 31.6247 67.2443 28.8574 64.7142C23.5717 59.8571 22.1431 51.4285 25.7145 45.2856C29.2859 39.1428 37.1431 36.4285 43.5717 38.5713C50.0002 40.7142 54.2859 46.5713 54.2859 52.8571C54.2859 58.7142 51.4288 64.2856 46.8574 68.1428" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M60.8569 30.0001C55.5279 27.1553 49.1615 26.3442 43.1429 27.8572M60.8569 30.0001C64.8021 30.948 68.3753 32.7557 71.1426 35.2858C76.4283 40.1429 77.8569 48.5715 74.2855 54.7144C70.7141 60.8572 62.8569 63.5715 56.4283 61.4287C50.0002 59.2858 45.7141 53.4287 45.7141 47.1429C45.7141 41.2858 48.5712 35.7144 53.1426 31.8572" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg
+      width="100"
+      height="100"
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M50 95C74.8528 95 95 74.8528 95 50C95 25.1472 74.8528 5 50 5C25.1472 5 5 25.1472 5 50C5 74.8528 25.1472 95 50 95Z"
+        className="text-primary"
+        fill="currentColor"
+        fillOpacity="0.1"
+      />
+      <path
+        d="M62.5 37.5C62.5 40.8152 61.183 43.9946 58.8388 46.3388C56.4946 48.683 53.3152 50 50 50C46.6848 50 43.5054 48.683 41.1612 46.3388C38.817 43.9946 37.5 40.8152 37.5 37.5C37.5 29.2222 43.0556 25 50 25C56.9444 25 62.5 29.2222 62.5 37.5Z"
+        className="text-primary"
+        stroke="currentColor"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M27.7778 75C31.5647 64.8611 40.0518 58.0556 50 58.0556C59.9482 58.0556 68.4353 64.8611 72.2222 75"
+        className="text-primary"
+        stroke="currentColor"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
