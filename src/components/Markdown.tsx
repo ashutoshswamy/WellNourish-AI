@@ -1,48 +1,46 @@
 // A simple component to render markdown content.
 // For a production app, consider a more robust library like react-markdown.
 
+import React from 'react';
+
 type MarkdownProps = {
   content: string;
 };
 
+// This regex helps split by markdown headers
+const headerRegex = /(?:^|\n)(#{1,3})\s+(.*)/;
+
 export function Markdown({ content }: MarkdownProps) {
-  const sections = content.split(/(\n## |\n# )/).slice(1);
-  const parsedContent = [];
-
-  for (let i = 0; i < sections.length; i += 2) {
-      const headingText = sections[i + 1].split('\n')[0];
-      const headingLevel = sections[i].includes('##') ? 'h2' : 'h1';
-      const body = sections[i + 1].substring(headingText.length).trim();
-      parsedContent.push({
-        heading: headingText,
-        headingLevel,
-        body
-      });
-  }
-
-  if (parsedContent.length === 0) {
-    // Fallback for content that doesn't start with a heading
-    return (
-       <div
-        className="prose prose-sm dark:prose-invert max-w-none"
-        dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br />') }}
-      />
-    )
-  }
+  if (!content) return null;
 
   return (
-    <article className="prose prose-sm dark:prose-invert max-w-none">
-      {parsedContent.map((section, index) => (
-        <div key={index}>
-          {section.headingLevel === 'h1' ? <h1>{section.heading}</h1> : <h2>{section.heading}</h2>}
-          {section.body.split('\n').map((line, lineIndex) => {
-             if (line.trim().startsWith('* ')) {
-                return <ul key={lineIndex}><li key={lineIndex}>{line.substring(2)}</li></ul>
-             }
-             return <p key={lineIndex}>{line}</p>
-          })}
-        </div>
-      ))}
-    </article>
+    <div>
+      {content.split(headerRegex).filter(Boolean).reduce((acc, item, index, arr) => {
+        if (index % 3 === 0) {
+          const type = arr[index];
+          const title = arr[index + 1];
+          const body = arr[index + 2];
+          acc.push({ type, title, body });
+        }
+        return acc;
+      }, [] as {type: string, title: string, body: string}[])
+      .map((section, index) => {
+        const HeadingTag = `h${section.type.length}` as keyof JSX.IntrinsicElements;
+        const listItems = section.body?.split('\n').filter(line => line.trim().startsWith('* ') || line.trim().startsWith('- '));
+        const paragraphs = section.body?.split('\n').filter(line => line.trim() && !line.trim().startsWith('* ') && !line.trim().startsWith('- '));
+
+        return (
+          <div key={index}>
+            {section.title && <HeadingTag>{section.title}</HeadingTag>}
+            {paragraphs && paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+            {listItems && listItems.length > 0 && (
+              <ul>
+                {listItems.map((li, i) => <li key={i}>{li.substring(2)}</li>)}
+              </ul>
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 }

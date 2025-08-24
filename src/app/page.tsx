@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { HeartPulse, Dumbbell, Salad, BrainCircuit } from 'lucide-react';
+import { HeartPulse, Dumbbell, Salad } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background">
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Logo className="h-8 w-8 text-primary" />
@@ -39,7 +39,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bg-white/50 dark:bg-black/10 py-16 md:py-24">
+        <section className="bg-background/80 py-16 md:py-24">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold font-headline">A Smarter Path to Wellness</h2>

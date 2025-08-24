@@ -86,8 +86,8 @@ export default function GeneratePage() {
           Use our AI to create personalized diet and workout plans based on your profile.
         </p>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="space-y-8 lg:col-span-1">
           <Card>
             <CardHeader>
               <CardTitle className="font-headline">AI Dietitian</CardTitle>
@@ -114,7 +114,7 @@ export default function GeneratePage() {
           </Card>
         </div>
         
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
           <Card className="sticky top-20">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
@@ -136,19 +136,23 @@ export default function GeneratePage() {
                 </div>
               )}
               {generatedPlan?.dietPlan && (
-                <Markdown content={generatedPlan.dietPlan} />
+                <div className="prose prose-sm dark:prose-invert max-w-none">
+                  <Markdown content={generatedPlan.dietPlan} />
+                </div>
               )}
               {generatedPlan?.workoutPlan && (
-                <Markdown content={generatedPlan.workoutPlan} />
+                 <div className="prose prose-sm dark:prose-invert max-w-none">
+                  <Markdown content={generatedPlan.workoutPlan} />
+                </div>
               )}
                {generatedPlan?.healthTips && (
-                <>
-                    <h2 className="text-xl font-bold mt-4 font-headline">Health Tips</h2>
+                <div className="prose prose-sm dark:prose-invert max-w-none mt-4">
+                    <h2 className="text-xl font-bold font-headline">Health Tips</h2>
                     <Markdown content={generatedPlan.healthTips} />
-                </>
+                </div>
               )}
               {!isGenerating && !generatedPlan && (
-                <div className="flex flex-col items-center justify-center h-full text-center">
+                <div className="flex flex-col items-center justify-center h-full text-center p-8">
                   <p className="text-muted-foreground">Click a "Generate" button to create a personalized plan.</p>
                 </div>
               )}

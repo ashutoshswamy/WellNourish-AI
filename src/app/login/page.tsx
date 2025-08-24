@@ -12,15 +12,16 @@ import Link from 'next/link'
 export default function LoginPage() {
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
+  const message = searchParams.get('message')
 
   const handleGoogleSignIn = async () => {
     await signInWithGoogle();
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
       <div className="w-full max-w-md">
-        <Card className="shadow-2xl bg-card/80 backdrop-blur-sm">
+        <Card className="shadow-2xl bg-card/80 backdrop-blur-sm border-border">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <Link href="/" className="flex items-center gap-2">
@@ -32,6 +33,7 @@ export default function LoginPage() {
           </CardHeader>
           <CardContent>
             {error && <p className="mb-4 text-center text-sm text-destructive bg-destructive/10 p-2 rounded-md">{error}</p>}
+            {message && <p className="mb-4 text-center text-sm text-primary bg-primary/10 p-2 rounded-md">{message}</p>}
             <form className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>

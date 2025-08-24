@@ -49,7 +49,7 @@ export default async function Dashboard() {
             </Button>
           </CardContent>
         </Card>
-        <Card className="lg:col-span-1 bg-accent/30 border-accent/50">
+        <Card className="lg:col-span-1 bg-accent/5 border-accent/20">
            <CardHeader>
             <CardTitle className="font-headline text-2xl">Track Your Progress</CardTitle>
             <CardDescription>Visualize your journey and stay motivated.</CardDescription>

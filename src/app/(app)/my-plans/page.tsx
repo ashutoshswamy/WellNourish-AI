@@ -39,10 +39,12 @@ export default async function MyPlansPage() {
       content += plan.diet_plan
     }
     if (plan.workout_plan) {
-      content += `\n\n${plan.workout_plan}`
+      if(content) content += '\n\n';
+      content += plan.workout_plan
     }
     if (plan.health_tips) {
-      content += `\n\n## Health Tips\n${plan.health_tips}`
+       if(content) content += '\n\n';
+      content += `## Health Tips\n${plan.health_tips}`
     }
     return content
   }
@@ -81,7 +83,7 @@ export default async function MyPlansPage() {
                       </div>
                       <Badge variant={planType === 'diet' ? 'default' : 'secondary'} className="capitalize">{planType}</Badge>
                     </AccordionTrigger>
-                    <AccordionContent className="p-4 bg-background/50 rounded-md">
+                    <AccordionContent className="p-4 bg-background/50 rounded-md prose prose-sm dark:prose-invert max-w-none">
                       <Markdown content={planContent} />
                     </AccordionContent>
                   </AccordionItem>
