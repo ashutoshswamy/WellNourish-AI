@@ -14,6 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { motion, AnimatePresence } from 'framer-motion'
 
 type PlanResult = (GeneratePersonalizedDietPlanOutput | GenerateCustomWorkoutPlanOutput) & {
   type: 'diet' | 'workout'
@@ -179,6 +180,7 @@ export default function GeneratePage() {
   }
 
   const isGenerating = isPending && generationType !== null;
+  const isSaving = isPending && !generationType && !!generatedPlan;
 
   return (
     <div className="space-y-8">
@@ -225,45 +227,68 @@ export default function GeneratePage() {
               </div>
               {generatedPlan && (
                 <Button variant="outline" size="icon" onClick={handleSavePlan} disabled={isPending}>
-                  <Save className="h-4 w-4"/>
+                  {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4"/>}
                   <span className="sr-only">Save Plan</span>
                 </Button>
               )}
             </CardHeader>
             <CardContent className="min-h-[400px] max-h-[60vh] overflow-y-auto">
-              {isGenerating && (
-                <div className="flex flex-col items-center justify-center h-full">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  <p className="mt-4 text-muted-foreground">Generating your {generationType} plan...</p>
-                </div>
-              )}
+              <AnimatePresence mode="wait">
+                {isGenerating && (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex flex-col items-center justify-center h-full"
+                  >
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <p className="mt-4 text-muted-foreground">Generating your {generationType} plan...</p>
+                  </motion.div>
+                )}
 
-              {generatedPlan?.type === 'diet' && (
-                <DietPlanDisplay plan={(generatedPlan as GeneratePersonalizedDietPlanOutput).dietPlanDetails} />
-              )}
-              {generatedPlan?.type === 'workout' && (
-                 <WorkoutPlanDisplay plan={(generatedPlan as GenerateCustomWorkoutPlanOutput).workoutPlanDetails} />
-              )}
-               {generatedPlan?.healthTips && generatedPlan.healthTips.length > 0 && (
-                 <div>
-                    <h2 className="text-xl font-bold font-headline mt-4 border-t pt-4">Health Tips</h2>
-                    <ul className="list-disc pl-5 space-y-1 mt-2">
-                      {generatedPlan.healthTips.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                 </div>
-              )}
-              {generatedPlan?.profile_snapshot && (
-                  <ProfileDataDisplay profile_data={generatedPlan.profile_snapshot} />
-              )}
-              {!isGenerating && !generatedPlan && (
-                <div className="flex flex-col items-center justify-center h-full text-center p-4 md:p-8">
-                   <p className="text-muted-foreground">Click a "Generate" button to create a personalized plan.</p>
-                </div>
-              )}
+                {!isGenerating && generatedPlan && (
+                  <motion.div
+                    key="plan"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    {generatedPlan.type === 'diet' && (
+                      <DietPlanDisplay plan={(generatedPlan as GeneratePersonalizedDietPlanOutput).dietPlanDetails} />
+                    )}
+                    {generatedPlan.type === 'workout' && (
+                      <WorkoutPlanDisplay plan={(generatedPlan as GenerateCustomWorkoutPlanOutput).workoutPlanDetails} />
+                    )}
+                    {generatedPlan?.healthTips && generatedPlan.healthTips.length > 0 && (
+                      <div>
+                          <h2 className="text-xl font-bold font-headline mt-4 border-t pt-4">Health Tips</h2>
+                          <ul className="list-disc pl-5 space-y-1 mt-2">
+                            {generatedPlan.healthTips.map((tip, i) => <li key={i}>{tip}</li>)}
+                          </ul>
+                      </div>
+                    )}
+                    {generatedPlan?.profile_snapshot && (
+                        <ProfileDataDisplay profile_data={generatedPlan.profile_snapshot} />
+                    )}
+                  </motion.div>
+                )}
+                
+                {!isGenerating && !generatedPlan && (
+                  <motion.div
+                    key="initial"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex flex-col items-center justify-center h-full text-center p-4 md:p-8"
+                  >
+                    <p className="text-muted-foreground">Click a "Generate" button to create a personalized plan.</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </CardContent>
           </Card>
         </div>
       </div>
     </div>
   )
-}
+
+    
