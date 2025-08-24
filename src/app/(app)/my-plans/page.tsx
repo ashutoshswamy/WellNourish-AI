@@ -120,15 +120,16 @@ export default async function MyPlansPage() {
           {plans && plans.length > 0 ? (
             <Accordion type="single" collapsible className="w-full">
               {plans.map((plan: any) => {
-                const isDiet = plan.type === 'diet';
-                const isWorkout = plan.type === 'workout';
+                const isDiet = plan.type === 'diet' || plan.type === 'hybrid';
+                const isWorkout = plan.type === 'workout' || plan.type === 'hybrid';
                 
                 return (
                   <AccordionItem value={String(plan.id)} key={plan.id}>
                     <AccordionTrigger className="text-lg font-body hover:no-underline">
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-4 flex-1">
                         <div className="flex items-center gap-2">
-                          {isDiet ? <Salad className="h-6 w-6 text-primary" /> : <Dumbbell className="h-6 w-6 text-primary" />}
+                          {isDiet && <Salad className="h-6 w-6 text-primary" />}
+                          {isWorkout && <Dumbbell className="h-6 w-6 text-primary" />}
                         </div>
                         <div className="text-left">
                           <span>{plan.name}</span>
@@ -137,7 +138,7 @@ export default async function MyPlansPage() {
                           </p>
                         </div>
                       </div>
-                      <Badge variant={isDiet ? 'default' : 'secondary'} className="capitalize">{plan.type}</Badge>
+                      <Badge variant={isDiet && isWorkout ? 'outline' : (isDiet ? 'default' : 'secondary')} className="capitalize">{plan.type}</Badge>
                     </AccordionTrigger>
                     <AccordionContent className="p-4 bg-muted/20 rounded-md space-y-6">
                       {isDiet && <DietPlanDisplay plan={plan.diet_plan_details} />}
