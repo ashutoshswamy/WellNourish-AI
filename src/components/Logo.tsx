@@ -1,8 +1,8 @@
-import { Stethoscope } from 'lucide-react';
+import { HeartPulse } from 'lucide-react';
 import type { SVGProps } from 'react';
 
 export function Logo(props: SVGProps<SVGSVGElement>) {
   return (
-    <Stethoscope {...props} />
+    <HeartPulse {...props} />
   );
 }

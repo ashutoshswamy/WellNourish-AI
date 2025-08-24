@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: 'WellNourish AI',
   description: 'Personalized diet and workout plans powered by AI.',
   icons: {
-    icon: '/stethoscope-logo.svg',
+    icon: '/heart-pulse-logo.svg',
   },
 };
 
