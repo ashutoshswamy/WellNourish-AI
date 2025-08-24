@@ -1,19 +1,13 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import { Alegreya, Belleza } from 'next/font/google';
+import { Space_Grotesk } from 'next/font/google';
 
-const belleza = Belleza({
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  weight: ['400'],
-  variable: '--font-belleza',
+  variable: '--font-space-grotesk',
 });
 
-const alegreya = Alegreya({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-alegreya',
-});
 
 export const metadata: Metadata = {
   title: 'WellNourish AI',
@@ -30,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${belleza.variable} ${alegreya.variable} font-body antialiased`}>
+      <body className={`${spaceGrotesk.variable} font-sans antialiased`}>
         {children}
         <Toaster />
       </body>
