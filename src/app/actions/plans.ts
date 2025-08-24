@@ -19,7 +19,7 @@ export async function createDietPlan() {
     gender: profile?.gender,
     activityLevel: profile?.activity_level,
     medicalConditions: profile?.medical_conditions,
-    dietaryPreferences: profile?.dietary_preferences,
+    dieteryPreferences: profile?.dietery_preferences,
     preferredCuisine: profile?.preferred_cuisine,
     allergies: profile?.allergies,
   }

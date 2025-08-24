@@ -23,7 +23,7 @@ const GeneratePersonalizedDietPlanInputSchema = z.object({
     .string()
     .optional()
     .describe('Any medical conditions the user has.'),
-  dietaryPreferences: z
+  dieteryPreferences: z
     .string()
     .optional()
     .describe('The dietary preferences of the user.'),
@@ -65,7 +65,7 @@ const prompt = ai.definePrompt({
 - Gender: {{gender}}
 - Activity Level: {{activityLevel}}
 - Medical Conditions: {{{medicalConditions}}}
-- Dietary Preferences: {{{dietaryPreferences}}}
+- Dietary Preferences: {{{dieteryPreferences}}}
 - Preferred Cuisine: {{{preferredCuisine}}}
 - Allergies: {{{allergies}}}
 
