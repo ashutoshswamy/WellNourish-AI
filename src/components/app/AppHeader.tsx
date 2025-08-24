@@ -8,12 +8,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose
+} from '@/components/ui/sheet'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { signOut } from '@/app/actions/auth'
 import Link from 'next/link'
-import { User as UserIcon, LogOut, LayoutDashboard, BotMessageSquare, NotebookText } from 'lucide-react'
+import { User as UserIcon, LogOut, Menu } from 'lucide-react'
 import { Logo } from '@/components/Logo'
-import { AppHeaderNav } from '@/components/app/AppHeaderNav'
+import { AppHeaderNav, AppHeaderNavMobile } from '@/components/app/AppHeaderNav'
 
 export function AppHeader({ user }: { user: User }) {
   const getInitials = (email: string) => {
@@ -22,16 +28,18 @@ export function AppHeader({ user }: { user: User }) {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">
-      <Link href="/dashboard" className="flex items-center gap-2 mr-6">
+      <Link href="/dashboard" className="flex items-center gap-2 mr-auto md:mr-6">
         <Logo className="h-8 w-8 text-primary" />
-        <span className="font-bold font-headline text-lg">
+        <span className="font-bold font-headline text-lg hidden sm:inline-block">
           WellNourish AI
         </span>
       </Link>
       
-      <AppHeaderNav />
+      <div className="hidden md:flex">
+         <AppHeaderNav />
+      </div>
 
-      <div className="flex w-full items-center justify-end gap-4">
+      <div className="flex items-center gap-4 ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
@@ -69,6 +77,24 @@ export function AppHeader({ user }: { user: User }) {
             </form>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="md:hidden">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Open main menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="flex flex-col">
+            <nav className="grid gap-4 text-lg font-medium">
+               <Link href="/dashboard" className="flex items-center gap-2 mb-4">
+                  <Logo className="h-8 w-8 text-primary" />
+                  <span className="font-bold font-headline text-lg">WellNourish AI</span>
+               </Link>
+               <AppHeaderNavMobile />
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   )

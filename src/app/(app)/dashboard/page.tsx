@@ -14,7 +14,7 @@ export default async function Dashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold font-headline">Welcome back, {userName}!</h1>
+        <h1 className="text-3xl lg:text-4xl font-bold font-headline">Welcome back, {userName}!</h1>
         <p className="text-muted-foreground mt-1">Here's your wellness snapshot. Ready to continue your journey?</p>
       </div>
 

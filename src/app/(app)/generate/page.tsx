@@ -81,7 +81,7 @@ export default function GeneratePage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold font-headline">Generate Your Plan</h1>
+        <h1 className="text-3xl lg:text-4xl font-bold font-headline">Generate Your Plan</h1>
         <p className="text-muted-foreground mt-1">
           Use our AI to create personalized diet and workout plans based on your profile.
         </p>
@@ -148,8 +148,8 @@ export default function GeneratePage() {
                  </div>
               )}
               {!isGenerating && !generatedPlan && (
-                <div className="flex flex-col items-center justify-center h-full text-center p-8">
-                  <p className="text-muted-foreground">Click a "Generate" button to create a personalized plan.</p>
+                <div className="flex flex-col items-center justify-center h-full text-center p-4 md:p-8">
+                   <p className="text-muted-foreground">Click a "Generate" button to create a personalized plan.</p>
                 </div>
               )}
             </CardContent>
