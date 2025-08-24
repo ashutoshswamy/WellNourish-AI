@@ -19,8 +19,8 @@ const config = {
     },
     extend: {
       fontFamily: {
-        body: ['"Space Grotesk"', 'sans-serif'],
-        headline: ['"Space Grotesk"', 'sans-serif'],
+        body: ['var(--font-alegreya)', 'serif'],
+        headline: ['var(--font-belleza)', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',

@@ -8,20 +8,20 @@ export default async function Dashboard() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  let userName = user?.email?.split('@')[0] || 'User'
+  let userName = user?.user_metadata.first_name || user?.email?.split('@')[0] || 'User'
   userName = userName.charAt(0).toUpperCase() + userName.slice(1);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl lg:text-4xl font-bold font-headline">Welcome back, {userName}!</h1>
+        <h1 className="text-3xl md:text-4xl font-bold font-headline">Welcome back, {userName}!</h1>
         <p className="text-muted-foreground mt-1">Here's your wellness snapshot. Ready to continue your journey?</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
         <Card className="flex flex-col">
           <CardHeader>
-            <CardTitle className="font-headline text-2xl flex items-center gap-2">
+            <CardTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2">
               <BotMessageSquare className="text-primary" />
               Generate a New Plan
             </CardTitle>
@@ -37,7 +37,7 @@ export default async function Dashboard() {
         </Card>
         <Card className="flex flex-col">
           <CardHeader>
-            <CardTitle className="font-headline text-2xl flex items-center gap-2">
+            <CardTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2">
               <NotebookText className="text-primary" />
               View Saved Plans
             </CardTitle>

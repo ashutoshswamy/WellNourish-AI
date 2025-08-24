@@ -18,21 +18,21 @@ export default async function ProfilePage() {
     .single()
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold font-headline">Your Health Profile</h1>
+        <h1 className="text-3xl md:text-4xl font-bold font-headline">Your Health Profile</h1>
         <p className="text-muted-foreground mt-1">
           This information helps us create the most effective plans for you.
         </p>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">Profile Details</CardTitle>
+          <CardTitle className="font-headline text-xl sm:text-2xl">Profile Details</CardTitle>
           <CardDescription>Keep your health profile up to date for the best results.</CardDescription>
         </CardHeader>
         <CardContent>
           <form action={updateUserProfile} className="space-y-6">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div className="space-y-2">
                     <Label htmlFor="first_name">First Name</Label>
                     <Input id="first_name" name="first_name" type="text" defaultValue={profile?.first_name ?? ''} />
@@ -42,7 +42,7 @@ export default async function ProfilePage() {
                     <Input id="last_name" name="last_name" type="text" defaultValue={profile?.last_name ?? ''} />
                 </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <div className="space-y-2">
                 <Label htmlFor="age">Age</Label>
                 <Input id="age" name="age" type="number" defaultValue={profile?.age ?? ''} />
@@ -69,7 +69,7 @@ export default async function ProfilePage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2 md:col-span-2">
+              <div className="space-y-2 sm:col-span-2">
                 <Label htmlFor="activity_level">Activity Level</Label>
                 <Select name="activity_level" defaultValue={profile?.activity_level ?? ''}>
                     <SelectTrigger id="activity_level">

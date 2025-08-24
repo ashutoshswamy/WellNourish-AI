@@ -183,18 +183,18 @@ export default function GeneratePage() {
   const isSaving = isPending && !generationType && !!generatedPlan;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl lg:text-4xl font-bold font-headline">Generate Your Plan</h1>
+        <h1 className="text-3xl md:text-4xl font-bold font-headline">Generate Your Plan</h1>
         <p className="text-muted-foreground mt-1">
           Use our AI to create personalized diet and workout plans based on your profile.
         </p>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <div className="space-y-8 lg:col-span-1">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-start">
+        <div className="space-y-6 md:col-span-1">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline">AI Dietitian</CardTitle>
+              <CardTitle className="font-headline text-xl sm:text-2xl">AI Dietitian</CardTitle>
               <CardDescription>Generates a meal plan based on your profile data.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -206,7 +206,7 @@ export default function GeneratePage() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline">AI Personal Trainer</CardTitle>
+              <CardTitle className="font-headline text-xl sm:text-2xl">AI Personal Trainer</CardTitle>
               <CardDescription>Creates a workout routine tailored to your goals.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -218,18 +218,24 @@ export default function GeneratePage() {
           </Card>
         </div>
 
-        <div className="lg:col-span-2">
+        <div className="md:col-span-2">
           <Card className="sticky top-20">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="font-headline">Generated Plan</CardTitle>
+                <CardTitle className="font-headline text-xl sm:text-2xl">Generated Plan</CardTitle>
                 <CardDescription>Your AI-crafted plan will appear here.</CardDescription>
               </div>
               {generatedPlan && (
-                <Button variant="outline" size="icon" onClick={handleSavePlan} disabled={isPending}>
-                  {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4"/>}
-                  <span className="sr-only">Save Plan</span>
-                </Button>
+                 <motion.div
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.5, opacity: 0 }}
+                 >
+                    <Button variant="outline" size="icon" onClick={handleSavePlan} disabled={isPending}>
+                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4"/>}
+                    <span className="sr-only">Save Plan</span>
+                    </Button>
+                </motion.div>
               )}
             </CardHeader>
             <CardContent className="min-h-[400px] max-h-[60vh] overflow-y-auto">
@@ -242,7 +248,12 @@ export default function GeneratePage() {
                     exit={{ opacity: 0 }}
                     className="flex flex-col items-center justify-center h-full"
                   >
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <motion.div
+                        animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+                        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                    >
+                        <Loader2 className="h-8 w-8 text-primary" />
+                    </motion.div>
                     <p className="mt-4 text-muted-foreground">Generating your {generationType} plan...</p>
                   </motion.div>
                 )}
@@ -252,6 +263,7 @@ export default function GeneratePage() {
                     key="plan"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
                   >
                     {generatedPlan.type === 'diet' && (
                       <DietPlanDisplay plan={(generatedPlan as GeneratePersonalizedDietPlanOutput).dietPlanDetails} />
@@ -278,7 +290,7 @@ export default function GeneratePage() {
                     key="initial"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex flex-col items-center justify-center h-full text-center p-4 md:p-8"
+                    className="flex flex-col items-center justify-center text-center h-full p-4"
                   >
                     <p className="text-muted-foreground">Click a "Generate" button to create a personalized plan.</p>
                   </motion.div>
@@ -290,5 +302,4 @@ export default function GeneratePage() {
       </div>
     </div>
   )
-
-    
+}

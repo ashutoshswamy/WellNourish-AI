@@ -10,19 +10,19 @@
     --card-foreground: 224 71.4% 4.1%;
     --popover: 40 50% 98%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 120 39% 54%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 207 100% 83%;
+    --primary: 162 47% 46%; /* Deep sky blue, adjusted HSL */
+    --primary-foreground: 210 20% 98%;
+    --secondary: 47 88% 78%; /* Mellow apricot, adjusted HSL */
     --secondary-foreground: 220.9 39.3% 11%;
-    --muted: 220 14.3% 95.9%;
+    --muted: 60 33% 94%;
     --muted-foreground: 220 8.9% 46.1%;
-    --accent: 43 100% 70%;
+    --accent: 7 89% 76%; /* Mellow apricot for accents */
     --accent-foreground: 220.9 39.3% 11%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 120 39% 54%;
+    --ring: 162 47% 46%;
     --radius: 0.5rem;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -38,19 +38,19 @@
     --card-foreground: 210 20% 98%;
     --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 20% 98%;
-    --primary: 120 39% 54%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 207 100% 83%;
+    --primary: 162 47% 46%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 47 88% 78%;
     --secondary-foreground: 220.9 39.3% 11%;
     --muted: 215 27.9% 16.9%;
     --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 43 100% 70%;
+    --accent: 7 89% 76%;
     --accent-foreground: 210 20% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
-    --ring: 120 39% 54%;
+    --ring: 162 47% 46%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -65,6 +65,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-color: #E7F6F2;
+    background-color: #F5F5DC;
   }
 }

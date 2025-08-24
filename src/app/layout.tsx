@@ -1,6 +1,19 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { Alegreya, Belleza } from 'next/font/google';
+
+const belleza = Belleza({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-belleza',
+});
+
+const alegreya = Alegreya({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-alegreya',
+});
 
 export const metadata: Metadata = {
   title: 'WellNourish AI',
@@ -17,12 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
-      </head>
-      <body className="font-body antialiased">
+      <body className={`${belleza.variable} ${alegreya.variable} font-body antialiased`}>
         {children}
         <Toaster />
       </body>

@@ -32,7 +32,7 @@ export default async function Home() {
       <main className="flex-grow">
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-center">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold font-headline text-foreground">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-headline text-foreground">
               Transform Your Health with AI-Powered Wellness
             </h1>
             <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -92,7 +92,7 @@ export default async function Home() {
 
       <footer className="border-t bg-muted/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center md:text-left">
                 <div className="col-span-1 lg:col-span-1">
                     <h3 className="font-bold font-headline text-lg mb-2">WellNourish AI</h3>
                     <p className="text-muted-foreground text-sm">
@@ -105,7 +105,7 @@ export default async function Home() {
                 <div className="col-span-1 lg:col-span-1"></div>
                 <div className="col-span-1 lg:col-span-1 md:text-right">
                     <h3 className="font-bold font-headline text-lg mb-2">Connect with Developer</h3>
-                    <div className="flex md:justify-end gap-4 mb-2">
+                    <div className="flex justify-center md:justify-end gap-4 mb-2">
                         <Link href="#" aria-label="GitHub" className="text-muted-foreground hover:text-primary"><Github /></Link>
                         <Link href="#" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary"><Linkedin /></Link>
                         <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary"><Twitter /></Link>

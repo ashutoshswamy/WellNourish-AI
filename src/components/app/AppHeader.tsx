@@ -94,9 +94,9 @@ export function AppHeader({ user }: { user: User }) {
                   <span className="font-bold font-headline text-lg">WellNourish AI</span>
                </Link>
             </SheetHeader>
-            <nav className="grid gap-4 text-lg font-medium">
+            <div className="grid gap-4 text-lg font-medium">
                <AppHeaderNavMobile />
-            </nav>
+            </div>
           </SheetContent>
         </Sheet>
       </div>
