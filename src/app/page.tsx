@@ -106,9 +106,9 @@ export default async function Home() {
                 <div className="md:col-span-1 md:text-right">
                     <h3 className="font-bold font-headline text-lg mb-2">Connect with Developer</h3>
                     <div className="flex justify-center md:justify-end gap-4 mb-2">
-                        <Link href="#" aria-label="GitHub" className="text-muted-foreground hover:text-primary"><Github /></Link>
-                        <Link href="#" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary"><Linkedin /></Link>
-                        <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary"><Twitter /></Link>
+                        <Link href="https://github.com/ashutoshswamy" aria-label="GitHub" className="text-muted-foreground hover:text-primary"><Github /></Link>
+                        <Link href="https://www.linkedin.com/in/ashutoshswamy" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary"><Linkedin /></Link>
+                        <Link href="https://twitter.com/ashutoshswamy_" aria-label="Twitter" className="text-muted-foreground hover:text-primary"><Twitter /></Link>
                     </div>
                     <p className="text-muted-foreground text-sm">Ashutosh Swamy</p>
                 </div>
