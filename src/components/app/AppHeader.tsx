@@ -11,8 +11,9 @@ import {
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
-  SheetClose
 } from '@/components/ui/sheet'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { signOut } from '@/app/actions/auth'
@@ -86,6 +87,9 @@ export function AppHeader({ user }: { user: User }) {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="flex flex-col">
+            <SheetHeader>
+                <SheetTitle className="sr-only">Main Menu</SheetTitle>
+            </SheetHeader>
             <nav className="grid gap-4 text-lg font-medium">
                <Link href="/dashboard" className="flex items-center gap-2 mb-4">
                   <Logo className="h-8 w-8 text-primary" />
