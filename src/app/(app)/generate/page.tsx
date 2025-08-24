@@ -136,20 +136,16 @@ export default function GeneratePage() {
                 </div>
               )}
               {generatedPlan?.dietPlan && (
-                <div className="prose prose-sm dark:prose-invert max-w-none">
-                  <Markdown content={generatedPlan.dietPlan} />
-                </div>
+                <Markdown content={generatedPlan.dietPlan} />
               )}
               {generatedPlan?.workoutPlan && (
-                 <div className="prose prose-sm dark:prose-invert max-w-none">
-                  <Markdown content={generatedPlan.workoutPlan} />
-                </div>
+                 <Markdown content={generatedPlan.workoutPlan} />
               )}
                {generatedPlan?.healthTips && (
-                <div className="prose prose-sm dark:prose-invert max-w-none mt-4">
-                    <h2 className="text-xl font-bold font-headline">Health Tips</h2>
+                 <div>
+                    <h2 className="text-xl font-bold font-headline mt-4">Health Tips</h2>
                     <Markdown content={generatedPlan.healthTips} />
-                </div>
+                 </div>
               )}
               {!isGenerating && !generatedPlan && (
                 <div className="flex flex-col items-center justify-center h-full text-center p-8">
