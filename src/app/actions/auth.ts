@@ -31,7 +31,7 @@ export async function signup(formData: FormData) {
   const confirmPassword = formData.get('confirmPassword') as string
 
   if (password !== confirmPassword) {
-    return redirect(`/login?error=${encodeURIComponent('Passwords do not match')}`)
+    return redirect(`/signup?error=${encodeURIComponent('Passwords do not match')}`)
   }
 
   const { error } = await supabase.auth.signUp({
@@ -43,7 +43,7 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
-    return redirect(`/login?error=${encodeURIComponent(error.message)}`)
+    return redirect(`/signup?error=${encodeURIComponent(error.message)}`)
   }
 
   // Show a success message or guide user to check email
