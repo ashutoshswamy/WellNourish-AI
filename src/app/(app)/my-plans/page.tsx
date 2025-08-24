@@ -71,7 +71,7 @@ export default async function MyPlansPage() {
                 const planContent = getPlanContent(plan);
                 return (
                   <AccordionItem value={String(plan.id)} key={plan.id}>
-                    <AccordionTrigger className="text-lg font-body">
+                    <AccordionTrigger className="text-lg font-body hover:no-underline">
                       <div className="flex items-center gap-4">
                         {planType === 'diet' ? <Salad className="h-6 w-6 text-primary" /> : <Dumbbell className="h-6 w-6 text-primary" />}
                         <div className="text-left">

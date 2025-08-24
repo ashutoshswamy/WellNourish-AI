@@ -44,6 +44,7 @@ export function AppSidebar({ user }: { user: User }) {
                   asChild
                   isActive={pathname === item.href}
                   tooltip={{ children: item.label }}
+                  className="group-data-[collapsible=icon]:justify-center"
                 >
                   <Link href={item.href}>
                     <item.icon />
