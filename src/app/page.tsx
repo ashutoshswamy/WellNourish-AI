@@ -1,11 +1,18 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { HeartPulse, Dumbbell, Salad } from 'lucide-react';
 import { Logo } from '@/components/Logo';
-import Image from "next/image";
+import { createClient } from '@/lib/supabase/server';
 
-export default function Home() {
+export default async function Home() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const buttonText = user ? "Go to Dashboard" : "Get Started";
+  const planButtonText = user ? "Go to Dashboard" : "Create Your Personalized Plan";
+  const dietButtonText = user ? "Go to Dashboard" : "Find Your Perfect Diet";
+  const href = user ? "/dashboard" : "/login";
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -17,7 +24,7 @@ export default function Home() {
         </Link>
         <nav>
           <Button asChild>
-            <Link href="/login">Get Started</Link>
+            <Link href={href}>{buttonText}</Link>
           </Button>
         </nav>
       </header>
@@ -33,7 +40,7 @@ export default function Home() {
             </p>
             <div className="mt-8">
               <Button asChild size="lg">
-                <Link href="/login">Create Your Personalized Plan</Link>
+                <Link href={href}>{planButtonText}</Link>
               </Button>
             </div>
           </div>
@@ -76,7 +83,7 @@ export default function Home() {
                 Our AI considers everything from your medical history to your taste in food to create a diet that's not just healthy, but also enjoyable. Say goodbye to restrictive, one-size-fits-all diets.
               </p>
               <Button asChild size="lg" className="mt-6">
-                <Link href="/login">Find Your Perfect Diet</Link>
+                <Link href={href}>{dietButtonText}</Link>
               </Button>
             </div>
           </div>
