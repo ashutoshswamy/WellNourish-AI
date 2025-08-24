@@ -7,15 +7,26 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M11 20A7 7 0 0 1 4 13H2a10 10 0 0 0 10 10z" className="text-primary" fill="currentColor" fillOpacity="0.2" />
-      <path d="M12 2a10 10 0 0 0-10 10h2A7 7 0 0 1 11 4v1a2 2 0 0 0-2 2H8a4 4 0 0 1 4-4z" className="text-primary" fill="currentColor" fillOpacity="0.2" />
-      <path d="M12 22a10 10 0 0 0 10-10h-2a7 7 0 0 1-7 7v-1a2 2 0 0 0 2-2h1a4 4 0 0 1-4 4z" className="text-primary" fill="currentColor" fillOpacity="0.8" />
-      <path d="M2 12a10 10 0 0 0 10 10V12H2z" className="text-primary" fill="currentColor" fillOpacity="0.8" />
+      <path
+        d="M19.5 12.572c-1.876 3.66-5.263 6.428-9.5 6.428s-7.624-2.767-9.5-6.428C2.376 9.233 5.237 8 9.5 8c2.79,0 5.06,1.25,6.5,3"
+        className="text-primary"
+        fill="currentColor"
+        fillOpacity="0.1"
+        strokeWidth="0"
+      />
+      <path
+        d="M4.5 12.572C6.376 9.233 9.763 6.428 14.5 6.428s7.624 2.767 9.5 6.428c-2.376 3.66-5.237 4.5-9.5 4.5s-7.21-1.25-10-4.428"
+        className="text-primary"
+        fill="currentColor"
+        fillOpacity="0.2"
+        strokeWidth="0"
+      />
+      <path d="M2 12h3l3-9 4 18 3-9h3" stroke="currentColor" />
     </svg>
   );
 }
