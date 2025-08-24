@@ -91,8 +91,11 @@ export default async function Home() {
       </main>
 
       <footer className="border-t">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-muted-foreground">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-muted-foreground text-sm">
           <p>&copy; {new Date().getFullYear()} WellNourish AI. All rights reserved.</p>
+           <Link href="/disclaimer" className="underline hover:text-primary">
+            Disclaimer
+          </Link>
         </div>
       </footer>
     </div>
