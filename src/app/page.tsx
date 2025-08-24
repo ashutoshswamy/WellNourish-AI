@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { HeartPulse, Dumbbell, Salad } from 'lucide-react';
+import { HeartPulse, Dumbbell, Salad, Github, Linkedin, Twitter, Heart } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { createClient } from '@/lib/supabase/server';
 
@@ -90,12 +90,33 @@ export default async function Home() {
         </section>
       </main>
 
-      <footer className="border-t">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-muted-foreground text-sm">
-          <p>&copy; {new Date().getFullYear()} WellNourish AI. All rights reserved.</p>
-           <Link href="/disclaimer" className="underline hover:text-primary">
-            Disclaimer
-          </Link>
+      <footer className="border-t bg-muted/20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="col-span-1 lg:col-span-1">
+                    <h3 className="font-bold font-headline text-lg mb-2">WellNourish AI</h3>
+                    <p className="text-muted-foreground text-sm">
+                        Personalized diet and workout plans powered by AI. Your journey to a healthier lifestyle starts here.
+                    </p>
+                    <Link href="/disclaimer" className="text-sm text-muted-foreground underline hover:text-primary mt-2 block">
+                        Disclaimer
+                    </Link>
+                </div>
+                <div className="col-span-1 lg:col-span-1"></div>
+                <div className="col-span-1 lg:col-span-1 md:text-right">
+                    <h3 className="font-bold font-headline text-lg mb-2">Connect with Developer</h3>
+                    <div className="flex md:justify-end gap-4 mb-2">
+                        <Link href="#" aria-label="GitHub" className="text-muted-foreground hover:text-primary"><Github /></Link>
+                        <Link href="#" aria-label="LinkedIn" className="text-muted-foreground hover:text-primary"><Linkedin /></Link>
+                        <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary"><Twitter /></Link>
+                    </div>
+                    <p className="text-muted-foreground text-sm">Ashutosh Swamy</p>
+                </div>
+            </div>
+            <div className="border-t mt-8 pt-6 text-center text-muted-foreground text-sm">
+                <p>&copy; {new Date().getFullYear()} WellNourish AI. All rights reserved.</p>
+                <p className="flex items-center justify-center gap-1 mt-1">Made with <Heart className="text-red-500 fill-current" size={14} />.</p>
+            </div>
         </div>
       </footer>
     </div>
