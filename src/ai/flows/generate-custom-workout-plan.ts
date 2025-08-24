@@ -1,4 +1,3 @@
-// This file is machine-generated - edit with caution!
 'use server';
 /**
  * @fileOverview Custom workout plan generation flow.
@@ -12,11 +11,16 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GenerateCustomWorkoutPlanInputSchema = z.object({
-  fitnessLevel: z
-    .enum(['Beginner', 'Intermediate', 'Advanced'])
-    .describe('The user fitness level: Beginner, Intermediate, or Advanced.'),
-  goals: z.string().describe('The user fitness goals.'),
-  equipment: z.string().describe('The available equipment.'),
+  fitnessGoals: z.string().describe('The user fitness goals.'),
+  activityLevel: z
+    .string()
+    .describe(
+      "The user's current activity level (e.g., Sedentary, Lightly active)."
+    ),
+  medicalConditions: z
+    .string()
+    .optional()
+    .describe('Any medical conditions the user has.'),
 });
 export type GenerateCustomWorkoutPlanInput = z.infer<
   typeof GenerateCustomWorkoutPlanInputSchema
@@ -41,13 +45,13 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateCustomWorkoutPlanOutputSchema},
   prompt: `You are a personal trainer who creates workout plans.
 
-Create a custom workout plan based on the user's fitness level, goals, and available equipment.
+Create a custom workout plan based on the user's fitness goals and activity level. Consider any medical conditions provided.
 
-Fitness Level: {{{fitnessLevel}}}
-Goals: {{{goals}}}
-Available Equipment: {{{equipment}}}
+- Fitness Goals: {{{fitnessGoals}}}
+- Activity Level: {{{activityLevel}}}
+- Medical Conditions: {{{medicalConditions}}}
 
-Workout Plan:`, 
+Provide a detailed workout plan.`,
 });
 
 const generateCustomWorkoutPlanFlow = ai.defineFlow(

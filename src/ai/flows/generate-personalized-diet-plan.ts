@@ -11,17 +11,28 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GeneratePersonalizedDietPlanInputSchema = z.object({
-  healthProfile: z
+  age: z.number().optional().describe('The age of the user.'),
+  height: z.number().optional().describe('The height of the user in centimeters.'),
+  weight: z.number().optional().describe('The weight of the user in kilograms.'),
+  gender: z.string().optional().describe('The gender of the user.'),
+  activityLevel: z
     .string()
-    .describe(
-      'A detailed health profile of the user, including medical history, lifestyle, and fitness goals.'
-    ),
-  preferences: z
+    .optional()
+    .describe('The activity level of the user.'),
+  fitnessGoals: z.string().describe('The fitness goals of the user.'),
+  medicalConditions: z
     .string()
-    .describe('The user’s dietary preferences, including preferred foods and cuisine types, and any allergies or dietary restrictions.'),
-  goals: z
+    .optional()
+    .describe('Any medical conditions the user has.'),
+  dietaryPreferences: z
     .string()
-    .describe('The user’s health and fitness goals, such as weight loss, muscle gain, or improved energy levels.'),
+    .optional()
+    .describe('The dietary preferences of the user.'),
+  preferredCuisine: z
+    .string()
+    .optional()
+    .describe('The preferred cuisine of the user.'),
+  allergies: z.string().optional().describe('Any allergies the user has.'),
 });
 export type GeneratePersonalizedDietPlanInput = z.infer<
   typeof GeneratePersonalizedDietPlanInputSchema
@@ -31,6 +42,7 @@ const GeneratePersonalizedDietPlanOutputSchema = z.object({
   dietPlan: z
     .string()
     .describe('A personalized diet plan tailored to the user’s health profile, preferences, and goals.'),
+  healthTips: z.string().describe('General health tips for the user.'),
 });
 export type GeneratePersonalizedDietPlanOutput = z.infer<
   typeof GeneratePersonalizedDietPlanOutputSchema
@@ -46,13 +58,21 @@ const prompt = ai.definePrompt({
   name: 'generatePersonalizedDietPlanPrompt',
   input: {schema: GeneratePersonalizedDietPlanInputSchema},
   output: {schema: GeneratePersonalizedDietPlanOutputSchema},
-  prompt: `You are an expert nutritionist. Please generate a personalized diet plan based on the following information:
+  prompt: `You are an expert nutritionist. Please generate a personalized diet plan and health tips based on the following user profile:
 
-Health Profile: {{{healthProfile}}}
-Preferences: {{{preferences}}}
-Goals: {{{goals}}}
+- Age: {{age}}
+- Height: {{height}} cm
+- Weight: {{weight}} kg
+- Gender: {{gender}}
+- Activity Level: {{activityLevel}}
+- Fitness Goals: {{{fitnessGoals}}}
+- Medical Conditions: {{{medicalConditions}}}
+- Dietary Preferences: {{{dietaryPreferences}}}
+- Preferred Cuisine: {{{preferredCuisine}}}
+- Allergies: {{{allergies}}}
 
-The diet plan should be tailored to the user’s specific needs and preferences. It should be detailed and easy to follow.
+The diet plan should be detailed, easy to follow, and tailored to the user’s specific needs and preferences.
+The health tips should be relevant to the user's profile and goals.
 `,
 });
 

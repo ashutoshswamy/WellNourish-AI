@@ -5,39 +5,48 @@ import { generateCustomWorkoutPlan, type GenerateCustomWorkoutPlanInput } from '
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function createDietPlan(input: { preferences: string; goals: string }) {
+export async function createDietPlan(generationDetails: any) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('User not authenticated')
 
-  const { data: profile } = await supabase.from('profiles').select('health_profile').eq('id', user.id).single()
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
   const aiInput: GeneratePersonalizedDietPlanInput = {
-    healthProfile: profile?.health_profile || 'No detailed health profile provided.',
-    preferences: input.preferences,
-    goals: input.goals,
+    age: profile?.age,
+    height: profile?.height,
+    weight: profile?.weight,
+    gender: profile?.gender,
+    activityLevel: profile?.activity_level,
+    fitnessGoals: profile?.fitness_goals || 'General health',
+    medicalConditions: profile?.medical_conditions,
+    dietaryPreferences: profile?.dietary_preferences,
+    preferredCuisine: profile?.preferred_cuisine,
+    allergies: profile?.allergies,
   }
 
   const plan = await generatePersonalizedDietPlan(aiInput)
   return plan
 }
 
-export async function createWorkoutPlan(input: Omit<GenerateCustomWorkoutPlanInput, 'fitnessLevel'> & { fitnessLevel: string }) {
+export async function createWorkoutPlan(generationDetails: any) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('User not authenticated')
+  
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
   const aiInput: GenerateCustomWorkoutPlanInput = {
-    fitnessLevel: input.fitnessLevel as 'Beginner' | 'Intermediate' | 'Advanced',
-    goals: input.goals,
-    equipment: input.equipment,
+    fitnessGoals: profile?.fitness_goals || 'General fitness',
+    activityLevel: profile?.activity_level || 'Sedentary',
+    medicalConditions: profile?.medical_conditions,
   }
 
   const plan = await generateCustomWorkoutPlan(aiInput)
   return plan
 }
 
-export async function savePlan(planData: { name: string; type: 'diet' | 'workout'; content: string }) {
+export async function savePlan(planData: { diet_plan: string | null, workout_plan: string | null, health_tips: string | null, generation_details: any }) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -47,9 +56,10 @@ export async function savePlan(planData: { name: string; type: 'diet' | 'workout
 
   const { error } = await supabase.from('plans').insert({
     user_id: user.id,
-    name: planData.name,
-    type: planData.type,
-    content: planData.content,
+    diet_plan: planData.diet_plan,
+    workout_plan: planData.workout_plan,
+    health_tips: planData.health_tips,
+    generation_details: planData.generation_details,
   });
 
   if (error) {
