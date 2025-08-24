@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { headers } from 'next/headers'
 
 export async function login(formData: FormData) {
   const supabase = createClient()
@@ -50,24 +49,4 @@ export async function signOut() {
   const supabase = createClient()
   await supabase.auth.signOut()
   redirect('/')
-}
-
-export async function signInWithGoogle() {
-  const origin = headers().get('origin')
-  const supabase = createClient()
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${origin}/auth/callback`,
-    },
-  })
-
-  if (error) {
-    console.error('Google Sign-In Error:', error)
-    return redirect(`/login?error=${encodeURIComponent('Could not authenticate with Google')}`)
-  }
-  
-  if (data.url) {
-    redirect(data.url)
-  }
 }
