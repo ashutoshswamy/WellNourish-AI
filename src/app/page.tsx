@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { HeartPulse, Dumbbell, Salad, Github, Linkedin, Twitter, Heart } from 'lucide-react';
+import { Dumbbell, Salad, Github, Linkedin, Twitter } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { createClient } from '@/lib/supabase/server';
 
@@ -115,7 +115,7 @@ export default async function Home() {
             </div>
             <div className="border-t mt-8 pt-6 text-center text-muted-foreground text-sm">
                 <p>&copy; {new Date().getFullYear()} WellNourish AI. All rights reserved.</p>
-                <p className="flex items-center justify-center gap-1 mt-1">Made with <Heart className="text-red-500 fill-current" size={14} />.</p>
+                <p className="flex items-center justify-center gap-1 mt-1">Made with ❤️</p>
             </div>
         </div>
       </footer>
