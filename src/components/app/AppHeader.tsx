@@ -89,12 +89,12 @@ export function AppHeader({ user }: { user: User }) {
           <SheetContent side="left" className="flex flex-col">
             <SheetHeader>
                 <SheetTitle className="sr-only">Main Menu</SheetTitle>
-            </SheetHeader>
-            <nav className="grid gap-4 text-lg font-medium">
-               <Link href="/dashboard" className="flex items-center gap-2 mb-4">
+                 <Link href="/dashboard" className="flex items-center gap-2 mb-4">
                   <Logo className="h-8 w-8 text-primary" />
                   <span className="font-bold font-headline text-lg">WellNourish AI</span>
                </Link>
+            </SheetHeader>
+            <nav className="grid gap-4 text-lg font-medium">
                <AppHeaderNavMobile />
             </nav>
           </SheetContent>

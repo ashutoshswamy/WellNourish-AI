@@ -32,6 +32,16 @@ export default async function ProfilePage() {
         </CardHeader>
         <CardContent>
           <form action={updateUserProfile} className="space-y-6">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                    <Label htmlFor="first_name">First Name</Label>
+                    <Input id="first_name" name="first_name" type="text" defaultValue={profile?.first_name ?? ''} />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="last_name">Last Name</Label>
+                    <Input id="last_name" name="last_name" type="text" defaultValue={profile?.last_name ?? ''} />
+                </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="age">Age</Label>
@@ -75,20 +85,20 @@ export default async function ProfilePage() {
                 </Select>
               </div>
             </div>
-            
+
             <div className="space-y-2">
-              <Label htmlFor="dietery_preferences">Dietary Preferences</Label>
-              <Textarea id="dietery_preferences" name="dietery_preferences" placeholder="e.g., Vegetarian, Vegan, Gluten-Free, prefer quick meals, dislike spicy food." defaultValue={profile?.dietery_preferences ?? ''} />
+              <Label htmlFor="dietary_preferences">Dietary Preferences</Label>
+              <Textarea id="dietary_preferences" name="dietary_preferences" placeholder="e.g., Vegetarian, Vegan, Gluten-Free, prefer quick meals, dislike spicy food." defaultValue={profile?.dietary_preferences ?? ''} />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="preferredCuisine">Preferred Cuisine</Label>
-              <Textarea id="preferredCuisine" name="preferredCuisine" placeholder="e.g., I love Mediterranean food, Mexican, Italian." defaultValue={profile?.preferred_cuisine ?? ''}/>
+              <Label htmlFor="preferred_cuisine">Preferred Cuisine</Label>
+              <Textarea id="preferred_cuisine" name="preferred_cuisine" placeholder="e.g., I love Mediterranean food, Mexican, Italian." defaultValue={profile?.preferred_cuisine ?? ''}/>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="medicalConditions">Medical Conditions</Label>
-              <Textarea id="medicalConditions" name="medicalConditions" placeholder="Please list any medical conditions, e.g., diabetes, high blood pressure, etc." defaultValue={profile?.medical_conditions ?? ''}/>
+              <Label htmlFor="medical_conditions">Medical Conditions</Label>
+              <Textarea id="medical_conditions" name="medical_conditions" placeholder="Please list any medical conditions, e.g., diabetes, high blood pressure, etc." defaultValue={profile?.medical_conditions ?? ''}/>
             </div>
 
             <div className="space-y-2">

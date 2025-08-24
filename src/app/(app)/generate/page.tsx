@@ -5,15 +5,85 @@ import { createDietPlan, createWorkoutPlan, savePlan } from '@/app/actions/plans
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2, Save, WandSparkles } from 'lucide-react'
-import { Markdown } from '@/components/Markdown'
 import { useToast } from '@/hooks/use-toast'
+import type { GeneratePersonalizedDietPlanOutput } from '@/ai/flows/generate-personalized-diet-plan'
+import type { GenerateCustomWorkoutPlanOutput } from '@/ai/flows/generate-custom-workout-plan'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
-type PlanResult = {
-  dietPlan?: string | null
-  workoutPlan?: string | null
-  healthTips?: string | null
-  profile_data?: any
+type PlanResult = (GeneratePersonalizedDietPlanOutput | GenerateCustomWorkoutPlanOutput) & {
+  type: 'diet' | 'workout'
+  profile_snapshot?: any
 } | null
+
+
+function DietPlanDisplay({ plan }: { plan: GeneratePersonalizedDietPlanOutput['dietPlanDetails'] }) {
+    return (
+        <div className="space-y-4">
+            <h2 className="font-headline text-2xl">{plan.title}</h2>
+            <p className="text-muted-foreground">{plan.summary}</p>
+            <Accordion type="single" collapsible className="w-full">
+                {plan.weekly_diet.map(daily => (
+                    <AccordionItem value={daily.day} key={daily.day}>
+                        <AccordionTrigger className="text-lg font-body hover:no-underline">
+                            <div className="flex justify-between items-center w-full pr-4">
+                                <span>{daily.day}</span>
+                                <span className="text-sm text-muted-foreground">{daily.daily_calories} kcal</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 bg-muted/20 rounded-md space-y-4">
+                            {daily.meals.map(meal => (
+                                <div key={meal.name}>
+                                    <h4 className="font-headline text-md mb-2">{meal.name}</h4>
+                                    <ul className="list-disc pl-5 space-y-1">
+                                        {meal.items.map(item => (
+                                            <li key={item.name}>
+                                                <strong>{item.name}:</strong> {item.description} ({item.calories} kcal)
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </AccordionContent>
+                    </AccordionItem>
+                ))}
+            </Accordion>
+        </div>
+    )
+}
+
+function WorkoutPlanDisplay({ plan }: { plan: GenerateCustomWorkoutPlanOutput['workoutPlanDetails'] }) {
+    return (
+        <div className="space-y-4">
+            <h2 className="font-headline text-2xl">{plan.title}</h2>
+            <p className="text-muted-foreground">{plan.summary}</p>
+            <Accordion type="single" collapsible className="w-full">
+                {plan.weeklySchedule.map(daily => (
+                    <AccordionItem value={daily.day} key={daily.day}>
+                        <AccordionTrigger className="text-lg font-body hover:no-underline">
+                            {daily.day} - {daily.title}
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 bg-muted/20 rounded-md space-y-4">
+                             <ul className="space-y-2">
+                                {daily.exercises.map(exercise => (
+                                    <li key={exercise.name}>
+                                        <strong>{exercise.name}:</strong> {exercise.sets} sets of {exercise.reps} reps, {exercise.rest} rest.
+                                        {exercise.notes && <p className="text-sm text-muted-foreground pl-2">- {exercise.notes}</p>}
+                                    </li>
+                                ))}
+                            </ul>
+                        </AccordionContent>
+                    </AccordionItem>
+                ))}
+            </Accordion>
+        </div>
+    )
+}
+
 
 function ProfileDataDisplay({ profile_data }: { profile_data: any }) {
     if (!profile_data) return null;
@@ -21,6 +91,7 @@ function ProfileDataDisplay({ profile_data }: { profile_data: any }) {
         <div className="mt-4 bg-muted/50 p-4 rounded-lg">
             <h3 className="font-headline text-lg mb-2">Plan Generated with this Profile</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
+                {profile_data.first_name && <div><strong>Name:</strong> {profile_data.first_name}</div>}
                 {profile_data.age && <div><strong>Age:</strong> {profile_data.age}</div>}
                 {profile_data.height && <div><strong>Height:</strong> {profile_data.height} cm</div>}
                 {profile_data.weight && <div><strong>Weight:</strong> {profile_data.weight} kg</div>}
@@ -42,14 +113,18 @@ export default function GeneratePage() {
     startTransition(async () => {
       setGeneratedPlan(null)
       setGenerationType('diet');
-      const result = await createDietPlan()
-      if (result.dietPlan) {
-        setGeneratedPlan({ dietPlan: result.dietPlan, healthTips: result.healthTips, profile_data: result.profile_data })
-      } else {
+      try {
+        const result = await createDietPlan()
+        if (result.dietPlanDetails) {
+            setGeneratedPlan({ ...result, type: 'diet' })
+        } else {
+            throw new Error("Failed to generate diet plan.");
+        }
+      } catch (e: any) {
         toast({
           variant: "destructive",
           title: "Error Generating Plan",
-          description: "Could not generate diet plan. Please try again.",
+          description: e.message || "Could not generate diet plan. Please try again.",
         })
       }
       setGenerationType(null);
@@ -60,16 +135,20 @@ export default function GeneratePage() {
     startTransition(async () => {
       setGeneratedPlan(null)
       setGenerationType('workout');
-      const result = await createWorkoutPlan()
-      if (result.workoutPlan) {
-        setGeneratedPlan({ workoutPlan: result.workoutPlan, healthTips: result.healthTips, profile_data: result.profile_data })
-      } else {
-        toast({
+       try {
+        const result = await createWorkoutPlan()
+        if (result.workoutPlanDetails) {
+            setGeneratedPlan({ ...result, type: 'workout' })
+        } else {
+             throw new Error("Failed to generate workout plan.");
+        }
+       } catch(e: any) {
+         toast({
           variant: "destructive",
           title: "Error Generating Plan",
-          description: "Could not generate workout plan. Please try again.",
+          description: e.message || "Could not generate workout plan. Please try again.",
         })
-      }
+       }
       setGenerationType(null);
     })
   }
@@ -78,12 +157,19 @@ export default function GeneratePage() {
     if (!generatedPlan) return;
 
     startTransition(async () => {
-        const result = await savePlan({
-            diet_plan: generatedPlan.dietPlan || null,
-            workout_plan: generatedPlan.workoutPlan || null,
-            health_tips: generatedPlan.healthTips || null,
-            profile_data: generatedPlan.profile_data,
-        });
+        const planToSave = {
+          name: generatedPlan.type === 'diet'
+            ? (generatedPlan as GeneratePersonalizedDietPlanOutput).dietPlanDetails.title
+            : (generatedPlan as GenerateCustomWorkoutPlanOutput).workoutPlanDetails.title,
+          type: generatedPlan.type,
+          profile_snapshot: generatedPlan.profile_snapshot,
+          diet_plan_details: generatedPlan.type === 'diet' ? (generatedPlan as GeneratePersonalizedDietPlanOutput).dietPlanDetails : null,
+          workout_plan_details: generatedPlan.type === 'workout' ? (generatedPlan as GenerateCustomWorkoutPlanOutput).workoutPlanDetails : null,
+          health_tips: generatedPlan.healthTips || [],
+        }
+
+        const result = await savePlan(planToSave);
+
         if (result.success) {
             toast({ title: "Plan Saved!", description: "Your plan has been saved to 'My Plans'." })
         } else {
@@ -129,7 +215,7 @@ export default function GeneratePage() {
             </CardContent>
           </Card>
         </div>
-        
+
         <div className="lg:col-span-2">
           <Card className="sticky top-20">
             <CardHeader className="flex flex-row items-center justify-between">
@@ -151,20 +237,23 @@ export default function GeneratePage() {
                   <p className="mt-4 text-muted-foreground">Generating your {generationType} plan...</p>
                 </div>
               )}
-              {generatedPlan?.dietPlan && (
-                <Markdown content={generatedPlan.dietPlan} />
+
+              {generatedPlan?.type === 'diet' && (
+                <DietPlanDisplay plan={(generatedPlan as GeneratePersonalizedDietPlanOutput).dietPlanDetails} />
               )}
-              {generatedPlan?.workoutPlan && (
-                 <Markdown content={generatedPlan.workoutPlan} />
+              {generatedPlan?.type === 'workout' && (
+                 <WorkoutPlanDisplay plan={(generatedPlan as GenerateCustomWorkoutPlanOutput).workoutPlanDetails} />
               )}
-               {generatedPlan?.healthTips && (
+               {generatedPlan?.healthTips && generatedPlan.healthTips.length > 0 && (
                  <div>
                     <h2 className="text-xl font-bold font-headline mt-4 border-t pt-4">Health Tips</h2>
-                    <Markdown content={generatedPlan.healthTips} />
+                    <ul className="list-disc pl-5 space-y-1 mt-2">
+                      {generatedPlan.healthTips.map((tip, i) => <li key={i}>{tip}</li>)}
+                    </ul>
                  </div>
               )}
-              {generatedPlan?.profile_data && (
-                  <ProfileDataDisplay profile_data={generatedPlan.profile_data} />
+              {generatedPlan?.profile_snapshot && (
+                  <ProfileDataDisplay profile_data={generatedPlan.profile_snapshot} />
               )}
               {!isGenerating && !generatedPlan && (
                 <div className="flex flex-col items-center justify-center h-full text-center p-4 md:p-8">

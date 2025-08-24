@@ -14,14 +14,16 @@ export async function updateUserProfile(formData: FormData) {
 
   const profileData = {
     id: user.id,
+    first_name: formData.get('first_name') as string,
+    last_name: formData.get('last_name') as string,
     age: formData.get('age') ? parseInt(formData.get('age') as string) : null,
     height: formData.get('height') ? parseFloat(formData.get('height') as string) : null,
     weight: formData.get('weight') ? parseFloat(formData.get('weight') as string) : null,
     gender: formData.get('gender') as string,
     activity_level: formData.get('activity_level') as string,
-    dietery_preferences: formData.get('dietery_preferences') as string,
-    preferred_cuisine: formData.get('preferredCuisine') as string,
-    medical_conditions: formData.get('medicalConditions') as string,
+    dietary_preferences: formData.get('dietary_preferences') as string,
+    preferred_cuisine: formData.get('preferred_cuisine') as string,
+    medical_conditions: formData.get('medical_conditions') as string,
     allergies: formData.get('allergies') as string,
     updated_at: new Date().toISOString(),
   }

@@ -11,21 +11,23 @@ export async function createDietPlan() {
   if (!user) throw new Error('User not authenticated')
 
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+  if (!profile) throw new Error('Profile not found. Please complete your profile first.');
 
   const aiInput: GeneratePersonalizedDietPlanInput = {
-    age: profile?.age,
-    height: profile?.height,
-    weight: profile?.weight,
-    gender: profile?.gender,
-    activityLevel: profile?.activity_level,
-    medicalConditions: profile?.medical_conditions,
-    dieteryPreferences: profile?.dietery_preferences,
-    preferredCuisine: profile?.preferred_cuisine,
-    allergies: profile?.allergies,
+    firstName: profile.first_name,
+    age: profile.age,
+    height: profile.height,
+    weight: profile.weight,
+    gender: profile.gender,
+    activityLevel: profile.activity_level,
+    medicalConditions: profile.medical_conditions,
+    dietaryPreferences: profile.dietary_preferences,
+    preferredCuisine: profile.preferred_cuisine,
+    allergies: profile.allergies,
   }
 
   const plan = await generatePersonalizedDietPlan(aiInput)
-  return { ...plan, profile_data: profile }
+  return { ...plan, profile_snapshot: profile }
 }
 
 export async function createWorkoutPlan() {
@@ -34,22 +36,32 @@ export async function createWorkoutPlan() {
   if (!user) throw new Error('User not authenticated')
   
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+  if (!profile) throw new Error('Profile not found. Please complete your profile first.');
+
 
   const aiInput: GenerateCustomWorkoutPlanInput = {
-    age: profile?.age,
-    height: profile?.height,
-    weight: profile?.weight,
-    gender: profile?.gender,
-    activityLevel: profile?.activity_level || 'Sedentary',
-    medicalConditions: profile?.medical_conditions,
-    allergies: profile?.allergies,
+    firstName: profile.first_name,
+    age: profile.age,
+    height: profile.height,
+    weight: profile.weight,
+    gender: profile.gender,
+    activityLevel: profile.activity_level || 'Sedentary',
+    medicalConditions: profile.medical_conditions,
+    allergies: profile.allergies,
   }
 
   const plan = await generateCustomWorkoutPlan(aiInput)
-  return { ...plan, profile_data: profile }
+  return { ...plan, profile_snapshot: profile }
 }
 
-export async function savePlan(planData: { diet_plan: string | null, workout_plan: string | null, health_tips: string | null, profile_data: any }) {
+export async function savePlan(planData: { 
+    name: string,
+    type: 'diet' | 'workout' | 'hybrid',
+    profile_snapshot: any,
+    diet_plan_details: any | null,
+    workout_plan_details: any | null,
+    health_tips: string[]
+}) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -59,10 +71,12 @@ export async function savePlan(planData: { diet_plan: string | null, workout_pla
 
   const { error } = await supabase.from('plans').insert({
     user_id: user.id,
-    diet_plan: planData.diet_plan,
-    workout_plan: planData.workout_plan,
+    name: planData.name,
+    type: planData.type,
+    profile_snapshot: planData.profile_snapshot,
+    diet_plan_details: planData.diet_plan_details,
+    workout_plan_details: planData.workout_plan_details,
     health_tips: planData.health_tips,
-    profile_data: planData.profile_data,
   });
 
   if (error) {
