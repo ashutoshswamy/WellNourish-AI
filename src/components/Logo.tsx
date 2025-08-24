@@ -1,8 +1,8 @@
-import { Heart } from 'lucide-react';
+import { Stethoscope } from 'lucide-react';
 import type { SVGProps } from 'react';
 
 export function Logo(props: SVGProps<SVGSVGElement>) {
   return (
-    <Heart {...props} fill="currentColor" />
+    <Stethoscope {...props} />
   );
 }
