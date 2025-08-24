@@ -78,7 +78,7 @@ export default async function ProfilePage() {
             
             <div className="space-y-2">
               <Label htmlFor="dietaryPreferences">Dietary Preferences</Label>
-              <Textarea id="dietaryPreferences" name="dietaryPreferences" placeholder="e.g., Vegetarian, Vegan, Gluten-Free, prefer quick meals, dislike spicy food." defaultValue={profile?.dietery_preferences ?? ''} />
+              <Textarea id="dietaryPreferences" name="dietaryPreferences" placeholder="e.g., Vegetarian, Vegan, Gluten-Free, prefer quick meals, dislike spicy food." defaultValue={profile?.dietary_preferences ?? ''} />
             </div>
 
             <div className="space-y-2">

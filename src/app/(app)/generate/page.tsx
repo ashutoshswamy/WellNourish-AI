@@ -15,6 +15,22 @@ type PlanResult = {
   profile_data?: any
 } | null
 
+function ProfileDataDisplay({ profile_data }: { profile_data: any }) {
+    if (!profile_data) return null;
+    return (
+        <div className="mt-4 bg-muted/50 p-4 rounded-lg">
+            <h3 className="font-headline text-lg mb-2">Plan Generated with this Profile</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
+                {profile_data.age && <div><strong>Age:</strong> {profile_data.age}</div>}
+                {profile_data.height && <div><strong>Height:</strong> {profile_data.height} cm</div>}
+                {profile_data.weight && <div><strong>Weight:</strong> {profile_data.weight} kg</div>}
+                {profile_data.gender && <div><strong>Gender:</strong> {profile_data.gender}</div>}
+                {profile_data.activity_level && <div className="col-span-2"><strong>Activity:</strong> {profile_data.activity_level}</div>}
+            </div>
+        </div>
+    )
+}
+
 export default function GeneratePage() {
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
@@ -46,7 +62,7 @@ export default function GeneratePage() {
       setGenerationType('workout');
       const result = await createWorkoutPlan()
       if (result.workoutPlan) {
-        setGeneratedPlan({ workoutPlan: result.workoutPlan, profile_data: result.profile_data })
+        setGeneratedPlan({ workoutPlan: result.workoutPlan, healthTips: result.healthTips, profile_data: result.profile_data })
       } else {
         toast({
           variant: "destructive",
@@ -143,9 +159,12 @@ export default function GeneratePage() {
               )}
                {generatedPlan?.healthTips && (
                  <div>
-                    <h2 className="text-xl font-bold font-headline mt-4">Health Tips</h2>
+                    <h2 className="text-xl font-bold font-headline mt-4 border-t pt-4">Health Tips</h2>
                     <Markdown content={generatedPlan.healthTips} />
                  </div>
+              )}
+              {generatedPlan?.profile_data && (
+                  <ProfileDataDisplay profile_data={generatedPlan.profile_data} />
               )}
               {!isGenerating && !generatedPlan && (
                 <div className="flex flex-col items-center justify-center h-full text-center p-4 md:p-8">

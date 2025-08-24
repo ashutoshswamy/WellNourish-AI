@@ -32,6 +32,7 @@ export type GenerateCustomWorkoutPlanInput = z.infer<
 
 const GenerateCustomWorkoutPlanOutputSchema = z.object({
   workoutPlan: z.string().describe('The generated custom workout plan.'),
+  healthTips: z.string().describe('General health tips for the user.'),
 });
 export type GenerateCustomWorkoutPlanOutput = z.infer<
   typeof GenerateCustomWorkoutPlanOutputSchema
@@ -49,7 +50,7 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateCustomWorkoutPlanOutputSchema},
   prompt: `You are a personal trainer who creates workout plans.
 
-Create a custom workout plan based on the user's profile. Consider any medical conditions provided.
+Create a custom workout plan and some health tips based on the user's profile. Consider any medical conditions provided.
 
 - Age: {{age}}
 - Height: {{height}} cm
@@ -59,7 +60,7 @@ Create a custom workout plan based on the user's profile. Consider any medical c
 - Medical Conditions: {{{medicalConditions}}}
 - Allergies: {{{allergies}}}
 
-Provide a detailed workout plan.`,
+Provide a detailed workout plan and relevant health tips.`,
 });
 
 const generateCustomWorkoutPlanFlow = ai.defineFlow(
