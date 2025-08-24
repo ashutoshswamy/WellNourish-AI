@@ -18,7 +18,7 @@ export default async function Dashboard() {
         <p className="text-muted-foreground mt-1">Here's your wellness snapshot. Ready to continue your journey?</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2">
         <Card className="flex flex-col">
           <CardHeader>
             <CardTitle className="font-headline text-2xl flex items-center gap-2">
@@ -47,17 +47,6 @@ export default async function Dashboard() {
             <Button asChild variant="secondary" className="w-full">
               <Link href="/my-plans">My Plans</Link>
             </Button>
-          </CardContent>
-        </Card>
-        <Card className="lg:col-span-1 bg-accent/20 border-accent/20 flex flex-col">
-           <CardHeader>
-            <CardTitle className="font-headline text-2xl">Track Your Progress</CardTitle>
-            <CardDescription>Visualize your journey and stay motivated.</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-grow flex items-center justify-center">
-            <div className="text-center text-muted-foreground p-8">
-                <p>Progress tracking charts coming soon!</p>
-            </div>
           </CardContent>
         </Card>
       </div>

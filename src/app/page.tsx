@@ -45,7 +45,7 @@ export default function Home() {
                     <h2 className="text-3xl md:text-4xl font-bold font-headline">A Smarter Path to Wellness</h2>
                     <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">Our intelligent platform analyzes your unique profile to deliver plans that truly work for you.</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="text-center">
                       <div className="inline-flex p-4 bg-primary/10 rounded-full mb-4">
                          <Salad className="h-8 w-8 text-primary" />
@@ -62,15 +62,6 @@ export default function Home() {
                       <h3 className="font-headline text-2xl mb-2">Custom Workout Plans</h3>
                       <p className="text-muted-foreground">
                           Get effective workout routines tailored to your fitness level, goals, and available equipment, from home bodyweight exercises to full gym sessions.
-                      </p>
-                    </div>
-                     <div className="text-center">
-                      <div className="inline-flex p-4 bg-primary/10 rounded-full mb-4">
-                         <HeartPulse className="h-8 w-8 text-primary" />
-                      </div>
-                      <h3 className="font-headline text-2xl mb-2">Progress Tracking</h3>
-                      <p className="text-muted-foreground">
-                          Monitor your journey with intuitive charts and visualizations. See how far you've come and stay motivated to reach your goals.
                       </p>
                     </div>
                 </div>
