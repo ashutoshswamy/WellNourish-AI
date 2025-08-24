@@ -1,6 +1,6 @@
 # WellNourish AI
 
-This is a [Next.js](https://nextjs.org/) project, bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) and configured for use with Firebase Studio.
+## Overview
 
 WellNourish AI is a modern wellness application that leverages the power of Artificial Intelligence to provide users with personalized diet and workout plans. It's built with a robust, modern tech stack designed for performance, scalability, and a great user experience.
 
@@ -12,17 +12,14 @@ WellNourish AI is a modern wellness application that leverages the power of Arti
 - **Plan Management:** Users can save, view, and manage their generated wellness plans.
 - **Responsive UI:** Built with ShadCN UI components and Tailwind CSS for a clean, modern, and responsive interface that works on all devices.
 
-## Technology Stack
+## Developer
 
-To learn more about the technologies used in this project, take a look at the following resources:
+This application was developed by Ashutosh Swamy. You can connect with him here:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [React Documentation](https://react.dev/) - learn about React.
-- [Genkit Documentation](https://firebase.google.com/docs/genkit) - learn about Genkit for AI-powered features.
-- [Supabase Documentation](https://supabase.com/docs) - learn about Supabase for backend services.
-- [ShadCN UI Documentation](https://ui.shadcn.com/) - learn about the UI components used.
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs) - learn about the CSS framework.
+- **GitHub:** [github.com/ashutoshswamy](https://github.com/ashutoshswamy)
+- **LinkedIn:** [linkedin.com/in/ashutoshswamy](https://www.linkedin.com/in/ashutoshswamy)
+- **Twitter:** [@ashutoshswamy_](https://twitter.com/ashutoshswamy_)
 
-## Deploy on Firebase
+## Copyright
 
-This application is ready to be deployed on [Firebase App Hosting](https://firebase.google.com/docs/app-hosting).
+&copy; 2024 WellNourish AI. All rights reserved.
