@@ -22,4 +22,4 @@ This application was developed by Ashutosh Swamy. You can connect with him here:
 
 ## Copyright
 
-&copy; 2024 WellNourish AI. All rights reserved.
+&copy; 2025 WellNourish AI. All rights reserved.
