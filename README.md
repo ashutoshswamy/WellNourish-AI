@@ -100,6 +100,7 @@ src/
 ├── components/            # React components
 │   ├── ui/                # Reusable UI components
 │   ├── enhanced-profile-form.tsx
+│   ├── footer.tsx         # App footer with developer info
 │   ├── plan-display.tsx
 │   └── user-dashboard.tsx
 ├── contexts/              # React contexts
@@ -135,9 +136,12 @@ src/
 
 This project is private and proprietary.
 
-## 👨‍💻 Author
+## 👨‍💻 Developer
 
-**WellNourish AI Team**
+**Ashutosh Swamy**
+
+- GitHub: [@ashutoshswamy](https://github.com/ashutoshswamy)
+- LinkedIn: [ashutoshswamy](https://linkedin.com/in/ashutoshswamy)
 
 ---
 
