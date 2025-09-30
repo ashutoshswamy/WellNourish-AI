@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ChartTooltipContent } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 
 const data = [
   { month: 'Jan', weight: 80 },
@@ -19,6 +19,13 @@ const data = [
   { month: 'Jun', weight: 75 },
 ];
 
+const chartConfig = {
+  weight: {
+    label: "Weight",
+    color: "hsl(var(--primary))",
+  },
+} satisfies ChartConfig
+
 export function ProgressTracker() {
   return (
     <Card className="shadow-lg">
@@ -28,7 +35,7 @@ export function ProgressTracker() {
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
             <LineChart
               data={data}
               margin={{
@@ -69,7 +76,7 @@ export function ProgressTracker() {
                 }}
               />
             </LineChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </div>
       </CardContent>
     </Card>
