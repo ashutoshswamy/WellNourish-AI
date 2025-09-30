@@ -8,6 +8,8 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Utensils, Dumbbell } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface PlanDisplayProps {
   dietPlan: string;
@@ -33,8 +35,8 @@ export function PlanDisplay({ dietPlan, workoutRegimen }: PlanDisplayProps) {
             <CardTitle className="font-headline">Your Personalized Diet Plan</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="prose prose-sm max-w-none rounded-lg border bg-secondary/50 p-4 text-secondary-foreground">
-              <pre className="whitespace-pre-wrap font-body text-sm">{dietPlan}</pre>
+            <div className="prose dark:prose-invert max-w-none rounded-lg border bg-secondary/50 p-4 text-secondary-foreground">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{dietPlan}</ReactMarkdown>
             </div>
           </CardContent>
         </Card>
@@ -45,8 +47,8 @@ export function PlanDisplay({ dietPlan, workoutRegimen }: PlanDisplayProps) {
             <CardTitle className="font-headline">Your Personalized Workout Regimen</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="prose prose-sm max-w-none rounded-lg border bg-secondary/50 p-4 text-secondary-foreground">
-               <pre className="whitespace-pre-wrap font-body text-sm">{workoutRegimen}</pre>
+            <div className="prose dark:prose-invert max-w-none rounded-lg border bg-secondary/50 p-4 text-secondary-foreground">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{workoutRegimen}</ReactMarkdown>
             </div>
           </CardContent>
         </Card>
