@@ -1,7 +1,19 @@
 {
-  "name": "nextn",
-  "version": "0.1.0",
+  "name": "wellnourish-ai",
+  "version": "1.0.0",
   "private": true,
+  "description": "Transform your health with WellNourish AI - the smartest personal diet and workout planner.",
+  "keywords": [
+    "AI",
+    "health",
+    "fitness",
+    "diet",
+    "nutrition",
+    "workout",
+    "wellness",
+    "planner"
+  ],
+  "author": "WellNourish AI Team",
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
@@ -9,7 +21,8 @@
     "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.14.1",
@@ -36,8 +49,11 @@
     "@radix-ui/react-tabs": "^1.1.3",
     "@radix-ui/react-toast": "^1.2.6",
     "@radix-ui/react-tooltip": "^1.1.8",
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.58.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "critters": "^0.0.23",
     "date-fns": "^3.6.0",
     "dotenv": "^16.5.0",
     "embla-carousel-react": "^8.6.0",

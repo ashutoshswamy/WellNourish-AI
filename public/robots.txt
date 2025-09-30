@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /signup
+Disallow: /plans
+Disallow: /auth/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://wellnourish-ai.vercel.app/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
