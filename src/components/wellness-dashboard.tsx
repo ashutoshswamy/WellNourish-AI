@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { ProfileForm } from '@/components/profile-form';
 import { PlanDisplay } from '@/components/plan-display';
-import { ProgressTracker } from '@/components/progress-tracker';
-import { Guidance } from '@/components/guidance';
 import type { PlanState } from '@/app/actions';
 
 export function WellnessDashboard() {
@@ -25,10 +23,6 @@ export function WellnessDashboard() {
               dietPlan={plans.dietPlan}
               workoutRegimen={plans.workoutRegimen!}
             />
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-                <ProgressTracker />
-                <Guidance />
-            </div>
           </div>
         </div>
       )}
