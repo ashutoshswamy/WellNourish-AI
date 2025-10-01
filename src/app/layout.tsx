@@ -90,8 +90,15 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+        />
         <meta name="theme-color" content="#16a34a" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
 
         {/* Favicon and icons */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -110,6 +117,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
 
+        {/* Optimized font loading with better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -146,10 +154,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-body antialiased min-h-screen flex flex-col">
+      <body className="font-body antialiased min-h-screen flex flex-col bg-background text-foreground">
         <AuthProvider>
-          <div className="flex-1">{children}</div>
-          <Footer />
+          <div className="flex-1 flex flex-col">
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
           <Toaster />
         </AuthProvider>
       </body>

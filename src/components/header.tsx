@@ -44,18 +44,18 @@ export function Header({ onBackToHome }: HeaderProps) {
   };
 
   return (
-    <header className="relative px-section py-6 md:py-8">
+    <header className="relative px-section py-4 xs:py-6 md:py-8">
       {/* Back to Home Button */}
       {onBackToHome && (
         <Button
           variant="ghost"
           size="sm"
           onClick={onBackToHome}
-          className="absolute left-4 top-6 md:top-8 sm:left-6 lg:left-8 touch-target focus-ring z-10"
+          className="absolute left-3 top-4 xs:left-4 xs:top-6 md:top-8 sm:left-6 lg:left-8 touch-target-large focus-ring z-10"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          <span className="hidden sm:inline">Back to Home</span>
-          <span className="sm:hidden">Back</span>
+          <ArrowLeft className="h-4 w-4 mr-1 xs:mr-2" />
+          <span className="hidden sm:inline text-sm">Back to Home</span>
+          <span className="sm:hidden text-sm">Back</span>
         </Button>
       )}
 
@@ -65,7 +65,7 @@ export function Header({ onBackToHome }: HeaderProps) {
           variant="ghost"
           size="sm"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="absolute right-4 top-6 md:hidden touch-target focus-ring z-50"
+          className="absolute right-3 top-4 xs:right-4 xs:top-6 md:hidden touch-target-large focus-ring z-50"
           aria-label="Toggle mobile menu"
         >
           {mobileMenuOpen ? (
@@ -77,11 +77,11 @@ export function Header({ onBackToHome }: HeaderProps) {
       )}
 
       {/* Desktop User Menu */}
-      <div className="absolute right-4 top-6 md:top-8 sm:right-6 lg:right-8 hidden md:flex">
+      <div className="absolute right-3 top-4 xs:right-4 xs:top-6 md:top-8 sm:right-6 lg:right-8 hidden md:flex">
         {user ? (
-          <div className="flex items-center gap-2 lg:gap-4">
+          <div className="flex items-center gap-1 xs:gap-2 lg:gap-4">
             {/* Navigation buttons when user is logged in */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 xs:gap-2">
               {pathname !== "/" && (
                 <Button
                   variant="ghost"
@@ -89,9 +89,9 @@ export function Header({ onBackToHome }: HeaderProps) {
                   asChild
                   className="touch-target focus-ring"
                 >
-                  <Link href="/" className="gap-2">
+                  <Link href="/" className="gap-1 xs:gap-2">
                     <LayoutDashboard className="h-4 w-4" />
-                    <span className="hidden lg:inline">Dashboard</span>
+                    <span className="hidden lg:inline text-sm">Dashboard</span>
                   </Link>
                 </Button>
               )}
@@ -102,9 +102,9 @@ export function Header({ onBackToHome }: HeaderProps) {
                   asChild
                   className="touch-target focus-ring"
                 >
-                  <Link href="/plans" className="gap-2">
+                  <Link href="/plans" className="gap-1 xs:gap-2">
                     <FileText className="h-4 w-4" />
-                    <span className="hidden lg:inline">History</span>
+                    <span className="hidden lg:inline text-sm">History</span>
                   </Link>
                 </Button>
               )}
@@ -115,15 +115,15 @@ export function Header({ onBackToHome }: HeaderProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="gap-2 touch-target focus-ring"
+                  className="gap-1 xs:gap-2 touch-target focus-ring"
                 >
                   <User className="h-4 w-4" />
-                  <span className="hidden xl:inline max-w-32 truncate">
+                  <span className="hidden xl:inline max-w-24 xs:max-w-32 truncate text-sm">
                     {user.email}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-48 xs:w-56">
                 <DropdownMenuItem asChild>
                   <Link href="/" className="flex items-center">
                     <LayoutDashboard className="h-4 w-4 mr-2" />
@@ -145,17 +145,21 @@ export function Header({ onBackToHome }: HeaderProps) {
             </DropdownMenu>
           </div>
         ) : (
-          <div className="flex gap-2">
+          <div className="flex gap-1 xs:gap-2">
             <Button
               variant="ghost"
               size="sm"
               asChild
               className="touch-target focus-ring"
             >
-              <Link href="/login">Sign In</Link>
+              <Link href="/login" className="text-sm">
+                Sign In
+              </Link>
             </Button>
             <Button size="sm" asChild className="touch-target focus-ring">
-              <Link href="/signup">Sign Up</Link>
+              <Link href="/signup" className="text-sm">
+                Sign Up
+              </Link>
             </Button>
           </div>
         )}
@@ -232,29 +236,33 @@ export function Header({ onBackToHome }: HeaderProps) {
 
       {/* Mobile Auth Buttons (when not logged in) */}
       {!user && (
-        <div className="absolute right-4 top-6 md:hidden flex gap-2">
+        <div className="absolute right-3 top-4 xs:right-4 xs:top-6 md:hidden flex gap-1 xs:gap-2">
           <Button
             variant="ghost"
             size="sm"
             asChild
             className="touch-target focus-ring"
           >
-            <Link href="/login">Sign In</Link>
+            <Link href="/login" className="text-sm">
+              Sign In
+            </Link>
           </Button>
           <Button size="sm" asChild className="touch-target focus-ring">
-            <Link href="/signup">Sign Up</Link>
+            <Link href="/signup" className="text-sm">
+              Sign Up
+            </Link>
           </Button>
         </div>
       )}
 
       {/* Logo and Title */}
-      <div className="flex items-center justify-center gap-2 md:gap-3">
-        <Leaf className="h-8 w-8 md:h-10 md:w-10 text-primary" />
-        <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-foreground font-headline">
+      <div className="flex items-center justify-center gap-2 xs:gap-3 md:gap-3">
+        <Leaf className="h-6 w-6 xs:h-8 xs:w-8 md:h-10 md:w-10 text-primary" />
+        <h1 className="text-xl xs:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-foreground font-headline">
           WellNourish AI
         </h1>
       </div>
-      <p className="mt-2 md:mt-4 text-center text-sm md:text-base lg:text-lg text-muted-foreground">
+      <p className="mt-2 xs:mt-3 md:mt-4 text-center text-xs xs:text-sm md:text-base lg:text-lg text-muted-foreground">
         Your personal AI-powered diet and workout planner.
       </p>
     </header>

@@ -209,62 +209,101 @@
     @apply container mx-auto px-4 sm:px-6 lg:px-8;
   }
 
-  /* Responsive container with fluid padding */
+  /* Enhanced responsive containers with better mobile padding */
   .container-fluid {
-    @apply w-full max-w-7xl mx-auto px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20;
+    @apply w-full max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20;
   }
 
   .container-narrow {
-    @apply w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply w-full max-w-4xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8;
   }
 
-  /* Touch-friendly sizing */
+  /* Ultra-wide screen container */
+  .container-ultra-wide {
+    @apply w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16;
+  }
+
+  /* Mobile-optimized containers */
+  .container-mobile {
+    @apply w-full px-3 xs:px-4 max-w-sm xs:max-w-md sm:max-w-lg mx-auto;
+  }
+
+  /* Enhanced touch-friendly sizing for better mobile experience */
   .touch-target {
     @apply min-h-[44px] min-w-[44px];
   }
 
-  .touch-button {
-    @apply min-h-[48px] px-6 py-3 text-base;
+  .touch-target-large {
+    @apply min-h-[48px] min-w-[48px];
   }
 
-  /* Mobile-first responsive grid */
+  .touch-button {
+    @apply min-h-[48px] px-4 py-3 text-base sm:px-6 md:py-4;
+  }
+
+  .touch-button-large {
+    @apply min-h-[56px] px-6 py-4 text-base md:text-lg;
+  }
+
+  /* Enhanced mobile-first responsive grid */
   .grid-responsive {
-    @apply grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6;
+    @apply grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 xs:gap-4 md:gap-6;
   }
 
   .grid-cards {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8;
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8;
   }
 
   .grid-features {
-    @apply grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8;
+    @apply grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8;
   }
 
-  /* Responsive spacing */
+  /* Mobile-optimized grid layouts */
+  .grid-mobile-stack {
+    @apply grid grid-cols-1 gap-4;
+  }
+
+  .grid-mobile-double {
+    @apply grid grid-cols-1 xs:grid-cols-2 gap-3 xs:gap-4;
+  }
+
+  .grid-tablet-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6;
+  }
+
+  /* Enhanced responsive spacing with micro adjustments */
   .space-y-responsive {
-    @apply space-y-4 md:space-y-6 lg:space-y-8;
+    @apply space-y-3 xs:space-y-4 md:space-y-6 lg:space-y-8;
   }
 
   .space-x-responsive {
-    @apply space-x-2 sm:space-x-4 md:space-x-6;
+    @apply space-x-2 xs:space-x-3 sm:space-x-4 md:space-x-6;
   }
 
-  /* Responsive padding */
+  /* Enhanced responsive padding with better mobile optimization */
   .py-section {
-    @apply py-12 md:py-16 lg:py-20 xl:py-24;
+    @apply py-8 xs:py-10 sm:py-12 md:py-16 lg:py-20 xl:py-24 2xl:py-28;
+  }
+
+  .py-section-small {
+    @apply py-4 xs:py-6 sm:py-8 md:py-10 lg:py-12;
   }
 
   .px-section {
-    @apply px-4 sm:px-6 lg:px-8 xl:px-12;
+    @apply px-3 xs:px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16;
   }
 
-  /* Responsive margins */
+  /* Enhanced responsive margins */
   .mb-section {
-    @apply mb-8 md:mb-12 lg:mb-16;
+    @apply mb-6 xs:mb-8 md:mb-12 lg:mb-16 xl:mb-20;
   }
 
   .mt-section {
-    @apply mt-8 md:mt-12 lg:mt-16;
+    @apply mt-6 xs:mt-8 md:mt-12 lg:mt-16 xl:mt-20;
+  }
+
+  .my-section {
+    @apply my-6 xs:my-8 md:my-12 lg:my-16 xl:my-20;
   }
 
   /* Glassmorphism effect */
@@ -322,13 +361,21 @@
     @apply p-4 sm:p-6 lg:p-8;
   }
 
-  /* Button size variants for mobile */
+  /* Enhanced button size variants for all devices */
   .btn-mobile {
-    @apply px-4 py-3 text-sm xs:px-6 xs:py-3 xs:text-base;
+    @apply px-3 py-2 text-sm xs:px-4 xs:py-3 xs:text-base;
+  }
+
+  .btn-tablet {
+    @apply px-4 py-3 text-base md:px-6 md:py-3;
   }
 
   .btn-desktop {
-    @apply px-6 py-3 text-base md:px-8 md:py-4 md:text-lg;
+    @apply px-6 py-3 text-base lg:px-8 lg:py-4 lg:text-lg;
+  }
+
+  .btn-hero {
+    @apply px-8 py-4 text-lg md:px-10 md:py-5 md:text-xl;
   }
 
   /* Safe area padding for notched devices */
@@ -440,7 +487,7 @@
   }
 }
 
-/* Print styles */
+/* Enhanced print styles */
 @media print {
   .no-print {
     display: none !important;
@@ -449,10 +496,30 @@
   body {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* Hide interactive elements in print */
+  button,
+  .btn,
+  input,
+  select,
+  textarea,
+  nav {
+    display: none !important;
   }
 }
 
-/* Reduced motion preferences */
+/* Enhanced reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -462,14 +529,72 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* Still allow focus indicators */
+  :focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
 }
 
-/* Mobile-specific optimizations */
+/* Dark mode support for devices */
+@media (prefers-color-scheme: dark) {
+  /* Ensure compatibility with system dark mode */
+  body {
+    color-scheme: dark;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  * {
+    border-color: ButtonText !important;
+  }
+
+  button {
+    border: 2px solid ButtonText !important;
+  }
+}
+
+/* Performance optimizations */
+@media (max-width: 768px) {
+  /* Reduce animations on mobile for better performance */
+  .performance-optimized {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Optimize images for mobile */
+  img {
+    image-rendering: optimizeSpeed;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .hover-effect {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Larger touch targets */
+  button,
+  a,
+  [role="button"] {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+/* Enhanced mobile-specific optimizations */
 @media (max-width: 640px) {
   /* Ensure tap targets are large enough */
   button,
   [role="button"],
-  a[href] {
+  a[href],
+  input[type="submit"],
+  input[type="button"] {
     min-height: 44px;
     min-width: 44px;
   }
@@ -479,6 +604,9 @@
   input[type="email"],
   input[type="password"],
   input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
   textarea,
   select {
     font-size: 16px;
@@ -494,9 +622,25 @@
   .card {
     margin-bottom: 1rem;
   }
+
+  /* Optimize mobile forms */
+  form {
+    padding: 1rem;
+  }
+
+  /* Improve mobile navigation */
+  nav {
+    padding: 0.5rem 1rem;
+  }
+
+  /* Mobile-friendly modals */
+  .modal-content {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
 }
 
-/* Tablet-specific optimizations */
+/* Enhanced tablet-specific optimizations */
 @media (min-width: 641px) and (max-width: 1024px) {
   /* Optimize for tablet touch interfaces */
   button,
@@ -504,14 +648,68 @@
     min-height: 48px;
     padding: 0.75rem 1.5rem;
   }
+
+  /* Better tablet navigation */
+  nav {
+    padding: 1rem 1.5rem;
+  }
+
+  /* Optimize tablet cards */
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  /* Better modal sizing for tablets */
+  .modal-content {
+    max-width: 90vw;
+    margin: 2rem auto;
+  }
+
+  /* Tablet-friendly forms */
+  form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
 }
 
-/* Desktop optimizations */
+/* Enhanced desktop optimizations */
 @media (min-width: 1025px) {
   /* Enable hover effects only on devices that support hover */
   .hover-only-desktop:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Better desktop navigation */
+  nav {
+    padding: 1rem 2rem;
+  }
+
+  /* Desktop-optimized grids */
+  .desktop-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  /* Desktop forms */
+  form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2.5rem;
+  }
+
+  /* Enhanced desktop buttons */
+  .btn-desktop-enhanced {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-desktop-enhanced:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -524,12 +722,46 @@
   }
 }
 
-/* Landscape orientation on mobile */
+/* Very large screens */
+@media (min-width: 1920px) {
+  .container-wellness,
+  .container-fluid {
+    max-width: 1600px;
+  }
+
+  /* Ultra-wide optimizations */
+  .grid-ultra-wide {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+  }
+
+  /* Enhanced typography for large screens */
+  .text-ultra-large {
+    font-size: 4rem;
+    line-height: 1.1;
+  }
+}
+
+/* Foldable devices support */
+@media (max-width: 640px) and (min-height: 600px) {
+  /* Tall narrow screens (unfolded phones) */
+  .foldable-layout {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .foldable-content {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+
+/* Landscape orientation optimizations */
 @media (max-height: 500px) and (orientation: landscape) {
   /* Reduce vertical spacing in landscape mode */
   .py-section {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
   /* Adjust hero text for landscape */
@@ -537,12 +769,15 @@
     font-size: 2rem;
     line-height: 1.2;
   }
-}
 
-/* Very large screens */
-@media (min-width: 1920px) {
-  .container-wellness,
-  .container-fluid {
-    max-width: 1600px;
+  /* Optimize navigation for landscape */
+  nav {
+    padding: 0.5rem 1rem;
+  }
+
+  /* Better modal sizing in landscape */
+  .modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
   }
 }

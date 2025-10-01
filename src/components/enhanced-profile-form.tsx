@@ -83,18 +83,18 @@ function SubmitButton() {
     <Button
       type="submit"
       size="lg"
-      className="w-full min-h-[56px] md:h-14 text-base md:text-lg font-semibold bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 transition-all duration-200 shadow-lg hover:shadow-xl touch-target focus-ring"
+      className="w-full touch-target-large text-sm xs:text-base md:text-lg font-semibold bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 transition-all duration-200 shadow-lg hover:shadow-xl focus-ring"
       disabled={pending}
     >
       {pending ? (
         <>
-          <Loader2 className="mr-2 md:mr-3 h-5 w-5 animate-spin" />
+          <Loader2 className="mr-2 md:mr-3 h-4 w-4 xs:h-5 xs:w-5 animate-spin" />
           <span className="hidden xs:inline">Generating Your Plan...</span>
           <span className="xs:hidden">Generating...</span>
         </>
       ) : (
         <>
-          <Bot className="mr-2 md:mr-3 h-5 w-5" />
+          <Bot className="mr-2 md:mr-3 h-4 w-4 xs:h-5 xs:w-5" />
           <span className="hidden sm:inline">
             Generate My Personalized Plan
           </span>
@@ -127,22 +127,22 @@ function MultiSelectCheckbox({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 xs:space-y-4">
       <div>
-        <Label className="text-sm md:text-base font-semibold text-foreground">
+        <Label className="text-sm xs:text-base md:text-lg font-semibold text-foreground">
           {label}
         </Label>
         {description && (
-          <p className="text-xs md:text-sm text-muted-foreground mt-1">
+          <p className="text-xs xs:text-sm md:text-base text-muted-foreground mt-1 xs:mt-2">
             {description}
           </p>
         )}
       </div>
-      <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 xs:gap-3 md:gap-4">
         {options.map((option) => (
           <div
             key={option}
-            className="flex items-center space-x-2 md:space-x-3"
+            className="flex items-center space-x-2 xs:space-x-3 p-2 xs:p-3 rounded-lg hover:bg-muted/30 transition-colors"
           >
             <Checkbox
               id={`${name}-${option}`}
@@ -152,11 +152,11 @@ function MultiSelectCheckbox({
               onCheckedChange={(checked) =>
                 handleCheckboxChange(option, checked as boolean)
               }
-              className="touch-target"
+              className="touch-target-large"
             />
             <label
               htmlFor={`${name}-${option}`}
-              className="text-sm md:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer touch-target"
+              className="text-xs xs:text-sm md:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer touch-target flex-1"
             >
               {option}
             </label>
@@ -194,8 +194,8 @@ function CustomInput({
   };
 
   return (
-    <div className="space-y-3">
-      <Label className="text-sm md:text-base font-semibold text-foreground">
+    <div className="space-y-3 xs:space-y-4">
+      <Label className="text-sm xs:text-base md:text-lg font-semibold text-foreground">
         {label}
       </Label>
       <div className="flex flex-col xs:flex-row gap-2">
@@ -447,11 +447,11 @@ export function EnhancedProfileForm({
 
           <CardContent className="space-y-responsive">
             {/* Age and Gender */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              <div className="space-y-2 md:space-y-3">
+            <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 md:gap-6">
+              <div className="space-y-2 xs:space-y-3">
                 <Label
                   htmlFor="age"
-                  className="text-sm md:text-base font-semibold text-foreground"
+                  className="text-sm xs:text-base md:text-lg font-semibold text-foreground"
                 >
                   Age
                 </Label>
@@ -461,21 +461,21 @@ export function EnhancedProfileForm({
                   type="number"
                   placeholder="e.g., 30"
                   required
-                  className="h-12 md:h-14 text-base border-2 focus:border-primary transition-colors touch-target focus-ring"
+                  className="touch-target-large text-sm xs:text-base border-2 focus:border-primary transition-colors focus-ring"
                 />
               </div>
 
-              <div className="space-y-2 md:space-y-3">
+              <div className="space-y-2 xs:space-y-3">
                 <Label
                   htmlFor="gender"
-                  className="text-sm md:text-base font-semibold text-foreground"
+                  className="text-sm xs:text-base md:text-lg font-semibold text-foreground"
                 >
                   Gender
                 </Label>
                 <Select name="gender" required>
                   <SelectTrigger
                     id="gender"
-                    className="h-12 md:h-14 text-base border-2 focus:border-primary touch-target focus-ring"
+                    className="touch-target-large text-sm xs:text-base border-2 focus:border-primary focus-ring"
                   >
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
@@ -492,15 +492,15 @@ export function EnhancedProfileForm({
             </div>
 
             {/* Height Section */}
-            <div className="space-y-3 md:space-y-4">
-              <Label className="text-sm md:text-base font-semibold text-foreground">
+            <div className="space-y-3 xs:space-y-4">
+              <Label className="text-sm xs:text-base md:text-lg font-semibold text-foreground">
                 Height
               </Label>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-3 gap-2 xs:gap-3 md:gap-4">
                 <div className="space-y-2">
                   <Label
                     htmlFor="height_cm"
-                    className="text-xs md:text-sm text-muted-foreground"
+                    className="text-xs xs:text-sm text-muted-foreground"
                   >
                     Centimeters
                   </Label>
@@ -512,13 +512,13 @@ export function EnhancedProfileForm({
                     value={heightCm}
                     onChange={(e) => handleHeightCmChange(e.target.value)}
                     required
-                    className="h-12 text-base border-2 focus:border-primary transition-colors"
+                    className="touch-target text-sm xs:text-base border-2 focus:border-primary transition-colors focus-ring"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label
                     htmlFor="height_ft"
-                    className="text-xs text-muted-foreground"
+                    className="text-xs xs:text-sm text-muted-foreground"
                   >
                     Feet
                   </Label>
@@ -531,13 +531,13 @@ export function EnhancedProfileForm({
                     onChange={(e) =>
                       handleHeightFeetInchesChange(e.target.value, heightInches)
                     }
-                    className="h-12 text-base border-2 focus:border-primary transition-colors"
+                    className="touch-target text-sm xs:text-base border-2 focus:border-primary transition-colors focus-ring"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label
                     htmlFor="height_inches"
-                    className="text-xs text-muted-foreground"
+                    className="text-xs xs:text-sm text-muted-foreground"
                   >
                     Inches
                   </Label>
@@ -550,22 +550,22 @@ export function EnhancedProfileForm({
                     onChange={(e) =>
                       handleHeightFeetInchesChange(heightFt, e.target.value)
                     }
-                    className="h-12 text-base border-2 focus:border-primary transition-colors"
+                    className="touch-target text-sm xs:text-base border-2 focus:border-primary transition-colors focus-ring"
                   />
                 </div>
               </div>
             </div>
 
             {/* Weight Section */}
-            <div className="space-y-4">
-              <Label className="text-sm font-semibold text-foreground">
+            <div className="space-y-3 xs:space-y-4">
+              <Label className="text-sm xs:text-base md:text-lg font-semibold text-foreground">
                 Weight
               </Label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 xs:gap-4">
                 <div className="space-y-2">
                   <Label
                     htmlFor="weight_kg"
-                    className="text-xs text-muted-foreground"
+                    className="text-xs xs:text-sm text-muted-foreground"
                   >
                     Kilograms
                   </Label>
@@ -578,13 +578,13 @@ export function EnhancedProfileForm({
                     value={weightKg}
                     onChange={(e) => handleWeightKgChange(e.target.value)}
                     required
-                    className="h-12 text-base border-2 focus:border-primary transition-colors"
+                    className="touch-target text-sm xs:text-base border-2 focus:border-primary transition-colors focus-ring"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label
                     htmlFor="weight_lbs"
-                    className="text-xs text-muted-foreground"
+                    className="text-xs xs:text-sm text-muted-foreground"
                   >
                     Pounds
                   </Label>
@@ -596,7 +596,7 @@ export function EnhancedProfileForm({
                     placeholder="e.g., 155.4"
                     value={weightLbs}
                     onChange={(e) => handleWeightLbsChange(e.target.value)}
-                    className="h-12 text-base border-2 focus:border-primary transition-colors"
+                    className="touch-target text-sm xs:text-base border-2 focus:border-primary transition-colors focus-ring"
                   />
                 </div>
               </div>
