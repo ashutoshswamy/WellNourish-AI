@@ -117,5 +117,15 @@ export default function TermsPage() {
 export const metadata = {
   title: "Terms of Service - WellNourish AI",
   description:
-    "Terms of Service for WellNourish AI - AI-powered personalized nutrition and diet planning app.",
+    "Terms of Service for WellNourish AI - AI-powered personalized nutrition and diet planning app. Understand your rights and responsibilities when using our platform.",
+  alternates: {
+    canonical: "/terms",
+  },
+  openGraph: {
+    title: "Terms of Service - WellNourish AI",
+    description:
+      "Terms of Service for WellNourish AI - AI-powered personalized nutrition and diet planning app.",
+    url: "/terms",
+    type: "website",
+  },
 };

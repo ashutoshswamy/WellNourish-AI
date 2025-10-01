@@ -230,5 +230,15 @@ export default function DisclaimerPage() {
 export const metadata = {
   title: "Medical Disclaimer - WellNourish AI",
   description:
-    "Important medical disclaimer and safety information for WellNourish AI users.",
+    "Important medical disclaimer and safety information for WellNourish AI users. Understand the limitations and proper use of our AI-powered health recommendations.",
+  alternates: {
+    canonical: "/disclaimer",
+  },
+  openGraph: {
+    title: "Medical Disclaimer - WellNourish AI",
+    description:
+      "Important medical disclaimer and safety information for WellNourish AI users.",
+    url: "/disclaimer",
+    type: "website",
+  },
 };

@@ -148,5 +148,15 @@ export default function PrivacyPage() {
 export const metadata = {
   title: "Privacy Policy - WellNourish AI",
   description:
-    "Privacy Policy for WellNourish AI - Learn how we collect, use, and protect your personal data.",
+    "Privacy Policy for WellNourish AI - Learn how we collect, use, and protect your personal data while using our AI-powered diet and workout planning platform.",
+  alternates: {
+    canonical: "/privacy",
+  },
+  openGraph: {
+    title: "Privacy Policy - WellNourish AI",
+    description:
+      "Privacy Policy for WellNourish AI - Learn how we collect, use, and protect your personal data.",
+    url: "/privacy",
+    type: "website",
+  },
 };
