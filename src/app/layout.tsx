@@ -180,10 +180,8 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased min-h-screen flex flex-col bg-background text-foreground safe-area-top safe-area-bottom overflow-x-hidden">
         <AuthProvider>
-          <div className="flex-1 flex flex-col min-h-screen">
-            <main className="flex-1 relative">
-              <div className="min-h-full">{children}</div>
-            </main>
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-1">{children}</main>
             <Footer />
           </div>
           <Toaster />

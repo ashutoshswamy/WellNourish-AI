@@ -103,7 +103,7 @@ export default function SignupPage() {
               </Alert>
             )}
 
-            <div className="space-y-3">
+            <div className="space-y-2 xs:space-y-3">
               <Label htmlFor="email" className="text-sm font-semibold">
                 Email Address
               </Label>
@@ -115,13 +115,13 @@ export default function SignupPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="pl-10 h-12 border-2 focus:border-primary transition-colors"
+                  className="pl-10 h-12 xs:h-14 border-2 focus:border-primary transition-colors text-base focus-ring a11y-focus"
                   required
                 />
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2 xs:space-y-3">
               <Label htmlFor="password" className="text-sm font-semibold">
                 Password
               </Label>
@@ -133,18 +133,19 @@ export default function SignupPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Create a password"
-                  className="pl-10 pr-10 h-12 border-2 focus:border-primary transition-colors"
+                  className="pl-10 pr-12 h-12 xs:h-14 border-2 focus:border-primary transition-colors text-base focus-ring a11y-focus"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md hover:bg-muted/20 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
+                    <EyeOff className="h-4 w-4 xs:h-5 xs:w-5" />
                   ) : (
-                    <Eye className="h-4 w-4" />
+                    <Eye className="h-4 w-4 xs:h-5 xs:w-5" />
                   )}
                 </button>
               </div>
@@ -153,7 +154,7 @@ export default function SignupPage() {
               </p>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2 xs:space-y-3">
               <Label
                 htmlFor="confirmPassword"
                 className="text-sm font-semibold"
@@ -168,49 +169,53 @@ export default function SignupPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm your password"
-                  className="pl-10 pr-10 h-12 border-2 focus:border-primary transition-colors"
+                  className="pl-10 pr-12 h-12 xs:h-14 border-2 focus:border-primary transition-colors text-base focus-ring a11y-focus"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md hover:bg-muted/20 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
+                  aria-label={
+                    showConfirmPassword ? "Hide password" : "Show password"
+                  }
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4" />
+                    <EyeOff className="h-4 w-4 xs:h-5 xs:w-5" />
                   ) : (
-                    <Eye className="h-4 w-4" />
+                    <Eye className="h-4 w-4 xs:h-5 xs:w-5" />
                   )}
                 </button>
               </div>
             </div>
           </CardContent>
 
-          <CardFooter className="flex flex-col space-y-4 pt-6">
+          <CardFooter className="flex flex-col space-y-4 xs:space-y-6 pt-4 xs:pt-6 px-4 xs:px-6 pb-6 xs:pb-8">
             <Button
               type="submit"
               size="lg"
-              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="w-full h-12 xs:h-14 text-sm xs:text-base font-semibold bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 transition-all duration-200 shadow-lg hover:shadow-xl touch-target-large a11y-focus"
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating Account...
+                  <Loader2 className="mr-2 h-4 w-4 xs:h-5 xs:w-5 animate-spin" />
+                  <span className="hidden xs:inline">Creating Account...</span>
+                  <span className="xs:hidden">Creating...</span>
                 </>
               ) : (
                 <>
-                  <User className="mr-2 h-4 w-4" />
+                  <User className="mr-2 h-4 w-4 xs:h-5 xs:w-5" />
                   Create Account
                 </>
               )}
             </Button>
 
-            <div className="text-center text-sm text-muted-foreground">
+            <div className="text-center text-xs xs:text-sm text-muted-foreground">
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-semibold text-primary hover:text-primary/90 transition-colors"
+                className="font-semibold text-primary hover:text-primary/90 transition-colors underline-offset-4 hover:underline touch-target a11y-focus"
               >
                 Sign in here
               </Link>

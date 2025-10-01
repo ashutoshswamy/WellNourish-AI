@@ -90,45 +90,42 @@ export function HomePage({ onGetStarted }: HomePageProps) {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden px-section py-section safe-area-top">
-        <div className="container-fluid">
+      <section className="relative overflow-hidden py-12 xs:py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 safe-area-top">
+        <div className="container mx-auto max-w-6xl px-4 xs:px-6 lg:px-8">
           <div className="text-center">
             <Badge
               variant="outline"
-              className="mb-4 xs:mb-6 md:mb-8 text-xs xs:text-sm font-medium border-primary/20 text-primary a11y-touch-target"
+              className="mb-6 xs:mb-8 md:mb-10 text-xs xs:text-sm font-medium border-primary/20 text-primary inline-flex items-center"
             >
               <Leaf className="mr-1 xs:mr-2 h-3 w-3 xs:h-4 xs:w-4" />
               AI-Powered Wellness Platform
             </Badge>
 
-            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-gray-900 font-sans">
-              <span className="bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-gray-900 font-sans leading-[1.1] mb-6 xs:mb-8 md:mb-10">
+              <span className="bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent block mb-2 xs:mb-3">
                 WellNourish AI
               </span>
-              <span className="block xs:inline xs:ml-2 lg:ml-4 mt-2 xs:mt-0">
-                <span className="hidden xs:inline">- </span>
-                <span className="text-gray-900 text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
-                  Personal AI-Powered Diet & Workout Planner
-                </span>
+              <span className="block text-gray-900 text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal leading-[1.3]">
+                Personal AI-Powered Diet & Workout Planner
               </span>
             </h1>
 
-            <p className="container-narrow mt-4 xs:mt-6 md:mt-8 text-base xs:text-lg sm:text-xl text-gray-600 leading-relaxed font-light px-2 xs:px-4 max-w-3xl mx-auto">
+            <p className="text-base xs:text-lg sm:text-xl text-gray-600 leading-relaxed font-light max-w-3xl mx-auto px-4 xs:px-6 mb-8 xs:mb-10 md:mb-12">
               Experience the future of personalized wellness with our AI-powered
               platform. Get scientifically-backed nutrition and fitness plans
               designed specifically for your unique goals, lifestyle, and
               preferences.
             </p>
 
-            <div className="mt-6 xs:mt-8 md:mt-12 flex justify-center px-3">
+            <div className="flex justify-center px-4">
               <Button
                 size="lg"
-                className="btn-hero font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg touch-target-large focus-ring a11y-focus w-full xs:w-auto max-w-sm xs:max-w-none transition-all duration-200 hover:scale-105"
+                className="px-8 py-4 text-base xs:text-lg font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 touch-target-large focus-ring w-full xs:w-auto max-w-sm xs:max-w-none"
                 onClick={onGetStarted}
               >
                 <span className="hidden xs:inline">Start Your Journey</span>
                 <span className="xs:hidden">Get Started</span>
-                <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
+                <ArrowRight className="ml-2 h-4 w-4 xs:h-5 xs:w-5" />
               </Button>
             </div>
           </div>
@@ -142,13 +139,13 @@ export function HomePage({ onGetStarted }: HomePageProps) {
       </section>
 
       {/* Features Section */}
-      <section className="px-section py-section-small mobile:py-8 bg-gray-50 safe-area-bottom">
-        <div className="container-fluid">
-          <div className="text-center mb-section">
-            <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 font-sans">
+      <section className="py-16 xs:py-20 md:py-24 bg-gray-50">
+        <div className="container mx-auto max-w-6xl px-4 xs:px-6 lg:px-8">
+          <div className="text-center mb-12 xs:mb-16 md:mb-20">
+            <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 font-sans mb-4 xs:mb-6">
               Why Choose WellNourish AI?
             </h2>
-            <p className="container-narrow mt-3 xs:mt-4 md:mt-6 text-sm xs:text-base sm:text-lg md:text-xl text-gray-600 font-light leading-relaxed px-2 xs:px-4 max-w-4xl mx-auto">
+            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600 font-light leading-relaxed max-w-4xl mx-auto px-4">
               Experience cutting-edge technology that transforms how you
               approach wellness, backed by science and tailored to your unique
               needs.
@@ -235,31 +232,31 @@ export function HomePage({ onGetStarted }: HomePageProps) {
       </section>
 
       {/* CTA Section */}
-      <section className="px-section py-section-small mobile:py-8 bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 safe-area-bottom">
-        <div className="container-narrow text-center">
-          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white font-sans">
+      <section className="py-16 xs:py-20 md:py-24 bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 safe-area-bottom">
+        <div className="container mx-auto max-w-4xl px-4 xs:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white font-sans mb-6 xs:mb-8">
             Ready to Transform Your Health?
           </h2>
-          <p className="mt-4 xs:mt-6 md:mt-8 text-sm xs:text-base sm:text-lg md:text-xl text-emerald-50 leading-relaxed font-light px-2 xs:px-4 max-w-3xl mx-auto">
+          <p className="text-sm xs:text-base sm:text-lg md:text-xl text-emerald-50 leading-relaxed font-light max-w-3xl mx-auto mb-8 xs:mb-10 md:mb-12 px-4">
             Join the revolution in personalized wellness. Start your AI-powered
             health journey today and discover what optimal wellness feels like
             for you.
           </p>
 
-          <div className="mt-6 xs:mt-8 md:mt-12 flex justify-center px-3">
+          <div className="flex justify-center px-4 mb-6 xs:mb-8">
             <Button
               size="lg"
               variant="secondary"
-              className="btn-hero font-semibold bg-white text-emerald-700 hover:bg-emerald-50 shadow-lg touch-target-large focus-ring a11y-focus w-full xs:w-auto max-w-sm xs:max-w-none transition-all duration-200 hover:scale-105"
+              className="px-8 py-4 text-base xs:text-lg font-semibold bg-white text-emerald-700 hover:bg-emerald-50 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 touch-target-large focus-ring w-full xs:w-auto max-w-sm xs:max-w-none"
               onClick={onGetStarted}
             >
               <span className="hidden sm:inline">Get Started Now - Free</span>
               <span className="sm:hidden">Start Free</span>
-              <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
+              <ArrowRight className="ml-2 h-4 w-4 xs:h-5 xs:w-5" />
             </Button>
           </div>
 
-          <p className="mt-4 xs:mt-6 md:mt-8 text-emerald-100 text-xs xs:text-sm leading-relaxed">
+          <p className="text-emerald-100 text-xs xs:text-sm leading-relaxed">
             No credit card required • Free forever plan available • Start in
             under 2 minutes
           </p>
