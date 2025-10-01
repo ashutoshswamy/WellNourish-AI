@@ -76,28 +76,30 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20 p-4">
-      <Card className="w-full max-w-md shadow-2xl border-0 bg-card/95 backdrop-blur">
-        <CardHeader className="text-center pb-8">
-          <CardTitle className="text-3xl font-bold font-headline bg-gradient-to-r from-primary to-green-600 bg-clip-text text-transparent">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20 p-3 xs:p-4 safe-area-top safe-area-bottom">
+      <Card className="w-full max-w-md shadow-2xl border-0 bg-card/95 backdrop-blur mx-auto">
+        <CardHeader className="text-center pb-6 xs:pb-8 px-4 xs:px-6 pt-6 xs:pt-8">
+          <CardTitle className="text-2xl xs:text-3xl md:text-3xl font-bold font-sans bg-gradient-to-r from-primary to-green-600 bg-clip-text text-transparent">
             Join WellNourish AI
           </CardTitle>
-          <CardDescription className="text-base text-muted-foreground">
+          <CardDescription className="text-sm xs:text-base text-muted-foreground mt-2">
             Create your account to start your wellness journey
           </CardDescription>
         </CardHeader>
 
         <form onSubmit={handleSignup}>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 xs:space-y-6 px-4 xs:px-6">
             {error && (
               <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription className="text-sm">{error}</AlertDescription>
               </Alert>
             )}
 
             {success && (
               <Alert>
-                <AlertDescription>{success}</AlertDescription>
+                <AlertDescription className="text-sm">
+                  {success}
+                </AlertDescription>
               </Alert>
             )}
 

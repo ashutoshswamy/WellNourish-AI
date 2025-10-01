@@ -91,11 +91,11 @@ export function UserDashboard() {
 
   if (loading) {
     return (
-      <div className="container mx-auto max-w-6xl px-4 py-8">
-        <div className="space-y-6">
+      <div className="container-fluid py-section safe-area-top safe-area-bottom">
+        <div className="space-y-6 max-w-6xl mx-auto">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="h-48 bg-gray-200 rounded-lg"></div>
               ))}
@@ -108,12 +108,12 @@ export function UserDashboard() {
 
   if (showCreateForm) {
     return (
-      <div className="container mx-auto max-w-6xl px-4 py-8">
-        <div className="mb-6">
+      <div className="container-fluid py-section safe-area-top safe-area-bottom min-h-screen">
+        <div className="mb-6 max-w-6xl mx-auto px-3">
           <Button
             variant="outline"
             onClick={() => setShowCreateForm(false)}
-            className="mb-4"
+            className="mb-4 touch-target-large a11y-focus"
           >
             ← Back to Dashboard
           </Button>
@@ -124,35 +124,43 @@ export function UserDashboard() {
   }
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-8">
-      <div className="space-y-8">
+    <div className="container-fluid py-section safe-area-top safe-area-bottom min-h-screen">
+      <div className="space-y-8 max-w-6xl mx-auto px-3">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">
+        <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-4 xs:gap-6">
+          <div className="flex-grow">
+            <h1 className="text-2xl xs:text-3xl md:text-4xl font-bold tracking-tight text-balance">
               Welcome back, {user?.email?.split("@")[0]}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm xs:text-base mt-1 xs:mt-2">
               Here's your wellness dashboard
             </p>
           </div>
-          <div className="flex gap-3">
-            <Button onClick={() => setShowCreateForm(true)} className="gap-2">
+          <div className="flex flex-col xs:flex-row gap-3 w-full xs:w-auto">
+            <Button
+              onClick={() => setShowCreateForm(true)}
+              className="gap-2 touch-target-large a11y-focus w-full xs:w-auto"
+            >
               <Plus className="h-4 w-4" />
-              Create New Plan
+              <span className="hidden sm:inline">Create New Plan</span>
+              <span className="sm:hidden">New Plan</span>
             </Button>
-            <Button variant="outline" asChild>
-              <Link href="/plans" className="gap-2">
+            <Button variant="outline" asChild className="w-full xs:w-auto">
+              <Link
+                href="/plans"
+                className="gap-2 touch-target-large a11y-focus"
+              >
                 <History className="h-4 w-4" />
-                View All Plans
+                <span className="hidden sm:inline">View All Plans</span>
+                <span className="sm:hidden">All Plans</span>
               </Link>
             </Button>
           </div>
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <Card className="hover:shadow-lg transition-shadow duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Plans</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -164,7 +172,7 @@ export function UserDashboard() {
               </p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 Profile Status
@@ -182,7 +190,7 @@ export function UserDashboard() {
               </p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow duration-200 sm:col-span-2 lg:col-span-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Latest Plan</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />

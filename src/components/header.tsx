@@ -258,7 +258,7 @@ export function Header({ onBackToHome }: HeaderProps) {
       {/* Logo and Title */}
       <div className="flex items-center justify-center gap-2 xs:gap-3 md:gap-3">
         <Leaf className="h-6 w-6 xs:h-8 xs:w-8 md:h-10 md:w-10 text-primary" />
-        <h1 className="text-xl xs:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-foreground font-headline">
+        <h1 className="text-xl xs:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-foreground font-sans">
           WellNourish AI
         </h1>
       </div>

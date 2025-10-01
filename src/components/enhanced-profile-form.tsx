@@ -83,7 +83,7 @@ function SubmitButton() {
     <Button
       type="submit"
       size="lg"
-      className="w-full touch-target-large text-sm xs:text-base md:text-lg font-semibold bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 transition-all duration-200 shadow-lg hover:shadow-xl focus-ring"
+      className="w-full touch-target-large text-sm xs:text-base md:text-lg font-semibold bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 transition-all duration-200 shadow-lg hover:shadow-xl focus-ring a11y-focus min-h-[48px] xs:min-h-[56px]"
       disabled={pending}
     >
       {pending ? (
@@ -138,11 +138,11 @@ function MultiSelectCheckbox({
           </p>
         )}
       </div>
-      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 xs:gap-3 md:gap-4">
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 2xl:grid-cols-4 gap-2 xs:gap-3 md:gap-4">
         {options.map((option) => (
           <div
             key={option}
-            className="flex items-center space-x-2 xs:space-x-3 p-2 xs:p-3 rounded-lg hover:bg-muted/30 transition-colors"
+            className="flex items-center space-x-2 xs:space-x-3 p-2 xs:p-3 md:p-4 rounded-lg hover:bg-muted/30 transition-colors touch-target a11y-touch-target"
           >
             <Checkbox
               id={`${name}-${option}`}
@@ -152,11 +152,11 @@ function MultiSelectCheckbox({
               onCheckedChange={(checked) =>
                 handleCheckboxChange(option, checked as boolean)
               }
-              className="touch-target-large"
+              className="touch-target-large a11y-focus"
             />
             <label
               htmlFor={`${name}-${option}`}
-              className="text-xs xs:text-sm md:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer touch-target flex-1"
+              className="text-xs xs:text-sm md:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer touch-target flex-1 break-words"
             >
               {option}
             </label>
@@ -421,22 +421,26 @@ export function EnhancedProfileForm({
   }, [state, onPlanGenerated, toast]);
 
   return (
-    <div className="container-fluid py-section">
-      <div className="text-center mb-section">
-        <h2 className="text-heading font-bold font-headline text-foreground mb-3">
+    <div className="container-fluid py-section safe-area-top safe-area-bottom min-h-screen">
+      <div className="text-center mb-section max-w-4xl mx-auto px-3">
+        <h2 className="text-heading font-bold font-sans text-foreground mb-3 xs:mb-4 md:mb-6">
           Create Your Comprehensive Wellness Profile
         </h2>
-        <p className="text-lead text-muted-foreground container-narrow">
+        <p className="text-lead text-muted-foreground container-narrow leading-relaxed">
           Help us understand your unique needs, preferences, and restrictions to
           create the perfect personalized diet and workout plan for you.
         </p>
       </div>
 
-      <form action={formAction} className="space-y-responsive" ref={formRef}>
+      <form
+        action={formAction}
+        className="space-y-responsive max-w-4xl mx-auto px-3"
+        ref={formRef}
+      >
         {/* Basic Information */}
         <Card className="border-0 shadow-xl bg-gradient-to-br from-card to-card/80 backdrop-blur card-responsive">
           <CardHeader className="pb-6 md:pb-8">
-            <CardTitle className="text-xl md:text-2xl font-headline flex items-center gap-2 md:gap-3">
+            <CardTitle className="text-xl md:text-2xl font-sans flex items-center gap-2 md:gap-3">
               <div className="w-1.5 md:w-2 h-6 md:h-8 bg-gradient-to-b from-primary to-green-600 rounded-full"></div>
               Basic Information
             </CardTitle>
@@ -743,7 +747,7 @@ export function EnhancedProfileForm({
         {/* Dietary Preferences and Restrictions */}
         <Card className="border-0 shadow-xl bg-gradient-to-br from-card to-card/80 backdrop-blur">
           <CardHeader className="pb-8">
-            <CardTitle className="text-2xl font-headline flex items-center gap-3">
+            <CardTitle className="text-2xl font-sans flex items-center gap-3">
               <div className="w-2 h-8 bg-gradient-to-b from-orange-500 to-red-600 rounded-full"></div>
               Dietary Preferences & Restrictions
             </CardTitle>

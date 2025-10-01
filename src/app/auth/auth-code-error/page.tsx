@@ -17,7 +17,7 @@ export default function AuthCodeError() {
           <div className="mx-auto w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mb-4">
             <AlertTriangle className="h-8 w-8 text-destructive" />
           </div>
-          <CardTitle className="text-2xl font-bold font-headline">
+          <CardTitle className="text-2xl font-bold font-sans">
             Authentication Error
           </CardTitle>
           <CardDescription className="text-base text-muted-foreground">

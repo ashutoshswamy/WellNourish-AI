@@ -35,8 +35,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ["Space Grotesk", "sans-serif"],
-        headline: ["Space Grotesk", "sans-serif"],
+        sans: ["Poppins", "sans-serif"],
+        body: ["Poppins", "sans-serif"],
+        headline: ["Poppins", "sans-serif"],
         code: ["monospace"],
       },
       fontSize: {

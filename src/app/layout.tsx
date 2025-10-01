@@ -92,13 +92,37 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+          content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, maximum-scale=1, shrink-to-fit=no"
         />
         <meta name="theme-color" content="#16a34a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="WellNourish AI" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileColor" content="#16a34a" />
+        <meta name="msapplication-tap-highlight" content="no" />
+
+        {/* Enhanced PWA meta tags */}
+        <meta name="application-name" content="WellNourish AI" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-status-bar-style" content="default" />
+
+        {/* Performance hints */}
+        <meta name="dns-prefetch" content="//fonts.googleapis.com" />
+        <meta name="dns-prefetch" content="//fonts.gstatic.com" />
+
+        {/* Optimized font loading with better performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet"
+        />
 
         {/* Favicon and icons */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -125,7 +149,7 @@ export default function RootLayout({
           crossOrigin=""
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
           rel="stylesheet"
         />
         {/* Structured Data */}
@@ -154,10 +178,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-body antialiased min-h-screen flex flex-col bg-background text-foreground">
+      <body className="font-sans antialiased min-h-screen flex flex-col bg-background text-foreground safe-area-top safe-area-bottom overflow-x-hidden">
         <AuthProvider>
-          <div className="flex-1 flex flex-col">
-            <main className="flex-1">{children}</main>
+          <div className="flex-1 flex flex-col min-h-screen">
+            <main className="flex-1 relative">
+              <div className="min-h-full">{children}</div>
+            </main>
             <Footer />
           </div>
           <Toaster />

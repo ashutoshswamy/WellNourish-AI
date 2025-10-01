@@ -148,10 +148,10 @@ function PlansContent() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex items-center gap-2">
+      <div className="min-h-screen flex items-center justify-center safe-area-top safe-area-bottom">
+        <div className="flex items-center gap-2 px-4">
           <Loader2 className="h-5 w-5 animate-spin" />
-          <span>Loading your plans...</span>
+          <span className="text-sm xs:text-base">Loading your plans...</span>
         </div>
       </div>
     );
@@ -162,27 +162,31 @@ function PlansContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 safe-area-top safe-area-bottom">
+      <div className="container-fluid py-section max-w-7xl mx-auto px-3">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold font-headline">Plan History</h1>
-            <p className="text-muted-foreground">
+        <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between mb-6 xs:mb-8 gap-4 xs:gap-6">
+          <div className="flex-grow">
+            <h1 className="text-2xl xs:text-3xl md:text-4xl font-bold font-sans text-balance">
+              Plan History
+            </h1>
+            <p className="text-muted-foreground text-sm xs:text-base mt-1 xs:mt-2">
               Browse and manage all your wellness plans ({plans.length} total)
             </p>
           </div>
-          <div className="flex gap-3">
-            <Button variant="outline" asChild>
-              <Link href="/" className="gap-2">
+          <div className="flex flex-col xs:flex-row gap-3 w-full xs:w-auto">
+            <Button variant="outline" asChild className="w-full xs:w-auto">
+              <Link href="/" className="gap-2 touch-target-large a11y-focus">
                 <LayoutDashboard className="h-4 w-4" />
-                Dashboard
+                <span className="hidden sm:inline">Dashboard</span>
+                <span className="sm:hidden">Home</span>
               </Link>
             </Button>
-            <Button asChild>
-              <Link href="/" className="gap-2">
+            <Button asChild className="w-full xs:w-auto">
+              <Link href="/" className="gap-2 touch-target-large a11y-focus">
                 <Plus className="h-4 w-4" />
-                Create New Plan
+                <span className="hidden sm:inline">Create New Plan</span>
+                <span className="sm:hidden">New Plan</span>
               </Link>
             </Button>
           </div>
@@ -190,14 +194,14 @@ function PlansContent() {
 
         {error && (
           <Alert variant="destructive" className="mb-6">
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription className="text-sm">{error}</AlertDescription>
           </Alert>
         )}
 
         {/* Search and Filter */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <Card className="mb-6 border-0 shadow-lg">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2 text-lg xs:text-xl">
               <Search className="h-5 w-5" />
               Search Plans
             </CardTitle>
@@ -216,9 +220,9 @@ function PlansContent() {
           </CardContent>
         </Card>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Plans List */}
-          <div className="space-y-4">
+          <div className="space-y-4 overflow-hidden">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">
                 Your Plans {searchTerm && `(${filteredPlans.length} found)`}
@@ -264,69 +268,77 @@ function PlansContent() {
                 </CardContent>
               </Card>
             ) : (
-              <ScrollArea className="h-[600px]">
-                <div className="space-y-4 pr-4">
+              <ScrollArea className="h-[600px] pr-2">
+                <div className="space-y-4">
                   {filteredPlans.map((plan) => (
-                    <Card
-                      key={plan.id}
-                      className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-                        selectedPlan?.id === plan.id
-                          ? "ring-2 ring-primary"
-                          : ""
-                      }`}
-                      onClick={() => setSelectedPlan(plan)}
-                    >
-                      <CardHeader className="pb-3">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <CardTitle className="text-lg">
-                              {plan.title}
-                            </CardTitle>
-                            <CardDescription className="flex items-center gap-2 mt-1">
-                              <Calendar className="h-3 w-3" />
-                              {formatDate(plan.created_at)}
-                            </CardDescription>
+                    <div key={plan.id} className="pr-2">
+                      <Card
+                        className="group cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/40"
+                        onClick={() => setSelectedPlan(plan)}
+                      >
+                        <CardHeader className="pb-3">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-3 mb-2">
+                                <CardTitle className="text-lg truncate">
+                                  {plan.title}
+                                </CardTitle>
+                                {selectedPlan?.id === plan.id && (
+                                  <span className="text-sm text-primary font-medium">
+                                    Selected
+                                  </span>
+                                )}
+                              </div>
+                              <CardDescription className="flex items-center gap-2 mt-1">
+                                <Calendar className="h-3 w-3 shrink-0" />
+                                <span className="truncate">
+                                  {formatDate(plan.created_at)}
+                                </span>
+                              </CardDescription>
+                            </div>
+                            <div className="flex gap-2 opacity-60 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedPlan(plan);
+                                }}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeletePlan(plan.id);
+                                }}
+                                disabled={deleting === plan.id}
+                              >
+                                {deleting === plan.id ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Trash2 className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </div>
                           </div>
-                          <div className="flex gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedPlan(plan);
-                              }}
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeletePlan(plan.id);
-                              }}
-                              disabled={deleting === plan.id}
-                            >
-                              {deleting === plan.id ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <Trash2 className="h-4 w-4 text-destructive" />
-                              )}
-                            </Button>
+                          <div className="flex gap-2 mt-3">
+                            <Badge variant="outline" className="text-xs">
+                              <Utensils className="h-3 w-3 mr-1" />
+                              Diet Plan
+                            </Badge>
+                            <Badge variant="outline" className="text-xs">
+                              <Dumbbell className="h-3 w-3 mr-1" />
+                              Workout
+                            </Badge>
                           </div>
-                        </div>
-                        <div className="flex gap-2 mt-2">
-                          <Badge variant="outline" className="text-xs">
-                            <Utensils className="h-3 w-3 mr-1" />
-                            Diet Plan
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            <Dumbbell className="h-3 w-3 mr-1" />
-                            Workout
-                          </Badge>
-                        </div>
-                      </CardHeader>
-                    </Card>
+                        </CardHeader>
+                      </Card>
+                    </div>
                   ))}
                 </div>
               </ScrollArea>
@@ -347,18 +359,21 @@ function PlansContent() {
                           Full View
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
-                        <DialogHeader>
+                      <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden p-0 w-[95vw]">
+                        <DialogHeader className="px-6 py-4 border-b shrink-0">
                           <DialogTitle className="text-2xl font-bold">
                             {selectedPlan.title}
                           </DialogTitle>
                         </DialogHeader>
-                        <PlanFullView
-                          title={selectedPlan.title}
-                          dietPlan={selectedPlan.diet_plan}
-                          workoutRegimen={selectedPlan.workout_regimen}
-                          showGradients={false}
-                        />
+                        <div className="overflow-hidden flex-1">
+                          <PlanFullView
+                            title={selectedPlan.title}
+                            dietPlan={selectedPlan.diet_plan}
+                            workoutRegimen={selectedPlan.workout_regimen}
+                            showGradients={false}
+                            createdAt={selectedPlan.created_at}
+                          />
+                        </div>
                       </DialogContent>
                     </Dialog>
                     <Badge variant="secondary">
@@ -367,49 +382,56 @@ function PlansContent() {
                   </div>
                 </div>
 
-                <Card>
+                <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50/50 via-background to-green-50/30">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-green-800">
                       <Utensils className="h-5 w-5 text-green-600" />
                       Diet Plan
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ScrollArea className="h-[300px]">
-                      <MarkdownRenderer
-                        content={selectedPlan.diet_plan}
-                        size="sm"
-                      />
+                      <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:text-green-800 dark:prose-headings:text-green-200">
+                        <MarkdownRenderer
+                          content={selectedPlan.diet_plan}
+                          size="sm"
+                        />
+                      </div>
                     </ScrollArea>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50/50 via-background to-blue-50/30">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-blue-800">
                       <Dumbbell className="h-5 w-5 text-blue-600" />
                       Workout Regimen
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ScrollArea className="h-[300px]">
-                      <MarkdownRenderer
-                        content={selectedPlan.workout_regimen}
-                        size="sm"
-                      />
+                      <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:text-blue-800 dark:prose-headings:text-blue-200">
+                        <MarkdownRenderer
+                          content={selectedPlan.workout_regimen}
+                          size="sm"
+                        />
+                      </div>
                     </ScrollArea>
                   </CardContent>
                 </Card>
               </div>
             ) : (
-              <Card className="h-[600px] flex items-center justify-center">
+              <Card className="h-[600px] flex items-center justify-center border-2 border-dashed border-muted-foreground/20 bg-gradient-to-br from-muted/5 to-muted/10">
                 <CardContent className="text-center">
-                  <Eye className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  <div className="animate-pulse">
+                    <Eye className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                  </div>
                   <h3 className="text-lg font-semibold mb-2">
                     Select a plan to view details
                   </h3>
                   <p className="text-muted-foreground">
-                    Click on any plan from the list to see its details
+                    Click on any plan from the list to see its comprehensive
+                    details
                   </p>
                 </CardContent>
               </Card>
