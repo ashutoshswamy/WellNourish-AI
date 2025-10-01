@@ -1,0 +1,39 @@
+Last Updated: [Insert Date]
+
+Welcome to [App Name] (“the App”). By using our services, you agree to these Terms of Service. Please read them carefully.
+
+1. Eligibility
+
+You must be at least 18 years old or have parental/guardian consent to use this App.
+
+2. Services Provided
+
+The App uses Generative AI to create personalized diet and nutrition plans based on the information you provide (e.g., health goals, dietary preferences, allergies). The results are recommendations only and do not replace professional medical advice.
+
+3. User Responsibilities
+
+Provide accurate and up-to-date health information.
+
+Use the App only for personal, non-commercial purposes.
+
+Do not misuse the App, upload harmful content, or attempt unauthorized access.
+
+4. No Medical Advice
+
+The App provides generalized health and nutrition recommendations. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider before making major dietary or lifestyle changes.
+
+5. Intellectual Property
+
+All content, algorithms, and design elements of the App are owned by [Your Company/App Name]. Users may not reproduce, modify, or distribute content without permission.
+
+6. Limitation of Liability
+
+We are not responsible for any adverse effects, health issues, or damages arising from the use of this App. Use at your own risk.
+
+7. Termination
+
+We may suspend or terminate accounts if users violate these Terms.
+
+8. Governing Law
+
+These Terms are governed by the laws of [Insert Jurisdiction/Region].
