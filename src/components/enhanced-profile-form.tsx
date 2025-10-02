@@ -212,10 +212,10 @@ function CustomInput({
           type="button"
           onClick={addItem}
           size="sm"
-          className="xs:w-auto w-full touch-target focus-ring"
+          className="xs:w-auto w-full touch-target focus-ring flex items-center justify-center"
         >
-          <Plus className="h-4 w-4 mr-0 xs:mr-2" />
-          <span className="xs:hidden">Add</span>
+          <Plus className="h-4 w-4 xs:mr-0" />
+          <span className="ml-2 xs:hidden">Add</span>
         </Button>
       </div>
       {items.length > 0 && (
