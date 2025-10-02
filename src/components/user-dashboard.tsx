@@ -23,6 +23,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import type { PlanState } from "@/app/actions";
 
 interface Plan {
@@ -35,6 +36,8 @@ interface Plan {
 
 export function UserDashboard() {
   const { user } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasProfile, setHasProfile] = useState(false);
@@ -47,6 +50,16 @@ export function UserDashboard() {
       checkProfile();
     }
   }, [user]);
+
+  useEffect(() => {
+    // Check if the create parameter is present
+    const shouldCreate = searchParams.get("create");
+    if (shouldCreate === "true") {
+      setShowCreateForm(true);
+      // Clear the parameter from URL
+      router.replace("/");
+    }
+  }, [searchParams, router]);
 
   const loadRecentPlans = async () => {
     if (!user) return;

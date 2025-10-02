@@ -183,7 +183,10 @@ function PlansContent() {
               </Link>
             </Button>
             <Button asChild className="w-full xs:w-auto">
-              <Link href="/" className="gap-2 touch-target-large a11y-focus">
+              <Link
+                href="/?create=true"
+                className="gap-2 touch-target-large a11y-focus"
+              >
                 <Plus className="h-4 w-4" />
                 <span className="hidden sm:inline">Create New Plan</span>
                 <span className="sm:hidden">New Plan</span>
@@ -245,7 +248,7 @@ function PlansContent() {
                         Create your first wellness plan to get started
                       </p>
                       <Button asChild>
-                        <Link href="/">Create Plan</Link>
+                        <Link href="/?create=true">Create Plan</Link>
                       </Button>
                     </>
                   ) : (
