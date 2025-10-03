@@ -175,11 +175,6 @@ src/
 - `npm run lint` - Run ESLint
 - `npm run typecheck` - Run TypeScript type checking
 
-## 📚 Documentation
-
-- [Supabase Setup Guide](SUPABASE_SETUP.md) - Detailed database and authentication setup
-- [Project Blueprint](docs/blueprint.md) - App design and feature specifications
-
 ## 🤝 Contributing
 
 We welcome contributions from the community! Here's how you can help:
