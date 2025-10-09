@@ -1,9 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertTriangle, Shield, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AlertTriangle, Shield, Info, Home } from "lucide-react";
+import Link from "next/link";
 
 export default function DisclaimerPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
+      <div className="mb-6">
+        <Link href="/">
+          <Button variant="outline" size="sm" className="gap-2">
+            <Home className="h-4 w-4" />
+            Back to Home
+          </Button>
+        </Link>
+      </div>
       <div className="space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
