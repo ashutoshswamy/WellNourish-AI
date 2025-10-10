@@ -61,6 +61,42 @@ export default function Home() {
             name="description"
             content="Transform your health with WellNourish AI - the smartest personal diet and workout planner. Get customized nutrition plans and fitness routines powered by artificial intelligence."
           />
+          {/* FAQ Structured Data */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: [
+                  {
+                    "@type": "Question",
+                    name: "What is WellNourish AI and how does it work?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "WellNourish AI is an intelligent health platform that uses artificial intelligence to create personalized diet and workout plans. Our AI analyzes your goals, preferences, dietary restrictions, and fitness level to generate customized nutrition and exercise recommendations tailored specifically for you.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "Is WellNourish AI free to use?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Yes, WellNourish AI offers free access to our core features including personalized diet planning and workout routines. Users can create an account and start their health journey at no cost.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "How accurate are the AI-generated diet and workout plans?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "Our AI algorithms are trained on extensive nutritional and fitness data, following established health guidelines. However, our recommendations are for informational purposes only and should not replace professional medical advice.",
+                    },
+                  },
+                ],
+              }),
+            }}
+          />
         </Head>
         <main className="min-h-screen bg-background text-foreground">
           <HomePage onGetStarted={handleGetStarted} />

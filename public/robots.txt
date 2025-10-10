@@ -1,26 +1,49 @@
+# Robots.txt for WellNourish AI (wellnourishai.in)
+# Allow all search engines to crawl public content
+
 User-agent: *
 Allow: /
 Allow: /privacy
 Allow: /terms
 Allow: /disclaimer
 
-# Disallow private/user-specific pages
+# Disallow private/user-specific pages and sensitive areas
 Disallow: /login
 Disallow: /signup
 Disallow: /plans
 Disallow: /auth/
 Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /private/
 
-# Allow search engines to crawl important pages
-Allow: /privacy
-Allow: /terms  
-Allow: /disclaimer
-
-# Sitemap
+# Sitemap locations
 Sitemap: https://www.wellnourishai.in/sitemap.xml
 
-# Crawl delay (respectful crawling)
+# Crawl delay for respectful crawling (1 second)
 Crawl-delay: 1
 
-# Additional sitemaps if any
-# Sitemap: https://www.wellnourishai.in/sitemap-pages.xml
+# Specific instructions for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0.5
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Block known bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /

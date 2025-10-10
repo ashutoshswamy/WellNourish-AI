@@ -3,91 +3,13 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/contexts/auth-context";
 import { Footer } from "@/components/footer";
+import {
+  generatePageMetadata,
+  generateWebApplicationLD,
+  generateOrganizationLD,
+} from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: {
-    default: "WellNourish AI - Personal AI-Powered Diet & Workout Planner",
-    template: "%s | WellNourish AI",
-  },
-  description:
-    "Transform your health with WellNourish AI - the smartest personal diet and workout planner. Get customized nutrition plans and fitness routines powered by artificial intelligence, tailored specifically for your goals, lifestyle, and preferences.",
-  keywords: [
-    "AI diet planner",
-    "workout planner",
-    "nutrition plan",
-    "fitness tracker",
-    "personalized diet",
-    "AI health coach",
-    "meal planning",
-    "fitness goals",
-    "healthy lifestyle",
-    "wellness app",
-  ],
-  authors: [{ name: "WellNourish AI Team" }],
-  creator: "WellNourish AI",
-  publisher: "WellNourish AI",
-  metadataBase: new URL("https://www.wellnourishai.in"),
-  alternates: {
-    canonical: "/",
-    languages: {
-      "en-US": "/",
-    },
-  },
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
-  },
-  manifest: "/manifest.json",
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://www.wellnourishai.in",
-    siteName: "WellNourish AI",
-    title: "WellNourish AI - Personal AI-Powered Diet & Workout Planner",
-    description:
-      "Transform your health with WellNourish AI - the smartest personal diet and workout planner. Get customized nutrition plans and fitness routines powered by artificial intelligence.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "WellNourish AI - Personal AI-Powered Health Planner",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "WellNourish AI - Personal AI-Powered Diet & Workout Planner",
-    description:
-      "Transform your health with WellNourish AI - the smartest personal diet and workout planner.",
-    images: ["/og-image.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  verification: {
-    google: "google-site-verification-code", // Add your Google verification code
-    other: {
-      "domain-verification": "wellnourishai.in",
-    },
-  },
-  category: "health",
-  classification: "health application",
-};
+export const metadata: Metadata = generatePageMetadata();
 
 export default function RootLayout({
   children,
@@ -111,48 +33,11 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#16a34a" />
         <meta name="msapplication-tap-highlight" content="no" />
 
-        {/* SEO Enhancement */}
-        <meta
-          name="robots"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta
-          name="googlebot"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta
-          name="bingbot"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:locale" content="en_US" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@wellnourishai" />
-        <meta name="twitter:creator" content="@wellnourishai" />
-
-        {/* Additional domain verification */}
-        <link rel="canonical" href="https://www.wellnourishai.in" />
-        <link
-          rel="alternate"
-          hrefLang="en"
-          href="https://www.wellnourishai.in"
-        />
-        <link
-          rel="alternate"
-          hrefLang="x-default"
-          href="https://www.wellnourishai.in"
-        />
-
-        {/* Enhanced PWA meta tags */}
-        <meta name="application-name" content="WellNourish AI" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="mobile-web-app-status-bar-style" content="default" />
-
         {/* Performance hints */}
         <meta name="dns-prefetch" content="//fonts.googleapis.com" />
         <meta name="dns-prefetch" content="//fonts.gstatic.com" />
 
-        {/* Optimized font loading with better performance */}
+        {/* Optimized font loading */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -181,89 +66,17 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
 
-        {/* Optimized font loading with better performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet"
-        />
         {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebApplication",
-              name: "WellNourish AI",
-              alternateName: "WellNourish AI Diet & Workout Planner",
-              description:
-                "Transform your health with WellNourish AI - the smartest personal diet and workout planner powered by artificial intelligence.",
-              url: "https://www.wellnourishai.in",
-              sameAs: ["https://wellnourish-ai.vercel.app"],
-              applicationCategory: "HealthApplication",
-              applicationSubCategory: "Diet Planning",
-              operatingSystem: "Web",
-              browserRequirements: "Requires JavaScript",
-              softwareVersion: "1.0",
-              datePublished: "2024",
-              author: {
-                "@type": "Organization",
-                name: "WellNourish AI",
-                url: "https://www.wellnourishai.in",
-              },
-              offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "USD",
-                availability: "https://schema.org/InStock",
-                priceValidUntil: "2025-12-31",
-              },
-              creator: {
-                "@type": "Organization",
-                name: "WellNourish AI",
-                url: "https://www.wellnourishai.in",
-              },
-              keywords:
-                "AI diet planner, workout planner, nutrition plan, fitness tracker, personalized diet, AI health coach, meal planning",
-              inLanguage: "en-US",
-              isAccessibleForFree: true,
-              isFamilyFriendly: true,
-              featureList: [
-                "AI-powered diet planning",
-                "Personalized workout routines",
-                "Nutrition tracking",
-                "Health goal setting",
-                "Progress monitoring",
-              ],
-            }),
+            __html: JSON.stringify(generateWebApplicationLD()),
           }}
         />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "WellNourish AI",
-              url: "https://www.wellnourishai.in",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://www.wellnourishai.in/android-chrome-512x512.png",
-                width: 512,
-                height: 512,
-              },
-              contactPoint: {
-                "@type": "ContactPoint",
-                contactType: "customer service",
-                availableLanguage: "English",
-              },
-              sameAs: ["https://wellnourish-ai.vercel.app"],
-            }),
+            __html: JSON.stringify(generateOrganizationLD()),
           }}
         />
       </head>

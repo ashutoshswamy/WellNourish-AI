@@ -1,7 +1,7 @@
 {
   "name": "WellNourish AI - Personal Diet & Workout Planner",
   "short_name": "WellNourish AI",
-  "description": "Transform your health with WellNourish AI - the smartest personal diet and workout planner.",
+  "description": "Transform your health with WellNourish AI - the smartest personal diet and workout planner powered by artificial intelligence.",
   "start_url": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
@@ -10,6 +10,7 @@
   "orientation": "portrait-primary",
   "scope": "/",
   "prefer_related_applications": false,
+  "id": "wellnourish-ai-app",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -30,7 +31,7 @@
       "purpose": "any"
     }
   ],
-  "categories": ["health", "fitness", "lifestyle", "medical"],
+  "categories": ["health", "fitness", "lifestyle", "medical", "wellness"],
   "lang": "en",
   "dir": "ltr",
   "shortcuts": [
