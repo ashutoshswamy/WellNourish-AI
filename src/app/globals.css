@@ -88,6 +88,13 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent horizontal scroll on all devices */
+    overflow-x: hidden;
+    /* Better text rendering */
+    text-rendering: optimizeLegibility;
+    /* Prevent iOS text size adjust after orientation change */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
   }
 
   h1,
@@ -128,6 +135,9 @@
   /* Smooth scrolling */
   html {
     scroll-behavior: smooth;
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
+    width: 100%;
   }
 
   /* Focus styles for accessibility */

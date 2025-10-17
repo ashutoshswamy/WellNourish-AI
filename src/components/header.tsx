@@ -167,51 +167,57 @@ export function Header({ onBackToHome }: HeaderProps) {
 
       {/* Mobile Menu Overlay */}
       {user && mobileMenuOpen && (
-        <div className="mobile-menu">
-          <div className="flex flex-col h-full">
+        <div className="mobile-menu animate-fade-in">
+          <div className="flex flex-col h-full bg-background">
             {/* Mobile Menu Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border">
-              <div className="flex items-center gap-2">
-                <Leaf className="h-6 w-6 text-primary" />
-                <span className="font-semibold text-lg">WellNourish AI</span>
+            <div className="flex items-center justify-between p-4 xs:p-5 border-b border-border bg-background/95 backdrop-blur-sm">
+              <div className="flex items-center gap-2 xs:gap-3">
+                <Leaf className="h-6 w-6 xs:h-7 xs:w-7 text-primary" />
+                <span className="font-semibold text-lg xs:text-xl">
+                  WellNourish AI
+                </span>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={closeMobileMenu}
-                className="touch-target focus-ring"
+                className="touch-target-large focus-ring"
                 aria-label="Close menu"
               >
-                <X className="h-5 w-5" />
+                <X className="h-5 w-5 xs:h-6 xs:w-6" />
               </Button>
             </div>
 
             {/* Mobile Menu Items */}
-            <div className="flex-1 px-4 py-6 space-y-4">
+            <div className="flex-1 px-4 xs:px-5 py-6 xs:py-8 space-y-4 xs:space-y-6 overflow-y-auto">
               <div className="space-y-2">
                 <Link
                   href="/"
                   onClick={closeMobileMenu}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors touch-target focus-ring"
+                  className="flex items-center gap-3 xs:gap-4 p-3 xs:p-4 rounded-lg hover:bg-muted/50 active:bg-muted transition-colors touch-target-large focus-ring"
                 >
-                  <LayoutDashboard className="h-5 w-5 text-muted-foreground" />
-                  <span className="font-medium">Dashboard</span>
+                  <LayoutDashboard className="h-5 w-5 xs:h-6 xs:w-6 text-muted-foreground" />
+                  <span className="font-medium text-base xs:text-lg">
+                    Dashboard
+                  </span>
                 </Link>
                 <Link
                   href="/plans"
                   onClick={closeMobileMenu}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors touch-target focus-ring"
+                  className="flex items-center gap-3 xs:gap-4 p-3 xs:p-4 rounded-lg hover:bg-muted/50 active:bg-muted transition-colors touch-target-large focus-ring"
                 >
-                  <FileText className="h-5 w-5 text-muted-foreground" />
-                  <span className="font-medium">Plan History</span>
+                  <FileText className="h-5 w-5 xs:h-6 xs:w-6 text-muted-foreground" />
+                  <span className="font-medium text-base xs:text-lg">
+                    Plan History
+                  </span>
                 </Link>
               </div>
 
               {/* User Info */}
-              <div className="pt-4 border-t border-border">
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
-                  <User className="h-5 w-5 text-muted-foreground" />
-                  <span className="font-medium text-sm truncate">
+              <div className="pt-4 xs:pt-6 border-t border-border">
+                <div className="flex items-center gap-3 xs:gap-4 p-3 xs:p-4 rounded-lg bg-muted/30">
+                  <User className="h-5 w-5 xs:h-6 xs:w-6 text-muted-foreground" />
+                  <span className="font-medium text-sm xs:text-base truncate">
                     {user.email}
                   </span>
                 </div>
@@ -219,14 +225,14 @@ export function Header({ onBackToHome }: HeaderProps) {
             </div>
 
             {/* Mobile Menu Footer */}
-            <div className="p-4 border-t border-border">
+            <div className="p-4 xs:p-5 border-t border-border bg-background/95 backdrop-blur-sm">
               <Button
                 variant="outline"
-                size="sm"
+                size="lg"
                 onClick={handleSignOut}
-                className="w-full justify-start gap-3 touch-target focus-ring"
+                className="w-full justify-start gap-3 xs:gap-4 touch-target-large focus-ring text-base xs:text-lg"
               >
-                <LogOut className="h-4 w-4" />
+                <LogOut className="h-5 w-5 xs:h-6 xs:w-6" />
                 Sign Out
               </Button>
             </div>

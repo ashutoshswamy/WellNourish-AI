@@ -172,47 +172,53 @@ export function UserDashboard() {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          <Card className="hover:shadow-lg transition-shadow duration-200">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Plans</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 md:gap-6">
+          <Card className="hover:shadow-lg transition-shadow duration-200 touch-target">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 xs:px-6 pt-4 xs:pt-6">
+              <CardTitle className="text-xs xs:text-sm md:text-base font-medium">
+                Total Plans
+              </CardTitle>
+              <TrendingUp className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{plans.length}</div>
-              <p className="text-xs text-muted-foreground">
+            <CardContent className="px-4 xs:px-6 pb-4 xs:pb-6">
+              <div className="text-xl xs:text-2xl md:text-3xl font-bold">
+                {plans.length}
+              </div>
+              <p className="text-xs xs:text-sm text-muted-foreground">
                 Recent plans created
               </p>
             </CardContent>
           </Card>
-          <Card className="hover:shadow-lg transition-shadow duration-200">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
+          <Card className="hover:shadow-lg transition-shadow duration-200 touch-target">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 xs:px-6 pt-4 xs:pt-6">
+              <CardTitle className="text-xs xs:text-sm md:text-base font-medium">
                 Profile Status
               </CardTitle>
-              <Utensils className="h-4 w-4 text-muted-foreground" />
+              <Utensils className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
+            <CardContent className="px-4 xs:px-6 pb-4 xs:pb-6">
+              <div className="text-xl xs:text-2xl md:text-3xl font-bold">
                 {hasProfile ? "Complete" : "Incomplete"}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs xs:text-sm text-muted-foreground">
                 {hasProfile
                   ? "Ready to generate plans"
                   : "Complete your profile first"}
               </p>
             </CardContent>
           </Card>
-          <Card className="hover:shadow-lg transition-shadow duration-200 sm:col-span-2 lg:col-span-1">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Latest Plan</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+          <Card className="hover:shadow-lg transition-shadow duration-200 sm:col-span-2 lg:col-span-1 touch-target">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 xs:px-6 pt-4 xs:pt-6">
+              <CardTitle className="text-xs xs:text-sm md:text-base font-medium">
+                Latest Plan
+              </CardTitle>
+              <Calendar className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
+            <CardContent className="px-4 xs:px-6 pb-4 xs:pb-6">
+              <div className="text-xl xs:text-2xl md:text-3xl font-bold">
                 {plans.length > 0 ? formatDate(plans[0].created_at) : "None"}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs xs:text-sm text-muted-foreground">
                 {plans.length > 0
                   ? "Most recent creation"
                   : "Create your first plan"}
@@ -223,29 +229,33 @@ export function UserDashboard() {
 
         {/* Recent Plans */}
         <div>
-          <h2 className="text-2xl font-semibold mb-6">Recent Plans</h2>
+          <h2 className="text-lg xs:text-xl md:text-2xl font-semibold mb-4 xs:mb-6">
+            Recent Plans
+          </h2>
           {plans.length === 0 ? (
-            <Card className="text-center py-12">
-              <CardContent>
-                <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-4">
-                  <Plus className="h-12 w-12 text-muted-foreground" />
+            <Card className="text-center py-8 xs:py-10 md:py-12">
+              <CardContent className="px-4 xs:px-6">
+                <div className="mx-auto w-16 h-16 xs:w-20 xs:h-20 md:w-24 md:h-24 bg-muted rounded-full flex items-center justify-center mb-3 xs:mb-4">
+                  <Plus className="h-8 w-8 xs:h-10 xs:w-10 md:h-12 md:w-12 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No plans yet</h3>
-                <p className="text-muted-foreground mb-6">
+                <h3 className="text-base xs:text-lg md:text-xl font-semibold mb-2">
+                  No plans yet
+                </h3>
+                <p className="text-xs xs:text-sm md:text-base text-muted-foreground mb-4 xs:mb-6 max-w-md mx-auto">
                   Create your first personalized diet and workout plan to get
                   started.
                 </p>
                 <Button
                   onClick={() => setShowCreateForm(true)}
-                  className="gap-2"
+                  className="gap-2 touch-target-large"
                 >
-                  <Plus className="h-4 w-4" />
+                  <Plus className="h-4 w-4 xs:h-5 xs:w-5" />
                   Create Your First Plan
                 </Button>
               </CardContent>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-5 md:gap-6">
               {plans.map((plan, index) => {
                 // Extract goal from title (e.g., "Weight Loss Plan - 12/1/2024" -> "Weight Loss")
                 const goalMatch = plan.title.match(/^(.+?)\s+Plan\s*-/);
@@ -254,26 +264,28 @@ export function UserDashboard() {
                 return (
                   <Card
                     key={plan.id}
-                    className="hover:shadow-lg transition-shadow"
+                    className="hover:shadow-lg transition-shadow touch-target"
                   >
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">{goal}</CardTitle>
+                    <CardHeader className="px-4 xs:px-6 pt-4 xs:pt-6">
+                      <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2">
+                        <CardTitle className="text-base xs:text-lg md:text-xl">
+                          {goal}
+                        </CardTitle>
                         {index === 0 && (
-                          <Badge variant="secondary">
+                          <Badge variant="secondary" className="text-xs">
                             {formatDate(plan.created_at)}
                           </Badge>
                         )}
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Utensils className="h-4 w-4" />
+                    <CardContent className="px-4 xs:px-6 pb-4 xs:pb-6">
+                      <div className="space-y-2 xs:space-y-3">
+                        <div className="flex items-center gap-2 text-xs xs:text-sm text-muted-foreground">
+                          <Utensils className="h-3 w-3 xs:h-4 xs:w-4" />
                           <span>Diet Plan Included</span>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Dumbbell className="h-4 w-4" />
+                        <div className="flex items-center gap-2 text-xs xs:text-sm text-muted-foreground">
+                          <Dumbbell className="h-3 w-3 xs:h-4 xs:w-4" />
                           <span>Workout Regimen Included</span>
                         </div>
                         <div className="pt-2">
@@ -281,13 +293,13 @@ export function UserDashboard() {
                             variant="outline"
                             size="sm"
                             asChild
-                            className="w-full"
+                            className="w-full touch-target text-xs xs:text-sm"
                           >
                             <Link
                               href={`/plans?view=${plan.id}`}
                               className="gap-2"
                             >
-                              <Eye className="h-4 w-4" />
+                              <Eye className="h-3 w-3 xs:h-4 xs:w-4" />
                               View Plan
                             </Link>
                           </Button>
@@ -304,39 +316,45 @@ export function UserDashboard() {
         {/* Quick Actions */}
         {plans.length > 0 && (
           <div>
-            <h2 className="text-2xl font-semibold mb-6">Quick Actions</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Plus className="h-5 w-5" />
+            <h2 className="text-lg xs:text-xl md:text-2xl font-semibold mb-4 xs:mb-6">
+              Quick Actions
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 xs:gap-5 md:gap-6">
+              <Card className="touch-target">
+                <CardHeader className="px-4 xs:px-6 pt-4 xs:pt-6">
+                  <CardTitle className="flex items-center gap-2 text-base xs:text-lg md:text-xl">
+                    <Plus className="h-4 w-4 xs:h-5 xs:w-5" />
                     Create New Plan
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-xs xs:text-sm">
                     Generate a new personalized diet and workout plan
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="px-4 xs:px-6 pb-4 xs:pb-6">
                   <Button
                     onClick={() => setShowCreateForm(true)}
-                    className="w-full"
+                    className="w-full touch-target-large text-sm xs:text-base"
                   >
                     Get Started
                   </Button>
                 </CardContent>
               </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <History className="h-5 w-5" />
+              <Card className="touch-target">
+                <CardHeader className="px-4 xs:px-6 pt-4 xs:pt-6">
+                  <CardTitle className="flex items-center gap-2 text-base xs:text-lg md:text-xl">
+                    <History className="h-4 w-4 xs:h-5 xs:w-5" />
                     View All Plans
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-xs xs:text-sm">
                     Browse through all your previous plans and manage them
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <Button variant="outline" className="w-full" asChild>
+                <CardContent className="px-4 xs:px-6 pb-4 xs:pb-6">
+                  <Button
+                    variant="outline"
+                    className="w-full touch-target-large text-sm xs:text-base"
+                    asChild
+                  >
                     <Link href="/plans">View History</Link>
                   </Button>
                 </CardContent>
