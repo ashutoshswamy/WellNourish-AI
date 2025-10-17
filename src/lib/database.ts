@@ -123,6 +123,20 @@ export class DatabaseService {
     return data;
   }
 
+  async getTotalUserPlansCount(userId: string): Promise<number> {
+    const { count, error } = await this.supabase
+      .from("plans")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error("Error fetching plans count:", error);
+      return 0;
+    }
+
+    return count || 0;
+  }
+
   async getPlan(planId: string, userId: string): Promise<Plan | null> {
     const { data, error } = await this.supabase
       .from("plans")

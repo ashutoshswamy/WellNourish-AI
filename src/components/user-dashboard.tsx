@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  Calendar,
   Dumbbell,
   Utensils,
   Plus,
@@ -39,6 +38,7 @@ export function UserDashboard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [plans, setPlans] = useState<Plan[]>([]);
+  const [totalPlansCount, setTotalPlansCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [hasProfile, setHasProfile] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -47,6 +47,7 @@ export function UserDashboard() {
   useEffect(() => {
     if (user) {
       loadRecentPlans();
+      loadTotalPlansCount();
       checkProfile();
     }
   }, [user]);
@@ -75,6 +76,18 @@ export function UserDashboard() {
     }
   };
 
+  const loadTotalPlansCount = async () => {
+    if (!user) return;
+
+    try {
+      const dbService = new DatabaseService();
+      const count = await dbService.getTotalUserPlansCount(user.id);
+      setTotalPlansCount(count);
+    } catch (error) {
+      console.error("Error loading total plans count:", error);
+    }
+  };
+
   const checkProfile = async () => {
     if (!user) return;
 
@@ -92,6 +105,7 @@ export function UserDashboard() {
     setShowCreateForm(false);
     // Reload recent plans to include the new one
     loadRecentPlans();
+    loadTotalPlansCount();
   };
 
   const formatDate = (dateString: string) => {
@@ -172,23 +186,7 @@ export function UserDashboard() {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 md:gap-6">
-          <Card className="hover:shadow-lg transition-shadow duration-200 touch-target">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 xs:px-6 pt-4 xs:pt-6">
-              <CardTitle className="text-xs xs:text-sm md:text-base font-medium">
-                Total Plans
-              </CardTitle>
-              <TrendingUp className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent className="px-4 xs:px-6 pb-4 xs:pb-6">
-              <div className="text-xl xs:text-2xl md:text-3xl font-bold">
-                {plans.length}
-              </div>
-              <p className="text-xs xs:text-sm text-muted-foreground">
-                Recent plans created
-              </p>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 md:gap-6">
           <Card className="hover:shadow-lg transition-shadow duration-200 touch-target">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 xs:px-6 pt-4 xs:pt-6">
               <CardTitle className="text-xs xs:text-sm md:text-base font-medium">
@@ -207,30 +205,32 @@ export function UserDashboard() {
               </p>
             </CardContent>
           </Card>
-          <Card className="hover:shadow-lg transition-shadow duration-200 sm:col-span-2 lg:col-span-1 touch-target">
+          <Card className="hover:shadow-lg transition-shadow duration-200 touch-target">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 xs:px-6 pt-4 xs:pt-6">
               <CardTitle className="text-xs xs:text-sm md:text-base font-medium">
-                Latest Plan
+                Total Plans Generated
               </CardTitle>
-              <Calendar className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
+              <TrendingUp className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent className="px-4 xs:px-6 pb-4 xs:pb-6">
               <div className="text-xl xs:text-2xl md:text-3xl font-bold">
-                {plans.length > 0 ? formatDate(plans[0].created_at) : "None"}
+                {totalPlansCount}
               </div>
               <p className="text-xs xs:text-sm text-muted-foreground">
-                {plans.length > 0
-                  ? "Most recent creation"
-                  : "Create your first plan"}
+                {totalPlansCount === 0
+                  ? "No plans created yet"
+                  : totalPlansCount === 1
+                  ? "Plan created"
+                  : "Plans created"}
               </p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Recent Plans */}
+        {/* Your Plans */}
         <div>
           <h2 className="text-lg xs:text-xl md:text-2xl font-semibold mb-4 xs:mb-6">
-            Recent Plans
+            Your Plans
           </h2>
           {plans.length === 0 ? (
             <Card className="text-center py-8 xs:py-10 md:py-12">
@@ -271,11 +271,9 @@ export function UserDashboard() {
                         <CardTitle className="text-base xs:text-lg md:text-xl">
                           {goal}
                         </CardTitle>
-                        {index === 0 && (
-                          <Badge variant="secondary" className="text-xs">
-                            {formatDate(plan.created_at)}
-                          </Badge>
-                        )}
+                        <Badge variant="secondary" className="text-xs">
+                          {formatDate(plan.created_at)}
+                        </Badge>
                       </div>
                     </CardHeader>
                     <CardContent className="px-4 xs:px-6 pb-4 xs:pb-6">
