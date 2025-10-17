@@ -3,7 +3,7 @@ import { Github, Linkedin, Heart } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-background border-t mt-auto safe-area-bottom">
+    <footer className="bg-background border-t mt-16 xs:mt-20 md:mt-24 lg:mt-32 safe-area-bottom">
       <div className="container mx-auto px-4 xs:px-6 sm:px-8 py-8 xs:py-10 md:py-12 max-w-7xl">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 xs:gap-8 md:gap-10">
           {/* Company Info */}
