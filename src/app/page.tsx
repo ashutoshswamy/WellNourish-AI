@@ -87,13 +87,13 @@ export default function Home() {
                   WellNourish AI
                 </h1>
               </div>
-              <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
                 {!loading && (
                   <>
                     {user ? (
                       <Link
                         href="/dashboard"
-                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105 transform"
+                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white px-4 sm:px-6 py-2.5 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105 transform touch-manipulation min-h-[44px] flex items-center justify-center"
                       >
                         <span className="hidden sm:inline">
                           Go to Dashboard
@@ -104,13 +104,13 @@ export default function Home() {
                       <>
                         <Link
                           href="/login"
-                          className="text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors px-2 sm:px-4 py-2 text-sm sm:text-base"
+                          className="text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 active:scale-95 font-medium transition-colors px-3 sm:px-4 py-2.5 text-sm sm:text-base touch-manipulation min-h-[44px] flex items-center justify-center rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         >
                           Sign In
                         </Link>
                         <Link
                           href="/signup"
-                          className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105 transform"
+                          className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white px-4 sm:px-6 py-2.5 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105 transform touch-manipulation min-h-[44px] flex items-center justify-center whitespace-nowrap"
                         >
                           <span className="hidden sm:inline">Get Started</span>
                           <span className="sm:hidden">Start</span>
@@ -159,11 +159,11 @@ export default function Home() {
 
             {/* CTA Buttons */}
             {!loading && (
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 px-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 px-4 max-w-2xl mx-auto">
                 {user ? (
                   <Link
                     href="/dashboard"
-                    className="group relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:scale-105 transform overflow-hidden"
+                    className="group relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:scale-105 transform overflow-hidden touch-manipulation min-h-[56px] w-full sm:w-auto"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       Go to Dashboard
@@ -175,7 +175,7 @@ export default function Home() {
                   <>
                     <Link
                       href="/signup"
-                      className="group relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:scale-105 transform overflow-hidden"
+                      className="group relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:scale-105 transform overflow-hidden touch-manipulation min-h-[56px] w-full sm:w-auto"
                     >
                       <span className="relative z-10 flex items-center gap-2">
                         <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -186,7 +186,7 @@ export default function Home() {
                     </Link>
                     <Link
                       href="/login"
-                      className="group inline-flex items-center justify-center gap-2 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border-2 border-zinc-300 dark:border-zinc-700 hover:border-emerald-600 dark:hover:border-emerald-600 px-8 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all hover:shadow-xl"
+                      className="group inline-flex items-center justify-center gap-2 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border-2 border-zinc-300 dark:border-zinc-700 hover:border-emerald-600 dark:hover:border-emerald-600 active:scale-95 px-8 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all hover:shadow-xl touch-manipulation min-h-[56px] w-full sm:w-auto"
                     >
                       <span className="hidden sm:inline">
                         Already a Member? Sign In
@@ -406,11 +406,13 @@ export default function Home() {
               {!loading && !user && (
                 <Link
                   href="/signup"
-                  className="group inline-flex items-center justify-center gap-2 sm:gap-3 bg-white text-emerald-600 px-8 sm:px-12 py-4 sm:py-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-xl hover:bg-zinc-50 transition-all shadow-2xl hover:shadow-3xl hover:scale-105 transform"
+                  className="group inline-flex items-center justify-center gap-2 sm:gap-3 bg-white text-emerald-600 px-8 sm:px-12 py-4 sm:py-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-xl hover:bg-zinc-50 active:scale-95 transition-all shadow-2xl hover:shadow-3xl hover:scale-105 transform touch-manipulation min-h-[56px] w-full sm:w-auto max-w-md mx-auto"
                 >
-                  <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
-                  Create Your Free Plan Now
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+                  <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
+                  <span className="whitespace-nowrap">
+                    Create Your Free Plan Now
+                  </span>
+                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
                 </Link>
               )}
 
