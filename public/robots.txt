@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+
+# Disallow private pages
+Disallow: /api/
+Disallow: /dashboard/
+
+# Host
+Host: https://wellnourishai.in
+
+# Sitemaps
+Sitemap: https://wellnourishai.in/sitemap.xml
