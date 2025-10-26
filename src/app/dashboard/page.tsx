@@ -275,60 +275,82 @@ export default function DashboardPage() {
                 {savedPlans.map((savedPlan) => (
                   <div
                     key={savedPlan.id}
-                    className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-2xl shadow-lg border border-zinc-200 dark:border-zinc-800 hover:shadow-2xl transition-all overflow-hidden group"
+                    className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg border border-zinc-200 dark:border-zinc-800 hover:shadow-2xl hover:border-emerald-300 dark:hover:border-emerald-700 transition-all overflow-hidden group"
                   >
-                    <div className="p-6">
-                      <div className="flex items-start justify-between mb-4">
+                    <div className="p-6 sm:p-8">
+                      {/* Header with Date/Time */}
+                      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-zinc-100 dark:border-zinc-800">
+                        <div className="bg-emerald-50 dark:bg-emerald-900/20 p-2.5 rounded-lg">
+                          <Calendar className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                        </div>
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-3">
-                            <Calendar className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">
-                              {new Date(
-                                savedPlan.created_at
-                              ).toLocaleDateString("en-US", {
+                          <p className="text-sm font-semibold text-zinc-900 dark:text-white">
+                            {new Date(savedPlan.created_at).toLocaleDateString(
+                              "en-US",
+                              {
                                 year: "numeric",
                                 month: "long",
                                 day: "numeric",
-                              })}
-                            </p>
-                          </div>
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            <div className="inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/30 px-3 py-2 rounded-xl">
-                              <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                              <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-                                BMI: {savedPlan.plan_data.bmi}
-                              </span>
-                              <span className="text-xs text-emerald-600 dark:text-emerald-500">
-                                ({savedPlan.plan_data.bmiCategory})
-                              </span>
-                            </div>
-                            <div className="inline-flex items-center gap-2 bg-teal-100 dark:bg-teal-900/30 px-3 py-2 rounded-xl">
-                              <span className="text-sm font-semibold text-teal-700 dark:text-teal-400">
-                                {savedPlan.user_inputs.dietPreference.replace(
-                                  "_",
-                                  " "
-                                )}
-                              </span>
-                            </div>
-                            <div className="inline-flex items-center gap-2 bg-cyan-100 dark:bg-cyan-900/30 px-3 py-2 rounded-xl">
-                              <TrendingUp className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-                              <span className="text-sm font-semibold text-cyan-700 dark:text-cyan-400">
-                                {savedPlan.user_inputs.activityLevel.replace(
-                                  "_",
-                                  " "
-                                )}
-                              </span>
-                            </div>
+                              }
+                            )}
+                          </p>
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                            {new Date(savedPlan.created_at).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* BMI Section */}
+                      <div className="mb-6">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                          <h3 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">
+                            Body Mass Index
+                          </h3>
+                        </div>
+                        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-xl p-4 border border-emerald-100 dark:border-emerald-900/30">
+                          <div className="flex items-baseline gap-3">
+                            <span className="text-3xl font-bold text-emerald-700 dark:text-emerald-400">
+                              {savedPlan.plan_data.bmi}
+                            </span>
+                            <span className="text-sm font-medium text-emerald-600 dark:text-emerald-500 bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 rounded-full">
+                              {savedPlan.plan_data.bmiCategory}
+                            </span>
                           </div>
                         </div>
                       </div>
+
+                      {/* Goal Section */}
+                      {savedPlan.user_inputs.goals && (
+                        <div className="mb-6">
+                          <div className="flex items-center gap-2 mb-2">
+                            <FileText className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                            <h3 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">
+                              Fitness Goal
+                            </h3>
+                          </div>
+                          <div className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 rounded-xl p-4 border border-violet-100 dark:border-violet-900/30">
+                            <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                              {savedPlan.user_inputs.goals}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* View Button */}
                       <button
                         onClick={() => loadPlan(savedPlan)}
-                        className="w-full flex items-center justify-center gap-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-zinc-700 dark:text-zinc-300 hover:text-emerald-700 dark:hover:text-emerald-400 px-4 py-3 rounded-xl font-semibold transition-all group"
+                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-3.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-xl hover:scale-[1.02] transform group"
                       >
-                        <FileText className="w-4 h-4" />
-                        View Plan Details
-                        <span className="ml-auto group-hover:translate-x-1 transition-transform">
+                        <FileText className="w-5 h-5" />
+                        View Complete Plan
+                        <span className="ml-auto group-hover:translate-x-1 transition-transform text-lg">
                           →
                         </span>
                       </button>
