@@ -7,7 +7,7 @@
 [![Supabase](https://img.shields.io/badge/Supabase-2.76-green?style=flat-square&logo=supabase)](https://supabase.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 
-WellNourish AI is a modern web application that leverages advanced AI (Google Gemini) to generate personalized diet and fitness plans tailored to your unique goals, preferences, and lifestyle. Get science-backed recommendations that adapt to your needs.
+WellNourish AI is a modern web application that leverages advanced AI to generate personalized diet and fitness plans tailored to your unique goals, preferences, and lifestyle. Get science-backed recommendations that adapt to your needs.
 
 🌐 **Live Demo:** [wellnourishai.in](https://wellnourishai.in)
 
@@ -137,7 +137,7 @@ SOFTWARE.
 
 ## © Copyright
 
-**Copyright © 2025 Ashutosh Swamy. All rights reserved.**
+**Copyright © 2025 WellNourish AI. All rights reserved.**
 
 WellNourish AI and its associated branding, content, and code are protected by copyright law. Unauthorized reproduction, distribution, or modification of this software without explicit permission from the copyright holder is prohibited, except as permitted under the MIT License.
 
