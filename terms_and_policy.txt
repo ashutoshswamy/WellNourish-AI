@@ -1,0 +1,339 @@
+---
+
+# ✅ **TERMS OF SERVICE — WellNourish AI**
+
+**Last Updated: [Date]**
+
+Welcome to **WellNourish AI** (“we”, “our”, “the Service”).
+By accessing or using **wellnourishai.in** or the WellNourish AI mobile/desktop application, you agree to these Terms of Service.
+
+---
+
+## **1. Eligibility**
+
+To use WellNourish AI, you must:
+
+* Be at least **18 years old**, OR
+* Be **16–17 years old with parental/guardian consent**
+* Provide accurate information
+* Comply with Indian laws, including the **DPDP Act, 2023** and **IT Act, 2000**
+
+---
+
+## **2. About the Service**
+
+WellNourish AI provides:
+
+* AI-generated personalized diet plans
+* AI-generated workout plans
+* Lifestyle and wellness recommendations
+
+The Service is intended for **informational and educational** purposes only.
+
+### **Not Medical Advice**
+
+The recommendations:
+
+* Are NOT created by licensed medical or dietetic professionals
+* Should NOT replace professional medical consultation
+* Should NOT be used to diagnose, treat, or cure any condition
+
+Consult a certified doctor before making major changes to your health routine.
+You are fully responsible for how you use the generated plans.
+
+---
+
+## **3. Account Registration**
+
+You may sign up using:
+
+* Google OAuth
+* GitHub OAuth
+* Email/password (via Supabase)
+
+You agree to:
+
+* Keep your login credentials secure
+* Not share your account
+* Notify us of unauthorized access
+* Provide accurate age and personal details
+
+We may suspend or terminate accounts for violations or irregular activity.
+
+---
+
+## **4. Acceptable Use**
+
+You agree to NOT:
+
+* Interfere with the app’s operation
+* Attempt to hack, reverse engineer, or disrupt systems
+* Upload harmful, abusive, or illegal content
+* Use the platform for any unlawful activities under Indian law
+* Misrepresent your identity or health status
+
+---
+
+## **5. AI-Generated Content**
+
+You understand and agree that:
+
+* AI results may contain errors
+* Output may vary depending on the model
+* Generated plans may not always suit your exact needs
+* You assume responsibility for acting on the recommendations
+
+WellNourish AI does **not** guarantee accuracy or completeness of AI output.
+
+---
+
+## **6. Intellectual Property**
+
+We own:
+
+* Branding
+* Software
+* UI/UX
+* AI prompt structures
+* Design assets
+
+You own:
+
+* The personal data you enter
+* Your preferences and profile information
+
+---
+
+## **7. Payments (If Premium Features Are Added)**
+
+If subscriptions or one-time purchases become available:
+
+* Pricing will be disclosed clearly
+* Payments will follow Indian consumer protection rules
+* Refunds will be limited unless required by law
+* Subscriptions may renew automatically until cancelled
+
+---
+
+## **8. Limitation of Liability**
+
+To the maximum extent permitted by Indian law:
+
+* We are **not liable** for indirect, incidental, or consequential damages
+* We are **not liable** for health issues, injuries, or losses resulting from use of the Service
+* Our total liability is limited to the amount you paid to us in the past 12 months (if any)
+
+---
+
+## **9. Termination**
+
+We may terminate or suspend your account if:
+
+* You violate these Terms
+* You misuse the Service
+* A lawful authority instructs us
+
+You may delete your account anytime.
+
+---
+
+## **10. Governing Law & Dispute Resolution**
+
+These Terms are governed by the laws of **India**.
+
+Legal jurisdiction: **Courts of Pune, Maharashtra, India**
+
+---
+
+## **11. Contact & Grievance Redressal (DPDP Act, Mandatory)**
+
+**Grievance Officer:** Ashutosh Swamy
+**Email:** [ashutoshswamy397@gmail.com](mailto:ashutoshswamy397@gmail.com)
+**Address:** Pune, Maharashtra, India
+
+We will respond to grievances within **15 working days**, as required under Indian law.
+
+---
+
+---
+
+# ✅ **PRIVACY POLICY — WellNourish AI**
+
+**Last Updated: [Date]**
+
+WellNourish AI (“we”, “our”, “us”) respects your privacy.
+This Privacy Policy explains how we collect, use, store, and protect your personal data in compliance with:
+
+* **Digital Personal Data Protection Act, 2023 (DPDP Act)**
+* **Information Technology Act, 2000**
+* **SPDI Rules, 2011**
+
+By using WellNourish AI, you consent to this Privacy Policy.
+
+---
+
+# 1. Data We Collect
+
+## **1.1 Personal Information**
+
+* Name
+* Email address
+* Profile photo (from Google/GitHub OAuth if provided)
+
+## **1.2 Wellness / Sensitive Data**
+
+You voluntarily provide:
+
+* Age
+* Height
+* Weight
+* Gender
+* Dietary preferences
+* Allergies
+* Activity level
+* Fitness goals
+
+This may be considered **Sensitive Personal Data** under Indian law.
+
+## **1.3 Technical Information**
+
+* IP address
+* Device and browser information
+* Usage analytics
+* Error logs
+* Login timestamps
+
+---
+
+# 2. How We Use Your Data
+
+We use your data for:
+
+* Generating AI-based diet and fitness plans
+* Improving recommendations
+* Account authentication & security
+* Analytics and performance
+* Preventing fraud or misuse
+* Compliance with Indian legal requirements
+
+We **do not sell** your data.
+
+---
+
+# 3. AI Data Processing
+
+We share only necessary data (e.g., age, weight, goals) with **Google Gemini** to generate personalized plans.
+
+We do **not** share:
+
+* Your email
+* Authentication tokens
+* Financial information
+
+AI processing is used **strictly** for providing services requested by you.
+
+---
+
+# 4. Legal Basis for Processing (DPDP Act)
+
+We process your data based on:
+
+* **Your consent**
+* **Contractual necessity** (to provide our service)
+* **Legitimate interests** (security, fraud prevention)
+
+You may withdraw consent at any time.
+
+---
+
+# 5. Data Storage & Security
+
+Your data is stored securely using:
+
+* Supabase PostgreSQL
+* TLS encryption in transit
+* Access controls
+* Industry-standard security measures
+
+We comply with:
+
+* **IT Act Section 43A**
+* **SPDI Rules reasonable security practices**
+
+No system is completely secure, but we take all reasonable precautions.
+
+---
+
+# 6. Data Retention
+
+We retain your data until:
+
+* Your account is active
+* You request deletion
+* Legal obligations require retention
+
+If you delete your account:
+
+* Personal data is removed within **30 days**
+* Backups/logs may be retained as required by law
+
+---
+
+# 7. Your Rights Under Indian Law
+
+You have the right to:
+
+* Access your data
+* Correct data
+* Delete your data
+* Withdraw consent
+* Request an export of your data
+* File grievances with our Grievance Officer
+
+We will respond within **15 working days**.
+
+---
+
+# 8. Children’s Privacy
+
+The Service is **not intended for children under 16**.
+
+We do not knowingly collect personal data from minors.
+
+---
+
+# 9. Data Sharing
+
+We may share data only with:
+
+* Supabase (database + auth)
+* Google Gemini (AI model)
+* Google / GitHub (OAuth providers)
+
+We do **not** share data with advertisers or data brokers.
+
+---
+
+# 10. International Data Transfer
+
+Your data may be processed outside India (e.g., Supabase servers, Google AI infrastructure).
+By using the Service, you consent to cross-border data transfers permitted under the DPDP Act.
+
+---
+
+# 11. Changes to This Policy
+
+We may update this Privacy Policy periodically.
+Continued use of the app after updates constitutes acceptance.
+
+---
+
+# 12. Grievance Redressal (DPDP Act Requirement)
+
+**Grievance Officer:** Ashutosh Swamy
+**Email:** [ashutoshswamy397@gmail.com](mailto:ashutoshswamy397@gmail.com)
+**Address:** Pune, Maharashtra, India
+
+We will respond to complaints within **15 working days**.
+
+---
