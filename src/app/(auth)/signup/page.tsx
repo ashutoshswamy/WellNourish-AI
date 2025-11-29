@@ -39,18 +39,31 @@ export default function SignUpPage() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
         },
       });
 
       if (error) {
+        // Check for email already exists error
+        if (error.message.toLowerCase().includes('already registered') || 
+            error.message.toLowerCase().includes('already exists')) {
+          setError('This email is already registered. Please sign in instead.');
+          return;
+        }
         setError(error.message);
         return;
       }
 
-      // If user is confirmed immediately (email confirmation disabled), redirect to dashboard
+      // Check if user already exists (identities array is empty when email is taken)
+      // This happens when Supabase is configured to not reveal if email exists
+      if (data.user && data.user.identities && data.user.identities.length === 0) {
+        setError('An account with this email already exists. Please sign in instead, or use "Forgot password" if you need to reset your password.');
+        return;
+      }
+
+      // If user is confirmed immediately (email confirmation disabled), redirect to onboarding
       if (data.session) {
-        router.push('/dashboard');
+        router.push('/onboarding');
         router.refresh();
         return;
       }
@@ -72,7 +85,7 @@ export default function SignUpPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback?next=/onboarding&flow=signup`,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -98,7 +111,7 @@ export default function SignUpPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback?next=/onboarding&flow=signup`,
         },
       });
 
@@ -164,7 +177,24 @@ export default function SignUpPage() {
           animate={{ opacity: 1, y: 0 }}
           className="rounded-xl bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-500"
         >
-          {error}
+          <p>{error}</p>
+          {error.includes('already exists') && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Link 
+                href="/login" 
+                className="font-medium text-primary hover:text-primary-dark underline transition-colors"
+              >
+                Sign in
+              </Link>
+              <span className="text-muted">or</span>
+              <Link 
+                href="/forgot-password" 
+                className="font-medium text-primary hover:text-primary-dark underline transition-colors"
+              >
+                Reset password
+              </Link>
+            </div>
+          )}
         </motion.div>
       )}
 

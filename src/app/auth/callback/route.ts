@@ -8,6 +8,7 @@ export async function GET(request: Request) {
   const token_hash = searchParams.get('token_hash');
   const type = searchParams.get('type');
   const next = searchParams.get('next') ?? '/dashboard';
+  const flow = searchParams.get('flow'); // 'signup' or 'login'
   const error = searchParams.get('error');
   const errorDescription = searchParams.get('error_description');
 
@@ -47,6 +48,51 @@ export async function GET(request: Request) {
     }
   );
 
+  /**
+   * Helper function to determine redirect path based on user's onboarding status
+   * For signup flows, redirect to onboarding
+   * For login flows, redirect to dashboard
+   */
+  const getRedirectPath = async (isSignupFlow: boolean): Promise<string> => {
+    // If it's explicitly a signup flow, go to onboarding
+    if (isSignupFlow) {
+      return '/onboarding';
+    }
+    
+    // For login flows, check if user has completed onboarding
+    // If they haven't completed preferences, redirect to onboarding
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: preferences } = await supabase
+        .from('user_preferences')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+      
+      // If no preferences exist, user needs to complete onboarding
+      if (!preferences) {
+        return '/onboarding';
+      }
+    }
+    
+    return '/dashboard';
+  };
+
+  /**
+   * Helper function to construct the full redirect URL
+   */
+  const buildRedirectUrl = (path: string, forwardedHost: string | null): string => {
+    const isLocalEnv = process.env.NODE_ENV === 'development';
+    
+    if (isLocalEnv) {
+      return `${origin}${path}`;
+    } else if (forwardedHost) {
+      return `https://${forwardedHost}${path}`;
+    } else {
+      return `${origin}${path}`;
+    }
+  };
+
   // Handle email confirmation (signup, recovery, email change, etc.)
   if (token_hash && type) {
     const { error: verifyError } = await supabase.auth.verifyOtp({
@@ -56,18 +102,13 @@ export async function GET(request: Request) {
 
     if (!verifyError) {
       const forwardedHost = request.headers.get('x-forwarded-host');
-      const isLocalEnv = process.env.NODE_ENV === 'development';
-
-      // Construct the redirect URL
-      let redirectUrl: string;
-      if (isLocalEnv) {
-        redirectUrl = `${origin}${next}`;
-      } else if (forwardedHost) {
-        redirectUrl = `https://${forwardedHost}${next}`;
-      } else {
-        redirectUrl = `${origin}${next}`;
-      }
-
+      
+      // For email signup verification, redirect to onboarding
+      // For other types (recovery, magiclink), use the provided next parameter or dashboard
+      const isSignupVerification = type === 'signup';
+      const redirectPath = isSignupVerification ? '/onboarding' : next;
+      
+      const redirectUrl = buildRedirectUrl(redirectPath, forwardedHost);
       return NextResponse.redirect(redirectUrl);
     }
 
@@ -87,20 +128,12 @@ export async function GET(request: Request) {
 
     if (!exchangeError) {
       const forwardedHost = request.headers.get('x-forwarded-host');
-      const isLocalEnv = process.env.NODE_ENV === 'development';
-
-      // Construct the redirect URL
-      let redirectUrl: string;
-      if (isLocalEnv) {
-        // In development, use localhost
-        redirectUrl = `${origin}${next}`;
-      } else if (forwardedHost) {
-        // In production behind a proxy
-        redirectUrl = `https://${forwardedHost}${next}`;
-      } else {
-        redirectUrl = `${origin}${next}`;
-      }
-
+      
+      // Determine redirect based on flow type
+      const isSignupFlow = flow === 'signup';
+      const redirectPath = await getRedirectPath(isSignupFlow);
+      
+      const redirectUrl = buildRedirectUrl(redirectPath, forwardedHost);
       return NextResponse.redirect(redirectUrl);
     }
 
