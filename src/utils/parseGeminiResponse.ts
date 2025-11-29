@@ -4,11 +4,20 @@
 
 import type { MealPlanData, WorkoutPlanData } from '@/types/database.types';
 
+export interface ShoppingListItem {
+  name: string;
+  amount: number;
+  unit: string;
+  category?: string;
+  notes?: string;
+}
+
 export interface GeminiPlanResponse {
   summary: string;
   daily_calories: number;
   meal_plan: MealPlanData;
   workout_plan: WorkoutPlanData;
+  shopping_list: ShoppingListItem[];
   warnings: string[];
   confidence_score: number;
 }
@@ -230,6 +239,13 @@ function sanitizeResponse(data: GeminiPlanResponse): GeminiPlanResponse {
         notes: data.workout_plan?.notes,
         progression_strategy: data.workout_plan?.progression_strategy,
       },
+      shopping_list: (data.shopping_list || []).map((item) => ({
+        name: item?.name || 'Unknown Item',
+        amount: item?.amount || 0,
+        unit: item?.unit || 'unit',
+        category: item?.category,
+        notes: item?.notes,
+      })),
       warnings: (data.warnings || []).filter((w) => typeof w === 'string'),
       confidence_score: Math.min(100, Math.max(0, Math.round(data.confidence_score || 0))),
     };
