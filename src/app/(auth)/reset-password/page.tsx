@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
   const [password, setPassword] = useState('');
@@ -17,13 +18,70 @@ export default function ResetPasswordPage() {
   const [isValidSession, setIsValidSession] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Check if user has a valid recovery session
-    const checkSession = async () => {
+    const handlePasswordRecovery = async () => {
+      // Check for error in URL params
+      const errorParam = searchParams.get('error');
+      const errorDescription = searchParams.get('error_description');
+      
+      if (errorParam) {
+        setError(errorDescription || 'An error occurred');
+        setIsValidSession(false);
+        return;
+      }
+
+      // Check for code in URL (PKCE flow)
+      const code = searchParams.get('code');
+      
+      if (code) {
+        // Exchange the code for a session
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+        
+        if (exchangeError) {
+          console.error('Code exchange error:', exchangeError);
+          setError(exchangeError.message);
+          setIsValidSession(false);
+          return;
+        }
+        
+        // Remove code from URL after successful exchange
+        window.history.replaceState({}, '', '/reset-password');
+        setIsValidSession(true);
+        return;
+      }
+
+      // Listen for auth state changes (handles hash fragment tokens)
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          setIsValidSession(true);
+        } else if (event === 'SIGNED_IN' && session) {
+          setIsValidSession(true);
+        }
+      });
+
+      // Check if there's already a valid session
       const { data: { session } } = await supabase.auth.getSession();
-      setIsValidSession(!!session);
+      
+      if (session) {
+        setIsValidSession(true);
+      } else {
+        // Give a moment for the hash fragment to be processed
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const { data: { session: retrySession } } = await supabase.auth.getSession();
+        if (retrySession) {
+          setIsValidSession(true);
+        } else {
+          setIsValidSession(false);
+        }
+      }
+
+      return () => {
+        subscription.unsubscribe();
+      };
     };
-    checkSession();
-  }, [supabase.auth]);
+
+    handlePasswordRecovery();
+  }, [supabase.auth, searchParams]);
 
   const validatePassword = (password: string): string | null => {
     if (password.length < 8) {
@@ -309,5 +367,24 @@ export default function ResetPasswordPage() {
         </button>
       </form>
     </>
+  );
+}
+
+function LoadingSpinner() {
+  return (
+    <div className="text-center">
+      <div className="animate-spin mx-auto h-8 w-8 border-2 border-green-600 border-t-transparent rounded-full" />
+      <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+        Loading...
+      </p>
+    </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
