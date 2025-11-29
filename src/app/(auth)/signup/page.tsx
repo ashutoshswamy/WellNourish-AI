@@ -35,7 +35,7 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -48,6 +48,14 @@ export default function SignUpPage() {
         return;
       }
 
+      // If user is confirmed immediately (email confirmation disabled), redirect to dashboard
+      if (data.session) {
+        router.push('/dashboard');
+        router.refresh();
+        return;
+      }
+
+      // Otherwise, show email confirmation message
       setSuccess(true);
     } catch {
       setError('An unexpected error occurred');
