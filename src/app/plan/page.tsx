@@ -483,7 +483,6 @@ function PlanPageContent() {
             <div className="min-w-0">
               <h2 className="text-base sm:text-lg font-medium text-green-100">Daily Target</h2>
               <p className="mt-0.5 sm:mt-1 text-2xl sm:text-4xl font-bold">{formatNumber(planData.daily_calories)} calories</p>
-              <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-green-100 line-clamp-2">{planData.summary}</p>
             </div>
             <div className="flex gap-2 sm:gap-4 overflow-x-auto pb-1">
               <div className="rounded-lg sm:rounded-xl bg-white/20 p-2.5 sm:p-4 text-center backdrop-blur-sm min-w-[60px] sm:min-w-[80px]">
