@@ -6,7 +6,7 @@ import MealPlanCard from '@/components/MealPlanCard';
 import WorkoutPlanCard from '@/components/WorkoutPlanCard';
 import WarningsBox from '@/components/WarningsBox';
 import { createClient } from '@/lib/supabase/client';
-import type { MealPlanData, WorkoutPlanData, ShoppingListItem } from '@/types/database.types';
+import type { MealPlanData, WorkoutPlanData } from '@/types/database.types';
 import { formatNumber, formatGrams } from '@/utils/formatNumber';
 
 interface PlanData {
@@ -16,7 +16,6 @@ interface PlanData {
   daily_calories: number;
   meal_plan: MealPlanData;
   workout_plan: WorkoutPlanData;
-  shopping_list: ShoppingListItem[];
   warnings: string[];
   confidence_score: number;
   metadata?: {
@@ -26,42 +25,6 @@ interface PlanData {
     tokens_used: number | null;
     goal?: string;
   };
-}
-
-// Shopping list categories for grouping
-const categoryOrder = [
-  'Proteins',
-  'Dairy',
-  'Vegetables',
-  'Fruits',
-  'Grains',
-  'Pantry',
-  'Spices',
-  'Other',
-];
-
-function groupShoppingList(items: ShoppingListItem[]) {
-  const grouped: Record<string, ShoppingListItem[]> = {};
-
-  items.forEach((item) => {
-    const category = item.category || 'Other';
-    if (!grouped[category]) {
-      grouped[category] = [];
-    }
-    grouped[category].push(item);
-  });
-
-  // Sort by category order
-  const sortedCategories = Object.keys(grouped).sort((a, b) => {
-    const indexA = categoryOrder.indexOf(a);
-    const indexB = categoryOrder.indexOf(b);
-    return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
-  });
-
-  return sortedCategories.map((category) => ({
-    category,
-    items: grouped[category],
-  }));
 }
 
 function PlanPageContent() {
@@ -114,7 +77,6 @@ function PlanPageContent() {
             daily_calories: plan.daily_calories || 2000,
             meal_plan: plan.meal_plan || { days: [] },
             workout_plan: plan.workout_plan || { weeks: [] },
-            shopping_list: plan.meal_plan?.shopping_list || [],
             warnings: [],
             confidence_score: 85,
             metadata: {
@@ -186,7 +148,6 @@ function PlanPageContent() {
           daily_calories: activePlan.daily_calories || 2000,
           meal_plan: activePlan.meal_plan || { days: [] },
           workout_plan: activePlan.workout_plan || { weeks: [] },
-          shopping_list: activePlan.meal_plan?.shopping_list || [],
           warnings: [],
           confidence_score: 85,
           metadata: {
@@ -354,8 +315,6 @@ function PlanPageContent() {
     return null;
   }
 
-  const groupedShoppingList = groupShoppingList(planData.shopping_list);
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
@@ -520,64 +479,17 @@ function PlanPageContent() {
           </div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
-          {/* Meal Plan & Workout Plan */}
-          <div className="space-y-6 sm:space-y-8 lg:col-span-2">
-            {/* Meal Plan */}
-            <section>
-              <MealPlanCard mealPlan={planData.meal_plan} />
-            </section>
+        {/* Main Content */}
+        <div className="space-y-6 sm:space-y-8">
+          {/* Meal Plan */}
+          <section>
+            <MealPlanCard mealPlan={planData.meal_plan} />
+          </section>
 
-            {/* Workout Plan */}
-            <section>
-              <WorkoutPlanCard workoutPlan={planData.workout_plan} />
-            </section>
-          </div>
-
-          {/* Sidebar - Shopping List */}
-          <div className="lg:col-span-1">
-            <div className="lg:sticky lg:top-24 rounded-xl border border-gray-200 bg-white p-4 sm:p-6 dark:border-gray-700 dark:bg-gray-900">
-              <h2 className="mb-3 sm:mb-4 flex items-center gap-2 text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
-                <svg className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-                Shopping List
-              </h2>
-              <p className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                {planData.shopping_list.length} items for the week
-              </p>
-
-              <div className="max-h-[50vh] lg:max-h-[60vh] space-y-3 sm:space-y-4 overflow-y-auto pr-2">
-                {groupedShoppingList.map(({ category, items }) => (
-                  <div key={category}>
-                    <h3 className="mb-1.5 sm:mb-2 text-xs sm:text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                      {category}
-                    </h3>
-                    <ul className="space-y-1.5 sm:space-y-2">
-                      {items.map((item, index) => (
-                        <li
-                          key={index}
-                          className="flex items-center gap-2 sm:gap-3 rounded-lg bg-gray-50 p-1.5 sm:p-2 dark:bg-gray-800"
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-3.5 w-3.5 sm:h-4 sm:w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                          />
-                          <span className="flex-1 text-xs sm:text-sm text-gray-700 dark:text-gray-300 min-w-0 truncate">
-                            {item.ingredient}
-                          </span>
-                          <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 shrink-0">
-                            {item.amount} {item.unit}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Workout Plan */}
+          <section>
+            <WorkoutPlanCard workoutPlan={planData.workout_plan} />
+          </section>
         </div>
       </main>
     </div>

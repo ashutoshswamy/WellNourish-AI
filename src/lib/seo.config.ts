@@ -166,7 +166,7 @@ export const pageSEOConfig: Record<string, PageSEOConfig> = {
   plan: {
     title: 'Your Personalized Plan',
     description:
-      'View your AI-generated personalized meal plan and workout routine with detailed recipes, nutritional information, and shopping lists.',
+      'View your AI-generated personalized meal plan and workout routine with detailed recipes and nutritional information.',
     noindex: true,
   },
   privacy: {

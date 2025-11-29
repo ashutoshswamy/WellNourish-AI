@@ -2,14 +2,13 @@
  * Parse and validate Gemini's response for the wellness plan
  */
 
-import type { MealPlanData, WorkoutPlanData, ShoppingListItem } from '@/types/database.types';
+import type { MealPlanData, WorkoutPlanData } from '@/types/database.types';
 
 export interface GeminiPlanResponse {
   summary: string;
   daily_calories: number;
   meal_plan: MealPlanData;
   workout_plan: WorkoutPlanData;
-  shopping_list: ShoppingListItem[];
   warnings: string[];
   confidence_score: number;
 }
@@ -202,7 +201,6 @@ function sanitizeResponse(data: GeminiPlanResponse): GeminiPlanResponse {
           total_carbs_g: day?.total_carbs_g || 0,
           total_fats_g: day?.total_fats_g || 0,
         })),
-        shopping_list: data.shopping_list || [],
         meal_prep_instructions: data.meal_plan?.meal_prep_instructions,
       },
       workout_plan: {
@@ -232,12 +230,6 @@ function sanitizeResponse(data: GeminiPlanResponse): GeminiPlanResponse {
         notes: data.workout_plan?.notes,
         progression_strategy: data.workout_plan?.progression_strategy,
       },
-      shopping_list: (data.shopping_list || []).map((item) => ({
-        ingredient: item?.ingredient || 'Unknown',
-        amount: item?.amount || 0,
-        unit: item?.unit || 'unit',
-        category: item?.category || 'Other',
-      })),
       warnings: (data.warnings || []).filter((w) => typeof w === 'string'),
       confidence_score: Math.min(100, Math.max(0, Math.round(data.confidence_score || 0))),
     };

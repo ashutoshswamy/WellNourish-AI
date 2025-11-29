@@ -92,9 +92,8 @@ Generate a detailed, actionable 7-day wellness plan that includes:
 2. **Daily Calories**: Recommended daily calorie intake based on their goals and activity level
 3. **Meal Plan**: 7 days of meals with recipes, ingredients, nutrition info, and prep instructions
 4. **Workout Plan**: Weekly workout schedule appropriate for their fitness level
-5. **Shopping List**: Consolidated grocery list for the week
-6. **Warnings**: Any health considerations or warnings based on their profile
-7. **Confidence Score**: Your confidence level (0-100) in this plan being suitable for the user
+5. **Warnings**: Any health considerations or warnings based on their profile
+6. **Confidence Score**: Your confidence level (0-100) in this plan being suitable for the user
 
 ## Response Format
 
@@ -160,9 +159,6 @@ You MUST respond with valid JSON only, no markdown formatting. Use this exact st
       }
     ]
   },
-  "shopping_list": [
-    { "ingredient": "Item name", "amount": 500, "unit": "g", "category": "Produce" }
-  ],
   "warnings": ["Any health warnings or considerations"],
   "confidence_score": 85
 }

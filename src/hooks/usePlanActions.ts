@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import type { MealPlanData, WorkoutPlanData, ShoppingListItem } from '@/types/database.types';
+import type { MealPlanData, WorkoutPlanData } from '@/types/database.types';
 
 export interface PlanData {
   success: boolean;
@@ -12,7 +12,6 @@ export interface PlanData {
   daily_calories: number;
   meal_plan: MealPlanData;
   workout_plan: WorkoutPlanData;
-  shopping_list: ShoppingListItem[];
   warnings: string[];
   confidence_score: number;
   metadata?: {

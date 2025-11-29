@@ -119,7 +119,6 @@ export interface GeneratedPlan {
 
 export interface MealPlanData {
   days: DailyMealPlan[];
-  shopping_list?: ShoppingListItem[];
   meal_prep_instructions?: string[];
 }
 
@@ -162,13 +161,6 @@ export interface NutritionInfo {
   fiber_g?: number;
   sugar_g?: number;
   sodium_mg?: number;
-}
-
-export interface ShoppingListItem {
-  ingredient: string;
-  amount: number;
-  unit: string;
-  category?: string;
 }
 
 export interface WorkoutPlanData {
