@@ -125,19 +125,19 @@ export default async function DashboardPage() {
 
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
-        <nav className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <nav className="container mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <Leaf className="h-7 w-7 text-primary group-hover:rotate-12 transition-transform" />
-            <span className="text-xl font-bold gradient-text">WellNourish AI</span>
+            <Leaf className="h-6 w-6 sm:h-7 sm:w-7 text-primary group-hover:rotate-12 transition-transform" />
+            <span className="text-lg sm:text-xl font-bold gradient-text">WellNourish AI</span>
           </Link>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted hidden sm:block">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <span className="text-xs sm:text-sm text-muted hidden sm:block truncate max-w-[150px]">
               {profile?.full_name || user.email}
             </span>
             <form action="/api/auth/signout" method="POST">
               <button
                 type="submit"
-                className="text-sm font-medium px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/50 transition-all"
+                className="text-xs sm:text-sm font-medium px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-card border border-border hover:border-primary/50 transition-all"
               >
                 Sign out
               </button>
@@ -147,38 +147,38 @@ export default async function DashboardPage() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium text-primary">Dashboard</span>
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 mb-1 sm:mb-2">
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <span className="text-xs sm:text-sm font-medium text-primary">Dashboard</span>
           </div>
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-2xl sm:text-3xl font-bold">
             Welcome back{profile?.full_name ? `, ${profile.full_name.split(' ')[0]}` : ''}! 👋
           </h1>
-          <p className="mt-2 text-muted">
+          <p className="mt-1 sm:mt-2 text-sm sm:text-base text-muted">
             Here&apos;s your personalized wellness overview.
           </p>
         </div>
 
         {/* Onboarding Alert */}
         {needsOnboarding && (
-          <div className="mb-8 p-5 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-2xl">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-amber-500/20 rounded-xl">
-                <AlertCircle className="h-6 w-6 text-amber-500" />
+          <div className="mb-6 sm:mb-8 p-4 sm:p-5 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl sm:rounded-2xl">
+            <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+              <div className="p-2 sm:p-3 bg-amber-500/20 rounded-lg sm:rounded-xl w-fit">
+                <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-amber-500" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-lg">Complete Your Profile</h3>
-                <p className="text-sm text-muted mt-1">
+                <h3 className="font-semibold text-base sm:text-lg">Complete Your Profile</h3>
+                <p className="text-xs sm:text-sm text-muted mt-1">
                   Set up your preferences to get personalized meal and workout plans.
                 </p>
                 <Link
                   href="/onboarding"
-                  className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all"
+                  className="inline-flex items-center gap-2 mt-3 sm:mt-4 px-4 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all"
                 >
                   Complete Setup
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Link>
               </div>
             </div>
@@ -187,88 +187,88 @@ export default async function DashboardPage() {
 
         {/* Latest Plan Banner */}
         {activePlan && (
-          <div className="mb-8 p-6 bg-gradient-to-r from-primary to-secondary rounded-2xl text-white relative overflow-hidden">
+          <div className="mb-6 sm:mb-8 p-4 sm:p-6 bg-gradient-to-r from-primary to-secondary rounded-xl sm:rounded-2xl text-white relative overflow-hidden">
             <div className="absolute inset-0 opacity-20">
               <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
             </div>
-            <div className="relative flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Zap className="h-5 w-5" />
-                  <p className="text-white/80 text-sm font-medium">Latest Plan</p>
+            <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1 sm:mb-2">
+                  <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <p className="text-white/80 text-xs sm:text-sm font-medium">Latest Plan</p>
                 </div>
-                <h2 className="text-2xl font-bold">{activePlan.plan_name}</h2>
-                <p className="text-white/80 text-sm mt-2">
+                <h2 className="text-lg sm:text-2xl font-bold truncate">{activePlan.plan_name}</h2>
+                <p className="text-white/80 text-xs sm:text-sm mt-1 sm:mt-2">
                   {formatNumber(activePlan.daily_calories)} cal/day
                 </p>
               </div>
               <Link
                 href="/plan"
-                className="px-5 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl font-medium transition-all flex items-center gap-2"
+                className="px-4 sm:px-5 py-2 sm:py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg sm:rounded-xl font-medium transition-all flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
               >
                 View Plan
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
               </Link>
             </div>
           </div>
         )}
 
         {/* Quick Actions */}
-        <div className="bg-card rounded-2xl p-6 border border-border mb-8">
-          <h2 className="text-xl font-semibold mb-5 flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+        <div className="bg-card rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-border mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-5 flex items-center gap-2">
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             Quick Actions
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Link 
               href="/onboarding"
-              className="group flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-all"
+              className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-all"
             >
-              <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${colorClasses.green} group-hover:scale-110 transition-transform`}>
-                <Plus className="h-5 w-5" />
+              <div className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl ${colorClasses.green} group-hover:scale-110 transition-transform shrink-0`}>
+                <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <div>
-                <p className="font-semibold">Generate New Plan</p>
-                <p className="text-sm text-muted">Create personalized plan</p>
+              <div className="min-w-0">
+                <p className="font-semibold text-sm sm:text-base truncate">Generate New Plan</p>
+                <p className="text-xs sm:text-sm text-muted truncate">Create personalized plan</p>
               </div>
             </Link>
             {activePlan ? (
               <Link 
                 href="/plan"
-                className="group flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-all"
+                className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-all"
               >
-                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${colorClasses.blue} group-hover:scale-110 transition-transform`}>
-                  <ClipboardList className="h-5 w-5" />
+                <div className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl ${colorClasses.blue} group-hover:scale-110 transition-transform shrink-0`}>
+                  <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <div>
-                  <p className="font-semibold">View Current Plan</p>
-                  <p className="text-sm text-muted">See meals & workouts</p>
+                <div className="min-w-0">
+                  <p className="font-semibold text-sm sm:text-base truncate">View Current Plan</p>
+                  <p className="text-xs sm:text-sm text-muted truncate">See meals & workouts</p>
                 </div>
               </Link>
             ) : (
               <Link 
                 href="/onboarding"
-                className="group flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-all"
+                className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-all"
               >
-                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${colorClasses.blue} group-hover:scale-110 transition-transform`}>
-                  <ClipboardList className="h-5 w-5" />
+                <div className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl ${colorClasses.blue} group-hover:scale-110 transition-transform shrink-0`}>
+                  <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <div>
-                  <p className="font-semibold">Create Your First Plan</p>
-                  <p className="text-sm text-muted">Get started now</p>
+                <div className="min-w-0">
+                  <p className="font-semibold text-sm sm:text-base truncate">Create Your First Plan</p>
+                  <p className="text-xs sm:text-sm text-muted truncate">Get started now</p>
                 </div>
               </Link>
             )}
             <Link 
               href="/onboarding"
-              className="group flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-all"
+              className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-all"
             >
-              <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${colorClasses.purple} group-hover:scale-110 transition-transform`}>
-                <Settings className="h-5 w-5" />
+              <div className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl ${colorClasses.purple} group-hover:scale-110 transition-transform shrink-0`}>
+                <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <div>
-                <p className="font-semibold">Update Preferences</p>
-                <p className="text-sm text-muted">Modify your goals</p>
+              <div className="min-w-0">
+                <p className="font-semibold text-sm sm:text-base truncate">Update Preferences</p>
+                <p className="text-xs sm:text-sm text-muted truncate">Modify your goals</p>
               </div>
             </Link>
           </div>
@@ -276,9 +276,9 @@ export default async function DashboardPage() {
 
         {/* Recent Plans */}
         {savedPlans && savedPlans.length > 0 && (
-          <div className="bg-card rounded-2xl p-6 border border-border">
-            <h2 className="text-xl font-semibold mb-5 flex items-center gap-2">
-              <ClipboardList className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-border">
+            <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-5 flex items-center gap-2">
+              <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               Recent Plans
             </h2>
             <PlanList plans={savedPlans} />
@@ -287,20 +287,20 @@ export default async function DashboardPage() {
 
         {/* Empty State */}
         {(!savedPlans || savedPlans.length === 0) && !needsOnboarding && (
-          <div className="bg-card rounded-2xl p-10 border border-border text-center">
-            <div className="mx-auto w-20 h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 mb-6">
-              <Sparkles className="h-10 w-10 text-primary" />
+          <div className="bg-card rounded-xl sm:rounded-2xl p-8 sm:p-10 border border-border text-center">
+            <div className="mx-auto w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 mb-4 sm:mb-6">
+              <Sparkles className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold">No Plans Yet</h3>
-            <p className="text-muted mt-2 mb-6 max-w-md mx-auto">
+            <h3 className="text-lg sm:text-xl font-semibold">No Plans Yet</h3>
+            <p className="text-sm sm:text-base text-muted mt-2 mb-4 sm:mb-6 max-w-md mx-auto">
               Generate your first personalized meal and workout plan to get started on your wellness journey.
             </p>
             <Link
               href="/onboarding"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-primary-dark text-white font-semibold rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all"
+              className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-primary to-primary-dark text-white font-semibold rounded-lg sm:rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all text-sm sm:text-base"
             >
               Generate Your First Plan
-              <ChevronRight className="h-5 w-5" />
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
             </Link>
           </div>
         )}

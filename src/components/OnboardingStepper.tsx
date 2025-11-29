@@ -24,7 +24,7 @@ export function OnboardingStepper({ currentStep, steps }: OnboardingStepperProps
     <div className="w-full">
       {/* Progress bar */}
       <div className="relative">
-        <div className="h-2 bg-border rounded-full overflow-hidden">
+        <div className="h-1.5 sm:h-2 bg-border rounded-full overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
@@ -34,7 +34,7 @@ export function OnboardingStepper({ currentStep, steps }: OnboardingStepperProps
         </div>
         
         {/* Step indicators */}
-        <div className="flex justify-between mt-4">
+        <div className="flex justify-between mt-3 sm:mt-4">
           {steps.map((step, index) => {
             const stepNumber = index + 1;
             const isCompleted = stepNumber < currentStep;
@@ -51,16 +51,16 @@ export function OnboardingStepper({ currentStep, steps }: OnboardingStepperProps
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: index * 0.1 }}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all ${
+                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center text-xs sm:text-sm font-semibold transition-all ${
                     isCompleted
                       ? 'bg-gradient-to-br from-primary to-primary-dark text-white shadow-lg shadow-primary/30'
                       : isCurrent
-                      ? 'bg-gradient-to-br from-primary to-primary-dark text-white ring-4 ring-primary/20 shadow-lg shadow-primary/30'
+                      ? 'bg-gradient-to-br from-primary to-primary-dark text-white ring-2 sm:ring-4 ring-primary/20 shadow-lg shadow-primary/30'
                       : 'bg-card border-2 border-border text-muted'
                   }`}
                 >
                   {isCompleted ? (
-                    <Check className="w-5 h-5" />
+                    <Check className="w-4 h-4 sm:w-5 sm:h-5" />
                   ) : (
                     stepNumber
                   )}
@@ -69,7 +69,7 @@ export function OnboardingStepper({ currentStep, steps }: OnboardingStepperProps
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 + 0.2 }}
-                  className={`mt-2 text-xs font-medium hidden sm:block ${
+                  className={`mt-1.5 sm:mt-2 text-[10px] sm:text-xs font-medium hidden xs:block ${
                     isCurrent
                       ? 'text-primary'
                       : isCompleted
@@ -90,9 +90,9 @@ export function OnboardingStepper({ currentStep, steps }: OnboardingStepperProps
         key={currentStep}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mt-6 text-center"
+        className="mt-4 sm:mt-6 text-center"
       >
-        <p className="text-sm text-muted">
+        <p className="text-xs sm:text-sm text-muted">
           Step {currentStep} of {steps.length}
         </p>
       </motion.div>

@@ -129,10 +129,10 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col overflow-hidden bg-background">
       {/* Animated background elements */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-float" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 rounded-full blur-[100px]" />
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-primary/10 rounded-full blur-[120px] animate-float" />
+        <div className="absolute bottom-0 right-1/4 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] bg-secondary/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] bg-gradient-to-r from-primary/5 via-transparent to-secondary/5 rounded-full blur-[100px]" />
         {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
       </div>
@@ -162,16 +162,17 @@ export default function HomePage() {
             <a href="#how-it-works" className="text-sm font-medium text-muted hover:text-foreground transition-colors">How It Works</a>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {loading ? (
-              <div className="h-10 w-24 bg-border/50 rounded-xl animate-pulse" />
+              <div className="h-10 w-20 sm:w-24 bg-border/50 rounded-xl animate-pulse" />
             ) : user ? (
-              <>
+              <div className="flex items-center gap-2 sm:gap-3">
                 <Link
                   href="/dashboard"
-                  className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
+                  className="text-xs sm:text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
                 >
-                  Dashboard
+                  <span className="hidden xs:inline">Dashboard</span>
+                  <span className="xs:hidden">Home</span>
                   <ChevronRight className="h-4 w-4" />
                 </Link>
                 <form action="/api/auth/signout" method="POST">
@@ -179,12 +180,12 @@ export default function HomePage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="text-sm font-medium px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/50 transition-all"
+                    className="text-xs sm:text-sm font-medium px-3 sm:px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/50 transition-all"
                   >
                     Sign out
                   </motion.button>
                 </form>
-              </>
+              </div>
             ) : (
               <>
                 <Link
@@ -196,7 +197,7 @@ export default function HomePage() {
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Link
                     href="/signup"
-                    className="text-sm font-medium px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-dark text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all"
+                    className="text-xs sm:text-sm font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-dark text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all"
                   >
                     Get Started Free
                   </Link>
@@ -232,10 +233,10 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-6 leading-tight px-2"
               >
                 Transform Your Health With
-                <span className="block mt-2">
+                <span className="block mt-1 sm:mt-2">
                   <span className="gradient-text">AI-Powered</span> Nutrition
                 </span>
               </motion.h1>
@@ -245,7 +246,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-lg sm:text-xl text-muted max-w-3xl mx-auto mb-10 leading-relaxed"
+                className="text-base sm:text-lg md:text-xl text-muted max-w-3xl mx-auto mb-8 sm:mb-10 leading-relaxed px-4"
               >
                 Get personalized meal plans and workout routines crafted by AI in seconds. 
                 Whether you want to lose weight, build muscle, or eat healthier—we've got you covered.
@@ -296,23 +297,23 @@ export default function HomePage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-muted"
+                className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-sm text-muted px-4"
               >
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
                     {['bg-primary', 'bg-secondary', 'bg-accent', 'bg-pink-500'].map((color, i) => (
-                      <div key={i} className={`w-8 h-8 rounded-full ${color} border-2 border-background flex items-center justify-center text-white text-xs font-bold`}>
+                      <div key={i} className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${color} border-2 border-background flex items-center justify-center text-white text-xs font-bold`}>
                         {String.fromCharCode(65 + i)}
                       </div>
                     ))}
                   </div>
-                  <span>Joined by <strong className="text-foreground">2,000+</strong> users</span>
+                  <span className="text-xs sm:text-sm">Joined by <strong className="text-foreground">2,000+</strong> users</span>
                 </div>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    <Star key={i} className="h-3 w-3 sm:h-4 sm:w-4 fill-amber-400 text-amber-400" />
                   ))}
-                  <span className="ml-1"><strong className="text-foreground">4.9/5</strong> rating</span>
+                  <span className="ml-1 text-xs sm:text-sm"><strong className="text-foreground">4.9/5</strong> rating</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -322,64 +323,64 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="mt-16 lg:mt-24 relative max-w-5xl mx-auto"
+              className="mt-12 sm:mt-16 lg:mt-24 relative max-w-5xl mx-auto px-2 sm:px-0"
             >
-              <div className="relative bg-gradient-to-b from-card to-card/50 rounded-3xl border border-border shadow-2xl shadow-primary/10 overflow-hidden">
+              <div className="relative bg-gradient-to-b from-card to-card/50 rounded-2xl sm:rounded-3xl border border-border shadow-2xl shadow-primary/10 overflow-hidden">
                 {/* Browser mockup header */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-card/80">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                    <div className="w-3 h-3 rounded-full bg-amber-400" />
-                    <div className="w-3 h-3 rounded-full bg-green-400" />
+                <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 border-b border-border bg-card/80">
+                  <div className="flex gap-1 sm:gap-1.5">
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-400" />
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-amber-400" />
+                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-400" />
                   </div>
                   <div className="flex-1 flex justify-center">
-                    <div className="px-4 py-1 rounded-lg bg-background/50 text-xs text-muted">wellnourishai.in/dashboard</div>
+                    <div className="px-2 sm:px-4 py-0.5 sm:py-1 rounded-lg bg-background/50 text-[10px] sm:text-xs text-muted truncate max-w-[200px] sm:max-w-none">wellnourishai.in/dashboard</div>
                   </div>
                 </div>
                 
                 {/* Dashboard Preview */}
-                <div className="p-6 lg:p-8">
-                  <div className="grid lg:grid-cols-3 gap-6">
+                <div className="p-4 sm:p-6 lg:p-8">
+                  <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
                     {/* Main Card */}
-                    <div className="lg:col-span-2 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl p-6 border border-primary/20">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 rounded-xl bg-primary/20">
-                          <Calendar className="h-5 w-5 text-primary" />
+                    <div className="lg:col-span-2 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-primary/20">
+                      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                        <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-primary/20">
+                          <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                         </div>
                         <div>
-                          <h3 className="font-semibold">Your Weekly Plan</h3>
-                          <p className="text-sm text-muted">Personalized for you</p>
+                          <h3 className="font-semibold text-sm sm:text-base">Your Weekly Plan</h3>
+                          <p className="text-xs sm:text-sm text-muted">Personalized for you</p>
                         </div>
                       </div>
-                      <div className="grid grid-cols-7 gap-2">
+                      <div className="grid grid-cols-7 gap-1 sm:gap-2">
                         {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, i) => (
-                          <div key={i} className={`p-3 rounded-xl text-center ${i === 0 ? 'bg-primary text-white' : 'bg-card/50'}`}>
-                            <span className="text-xs font-medium">{day}</span>
-                            <div className={`mt-1 h-1 rounded-full ${i < 3 ? 'bg-primary' : i === 0 ? 'bg-white/30' : 'bg-border'}`} />
+                          <div key={i} className={`p-1.5 sm:p-3 rounded-lg sm:rounded-xl text-center ${i === 0 ? 'bg-primary text-white' : 'bg-card/50'}`}>
+                            <span className="text-[10px] sm:text-xs font-medium">{day}</span>
+                            <div className={`mt-0.5 sm:mt-1 h-0.5 sm:h-1 rounded-full ${i < 3 ? 'bg-primary' : i === 0 ? 'bg-white/30' : 'bg-border'}`} />
                           </div>
                         ))}
                       </div>
                     </div>
 
                     {/* Stats Cards */}
-                    <div className="space-y-4">
-                      <div className="bg-card rounded-2xl p-4 border border-border">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-muted">Daily Calories</span>
-                          <TrendingUp className="h-4 w-4 text-primary" />
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="bg-card rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-border">
+                        <div className="flex items-center justify-between mb-1 sm:mb-2">
+                          <span className="text-xs sm:text-sm text-muted">Daily Calories</span>
+                          <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
                         </div>
-                        <p className="text-2xl font-bold">2,150</p>
-                        <div className="mt-2 h-2 rounded-full bg-border overflow-hidden">
+                        <p className="text-xl sm:text-2xl font-bold">2,150</p>
+                        <div className="mt-1.5 sm:mt-2 h-1.5 sm:h-2 rounded-full bg-border overflow-hidden">
                           <div className="h-full w-3/4 bg-gradient-to-r from-primary to-secondary rounded-full" />
                         </div>
                       </div>
-                      <div className="bg-card rounded-2xl p-4 border border-border">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-muted">Protein Goal</span>
-                          <Target className="h-4 w-4 text-secondary" />
+                      <div className="bg-card rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-border">
+                        <div className="flex items-center justify-between mb-1 sm:mb-2">
+                          <span className="text-xs sm:text-sm text-muted">Protein Goal</span>
+                          <Target className="h-3 w-3 sm:h-4 sm:w-4 text-secondary" />
                         </div>
-                        <p className="text-2xl font-bold">125g</p>
-                        <p className="text-xs text-primary mt-1">On track! +12% from last week</p>
+                        <p className="text-xl sm:text-2xl font-bold">125g</p>
+                        <p className="text-[10px] sm:text-xs text-primary mt-0.5 sm:mt-1">On track! +12% from last week</p>
                       </div>
                     </div>
                   </div>
@@ -427,9 +428,9 @@ export default function HomePage() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-16 border-y border-border bg-card/30">
+        <section className="py-12 sm:py-16 border-y border-border bg-card/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
               {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
@@ -439,11 +440,11 @@ export default function HomePage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="text-center"
                 >
-                  <div className="inline-flex p-3 rounded-2xl bg-primary/10 mb-4">
-                    <stat.icon className="h-6 w-6 text-primary" />
+                  <div className="inline-flex p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-primary/10 mb-2 sm:mb-4">
+                    <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                   </div>
-                  <p className="text-3xl lg:text-4xl font-bold gradient-text">{stat.value}</p>
-                  <p className="text-sm text-muted mt-1">{stat.label}</p>
+                  <p className="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text">{stat.value}</p>
+                  <p className="text-xs sm:text-sm text-muted mt-0.5 sm:mt-1">{stat.label}</p>
                 </motion.div>
               ))}
             </div>
@@ -451,22 +452,22 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="py-24">
+        <section id="features" className="py-16 sm:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-16"
+              className="text-center mb-10 sm:mb-16"
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">Features</span>
-              <h2 className="text-3xl lg:text-5xl font-bold mb-4">Everything You Need to <span className="gradient-text">Succeed</span></h2>
-              <p className="text-lg text-muted max-w-2xl mx-auto">
+              <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-3 sm:mb-4">Features</span>
+              <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold mb-3 sm:mb-4">Everything You Need to <span className="gradient-text">Succeed</span></h2>
+              <p className="text-base sm:text-lg text-muted max-w-2xl mx-auto px-4">
                 Powerful features designed to make your wellness journey effortless and enjoyable.
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {features.map((feature, index) => (
                 <motion.div
                   key={feature.title}
@@ -475,14 +476,14 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ y: -5, scale: 1.02 }}
-                  className="group relative p-6 rounded-3xl bg-card border border-border hover:border-primary/30 transition-all duration-300 overflow-hidden"
+                  className="group relative p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-card border border-border hover:border-primary/30 transition-all duration-300 overflow-hidden"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                  <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                    <feature.icon className="h-7 w-7 text-white" />
+                  <div className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-4 sm:mb-5 group-hover:scale-110 transition-transform duration-300`}>
+                    <feature.icon className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 relative">{feature.title}</h3>
-                  <p className="text-muted relative leading-relaxed">{feature.description}</p>
+                  <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 relative">{feature.title}</h3>
+                  <p className="text-sm sm:text-base text-muted relative leading-relaxed">{feature.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -490,22 +491,22 @@ export default function HomePage() {
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="py-24 bg-gradient-to-b from-card/50 to-background">
+        <section id="how-it-works" className="py-16 sm:py-24 bg-gradient-to-b from-card/50 to-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-16"
+              className="text-center mb-10 sm:mb-16"
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">How It Works</span>
-              <h2 className="text-3xl lg:text-5xl font-bold mb-4">Get Started in <span className="gradient-text">3 Simple Steps</span></h2>
-              <p className="text-lg text-muted max-w-2xl mx-auto">
+              <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-secondary/10 text-secondary text-xs sm:text-sm font-medium mb-3 sm:mb-4">How It Works</span>
+              <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold mb-3 sm:mb-4">Get Started in <span className="gradient-text">3 Simple Steps</span></h2>
+              <p className="text-base sm:text-lg text-muted max-w-2xl mx-auto px-4">
                 From signup to your first personalized plan in under 5 minutes.
               </p>
             </motion.div>
 
-            <div className="grid lg:grid-cols-3 gap-8 relative">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 relative">
               {/* Connection line */}
               <div className="absolute top-24 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-gradient-to-r from-primary via-secondary to-accent hidden lg:block" />
               
@@ -518,12 +519,12 @@ export default function HomePage() {
                   transition={{ duration: 0.5, delay: index * 0.2 }}
                   className="relative text-center"
                 >
-                  <div className="relative z-10 w-20 h-20 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-xl shadow-primary/30">
-                    <step.icon className="h-10 w-10 text-white" />
+                  <div className="relative z-10 w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-xl shadow-primary/30">
+                    <step.icon className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
                   </div>
-                  <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-bold mb-4">Step {step.step}</span>
-                  <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-                  <p className="text-muted max-w-xs mx-auto">{step.description}</p>
+                  <span className="inline-block px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-bold mb-3 sm:mb-4">Step {step.step}</span>
+                  <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{step.title}</h3>
+                  <p className="text-sm sm:text-base text-muted max-w-xs mx-auto">{step.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -531,13 +532,13 @@ export default function HomePage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24">
+        <section className="py-16 sm:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="relative rounded-[2.5rem] bg-gradient-to-br from-primary via-primary-dark to-secondary p-12 lg:p-20 text-center overflow-hidden"
+              className="relative rounded-2xl sm:rounded-[2.5rem] bg-gradient-to-br from-primary via-primary-dark to-secondary p-8 sm:p-12 lg:p-20 text-center overflow-hidden"
             >
               {/* Background pattern */}
               <div className="absolute inset-0 opacity-10">
@@ -549,32 +550,32 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-8"
+                  className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 border border-white/20 mb-6 sm:mb-8"
                 >
-                  <Award className="h-4 w-4 text-white" />
-                  <span className="text-sm font-medium text-white">Start Your Transformation Today</span>
+                  <Award className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                  <span className="text-xs sm:text-sm font-medium text-white">Start Your Transformation Today</span>
                 </motion.div>
 
-                <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6">
-                  Ready to Transform<br />Your Health?
+                <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
+                  Ready to Transform<br className="hidden sm:block" />Your Health?
                 </h2>
-                <p className="text-lg text-white/80 max-w-2xl mx-auto mb-10">
+                <p className="text-base sm:text-lg text-white/80 max-w-2xl mx-auto mb-8 sm:mb-10 px-4">
                   Join thousands of users who have already transformed their health with personalized AI-powered nutrition plans.
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Link
                       href="/signup"
-                      className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold rounded-2xl bg-white text-primary shadow-2xl hover:bg-white/90 transition-all"
+                      className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl sm:rounded-2xl bg-white text-primary shadow-2xl hover:bg-white/90 transition-all"
                     >
                       Get Started Free
-                      <ArrowRight className="h-5 w-5" />
+                      <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
                     </Link>
                   </motion.div>
                 </div>
 
-                <p className="text-sm text-white/60 mt-6">
+                <p className="text-xs sm:text-sm text-white/60 mt-5 sm:mt-6">
                   No credit card required • Free forever plan available
                 </p>
               </div>

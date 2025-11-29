@@ -360,104 +360,106 @@ function PlanPageContent() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Dashboard
-            </button>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                Your Wellness Plan
-              </h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Generated with AI
-              </p>
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="flex items-center gap-1.5 sm:gap-2 rounded-lg border border-gray-300 bg-white px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 shrink-0"
+              >
+                <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span className="hidden sm:inline">Dashboard</span>
+              </button>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100 truncate">
+                  Your Wellness Plan
+                </h1>
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                  Generated with AI
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleRegenerate}
-              disabled={isRegenerating}
-              className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-            >
-              {isRegenerating ? (
-                <>
-                  <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Regenerating...
-                </>
-              ) : (
-                <>
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  Regenerate
-                </>
-              )}
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={isSaving || saveSuccess}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-white transition-colors disabled:cursor-not-allowed ${
-                saveSuccess
-                  ? 'bg-green-500'
-                  : 'bg-green-600 hover:bg-green-700 disabled:opacity-50'
-              }`}
-            >
-              {isSaving ? (
-                <>
-                  <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Saving...
-                </>
-              ) : saveSuccess ? (
-                <>
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Saved!
-                </>
-              ) : (
-                <>
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-                  </svg>
-                  Save Plan
-                </>
-              )}
-            </button>
-            <button
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="flex items-center gap-2 rounded-lg border border-red-300 bg-white px-4 py-2 font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/30"
-            >
-              {isDeleting ? (
-                <>
-                  <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Deleting...
-                </>
-              ) : (
-                <>
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                  Delete
-                </>
-              )}
-            </button>
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+              <button
+                onClick={handleRegenerate}
+                disabled={isRegenerating}
+                className="flex items-center gap-1.5 sm:gap-2 rounded-lg border border-gray-300 bg-white px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
+                {isRegenerating ? (
+                  <>
+                    <svg className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <span className="hidden sm:inline">Regenerating...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span className="hidden sm:inline">Regenerate</span>
+                  </>
+                )}
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={isSaving || saveSuccess}
+                className={`flex items-center gap-1.5 sm:gap-2 rounded-lg px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white transition-colors disabled:cursor-not-allowed ${
+                  saveSuccess
+                    ? 'bg-green-500'
+                    : 'bg-green-600 hover:bg-green-700 disabled:opacity-50'
+                }`}
+              >
+                {isSaving ? (
+                  <>
+                    <svg className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <span className="hidden sm:inline">Saving...</span>
+                  </>
+                ) : saveSuccess ? (
+                  <>
+                    <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="hidden sm:inline">Saved!</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                    </svg>
+                    <span className="hidden sm:inline">Save Plan</span>
+                  </>
+                )}
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="flex items-center gap-1.5 sm:gap-2 rounded-lg border border-red-300 bg-white px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/30"
+              >
+                {isDeleting ? (
+                  <>
+                    <svg className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <span className="hidden sm:inline">Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    <span className="hidden sm:inline">Delete</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -476,43 +478,43 @@ function PlanPageContent() {
         </div>
 
         {/* Daily Calorie Summary Card */}
-        <div className="mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 p-6 text-white shadow-lg">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h2 className="text-lg font-medium text-green-100">Daily Target</h2>
-              <p className="mt-1 text-4xl font-bold">{formatNumber(planData.daily_calories)} calories</p>
-              <p className="mt-2 max-w-xl text-sm text-green-100">{planData.summary}</p>
+        <div className="mb-6 sm:mb-8 overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 p-4 sm:p-6 text-white shadow-lg">
+          <div className="flex flex-col gap-4 sm:gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="min-w-0">
+              <h2 className="text-base sm:text-lg font-medium text-green-100">Daily Target</h2>
+              <p className="mt-0.5 sm:mt-1 text-2xl sm:text-4xl font-bold">{formatNumber(planData.daily_calories)} calories</p>
+              <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-green-100 line-clamp-2">{planData.summary}</p>
             </div>
-            <div className="flex gap-4">
-              <div className="rounded-xl bg-white/20 p-4 text-center backdrop-blur-sm">
-                <div className="text-2xl font-bold">
+            <div className="flex gap-2 sm:gap-4 overflow-x-auto pb-1">
+              <div className="rounded-lg sm:rounded-xl bg-white/20 p-2.5 sm:p-4 text-center backdrop-blur-sm min-w-[60px] sm:min-w-[80px]">
+                <div className="text-lg sm:text-2xl font-bold">
                   {formatGrams(planData.meal_plan.days[0]?.total_protein_g || 0)}
                 </div>
-                <div className="text-xs text-green-100">Protein</div>
+                <div className="text-[10px] sm:text-xs text-green-100">Protein</div>
               </div>
-              <div className="rounded-xl bg-white/20 p-4 text-center backdrop-blur-sm">
-                <div className="text-2xl font-bold">
+              <div className="rounded-lg sm:rounded-xl bg-white/20 p-2.5 sm:p-4 text-center backdrop-blur-sm min-w-[60px] sm:min-w-[80px]">
+                <div className="text-lg sm:text-2xl font-bold">
                   {formatGrams(planData.meal_plan.days[0]?.total_carbs_g || 0)}
                 </div>
-                <div className="text-xs text-green-100">Carbs</div>
+                <div className="text-[10px] sm:text-xs text-green-100">Carbs</div>
               </div>
-              <div className="rounded-xl bg-white/20 p-4 text-center backdrop-blur-sm">
-                <div className="text-2xl font-bold">
+              <div className="rounded-lg sm:rounded-xl bg-white/20 p-2.5 sm:p-4 text-center backdrop-blur-sm min-w-[60px] sm:min-w-[80px]">
+                <div className="text-lg sm:text-2xl font-bold">
                   {formatGrams(planData.meal_plan.days[0]?.total_fats_g || 0)}
                 </div>
-                <div className="text-xs text-green-100">Fats</div>
+                <div className="text-[10px] sm:text-xs text-green-100">Fats</div>
               </div>
             </div>
           </div>
-          <div className="mt-4 flex items-center gap-2">
+          <div className="mt-3 sm:mt-4 flex items-center gap-2 flex-wrap">
             {planData.metadata?.goal && (
-              <div className="flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-sm backdrop-blur-sm">
+              <div className="flex items-center gap-1 rounded-full bg-white/20 px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm backdrop-blur-sm">
                 <span>🎯</span>
                 <span className="capitalize">{planData.metadata.goal.replace(/_/g, ' ')}</span>
               </div>
             )}
             {planData.metadata?.plan_type && planData.metadata.plan_type !== 'combined' && (
-              <div className="rounded-full bg-white/20 px-3 py-1 text-sm capitalize backdrop-blur-sm">
+              <div className="rounded-full bg-white/20 px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm capitalize backdrop-blur-sm">
                 {planData.metadata.plan_type} Plan
               </div>
             )}
@@ -520,9 +522,9 @@ function PlanPageContent() {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
           {/* Meal Plan & Workout Plan */}
-          <div className="space-y-8 lg:col-span-2">
+          <div className="space-y-6 sm:space-y-8 lg:col-span-2">
             {/* Meal Plan */}
             <section>
               <MealPlanCard mealPlan={planData.meal_plan} />
@@ -536,37 +538,37 @@ function PlanPageContent() {
 
           {/* Sidebar - Shopping List */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
-              <h2 className="mb-4 flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-gray-100">
-                <svg className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="lg:sticky lg:top-24 rounded-xl border border-gray-200 bg-white p-4 sm:p-6 dark:border-gray-700 dark:bg-gray-900">
+              <h2 className="mb-3 sm:mb-4 flex items-center gap-2 text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+                <svg className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                 </svg>
                 Shopping List
               </h2>
-              <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">
+              <p className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                 {planData.shopping_list.length} items for the week
               </p>
 
-              <div className="max-h-[60vh] space-y-4 overflow-y-auto pr-2">
+              <div className="max-h-[50vh] lg:max-h-[60vh] space-y-3 sm:space-y-4 overflow-y-auto pr-2">
                 {groupedShoppingList.map(({ category, items }) => (
                   <div key={category}>
-                    <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <h3 className="mb-1.5 sm:mb-2 text-xs sm:text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       {category}
                     </h3>
-                    <ul className="space-y-2">
+                    <ul className="space-y-1.5 sm:space-y-2">
                       {items.map((item, index) => (
                         <li
                           key={index}
-                          className="flex items-center gap-3 rounded-lg bg-gray-50 p-2 dark:bg-gray-800"
+                          className="flex items-center gap-2 sm:gap-3 rounded-lg bg-gray-50 p-1.5 sm:p-2 dark:bg-gray-800"
                         >
                           <input
                             type="checkbox"
-                            className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                            className="h-3.5 w-3.5 sm:h-4 sm:w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
                           />
-                          <span className="flex-1 text-sm text-gray-700 dark:text-gray-300">
+                          <span className="flex-1 text-xs sm:text-sm text-gray-700 dark:text-gray-300 min-w-0 truncate">
                             {item.ingredient}
                           </span>
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                          <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 shrink-0">
                             {item.amount} {item.unit}
                           </span>
                         </li>
