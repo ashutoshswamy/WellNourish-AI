@@ -63,6 +63,17 @@ export default function SignUpPage() {
 
       // If user is confirmed immediately (email confirmation disabled), redirect to onboarding
       if (data.session) {
+        // Send welcome email for immediate signup (no email confirmation required)
+        try {
+          await fetch('/api/send-welcome-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+        } catch (emailError) {
+          console.error('Failed to send welcome email:', emailError);
+          // Don't block the signup flow if email fails
+        }
         router.push('/onboarding');
         router.refresh();
         return;

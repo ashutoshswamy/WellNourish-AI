@@ -1,6 +1,32 @@
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import React from 'react';
+import { resend, FROM_EMAIL } from '@/lib/resend';
+import { WelcomeEmail } from '@/components/emails/WelcomeEmail';
+
+/**
+ * Send a welcome email to newly signed up users
+ */
+async function sendWelcomeEmail(email: string, userName?: string) {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('RESEND_API_KEY not configured, skipping welcome email');
+    return;
+  }
+
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: 'Welcome to WellNourish AI! 🥗',
+      react: React.createElement(WelcomeEmail, { userName }),
+    });
+    console.log('Welcome email sent successfully to:', email);
+  } catch (error) {
+    console.error('Failed to send welcome email:', error);
+    // Don't throw - we don't want to block the user signup flow
+  }
+}
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -108,6 +134,15 @@ export async function GET(request: Request) {
       const isSignupVerification = type === 'signup';
       const redirectPath = isSignupVerification ? '/onboarding' : next;
       
+      // Send welcome email for new signups
+      if (isSignupVerification) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.email) {
+          const userName = user.user_metadata?.full_name || user.user_metadata?.name;
+          await sendWelcomeEmail(user.email, userName);
+        }
+      }
+      
       const redirectUrl = buildRedirectUrl(redirectPath, forwardedHost);
       return NextResponse.redirect(redirectUrl);
     }
@@ -132,6 +167,15 @@ export async function GET(request: Request) {
       // Determine redirect based on flow type
       const isSignupFlow = flow === 'signup';
       const redirectPath = await getRedirectPath(isSignupFlow);
+      
+      // Send welcome email for new OAuth signups
+      if (isSignupFlow) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.email) {
+          const userName = user.user_metadata?.full_name || user.user_metadata?.name;
+          await sendWelcomeEmail(user.email, userName);
+        }
+      }
       
       const redirectUrl = buildRedirectUrl(redirectPath, forwardedHost);
       return NextResponse.redirect(redirectUrl);
