@@ -76,19 +76,15 @@ export async function GET(request: Request) {
 
   /**
    * Helper function to determine redirect path based on user's onboarding status
-   * For signup flows, redirect to onboarding
-   * For login flows, redirect to dashboard
+   * Always checks if user has completed onboarding regardless of flow type
+   * This ensures OAuth signups are redirected to onboarding even if flow param is lost
    */
   const getRedirectPath = async (isSignupFlow: boolean): Promise<string> => {
-    // If it's explicitly a signup flow, go to onboarding
-    if (isSignupFlow) {
-      return '/onboarding';
-    }
-    
-    // For login flows, check if user has completed onboarding
-    // If they haven't completed preferences, redirect to onboarding
     const { data: { user } } = await supabase.auth.getUser();
+    
     if (user) {
+      // Always check if user has completed onboarding
+      // This handles cases where OAuth provider doesn't preserve the flow parameter
       const { data: preferences } = await supabase
         .from('user_preferences')
         .select('id')
@@ -101,6 +97,7 @@ export async function GET(request: Request) {
       }
     }
     
+    // User has completed onboarding, redirect to dashboard
     return '/dashboard';
   };
 
@@ -164,12 +161,12 @@ export async function GET(request: Request) {
     if (!exchangeError) {
       const forwardedHost = request.headers.get('x-forwarded-host');
       
-      // Determine redirect based on flow type
-      const isSignupFlow = flow === 'signup';
-      const redirectPath = await getRedirectPath(isSignupFlow);
+      // Get redirect path (will check for user preferences)
+      const redirectPath = await getRedirectPath(flow === 'signup');
       
-      // Send welcome email for new OAuth signups
-      if (isSignupFlow) {
+      // Send welcome email for new OAuth signups (users without preferences)
+      // This ensures email is sent even if flow param is lost during OAuth redirect
+      if (redirectPath === '/onboarding') {
         const { data: { user } } = await supabase.auth.getUser();
         if (user?.email) {
           const userName = user.user_metadata?.full_name || user.user_metadata?.name;
