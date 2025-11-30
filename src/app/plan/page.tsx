@@ -320,7 +320,8 @@ function PlanPageContent() {
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            {/* Top row: Back button and title */}
             <div className="flex items-center gap-3 sm:gap-4">
               <button
                 onClick={() => router.push('/dashboard')}
@@ -329,22 +330,24 @@ function PlanPageContent() {
                 <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                <span className="hidden sm:inline">Dashboard</span>
+                <span className="hidden xs:inline">Dashboard</span>
               </button>
-              <div className="min-w-0">
-                <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100 truncate">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 truncate">
                   Your Wellness Plan
                 </h1>
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-gray-400">
                   Generated with AI
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+            
+            {/* Bottom row: Action buttons */}
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={handleRegenerate}
                 disabled={isRegenerating}
-                className="flex items-center gap-1.5 sm:gap-2 rounded-lg border border-gray-300 bg-white px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                className="flex-1 xs:flex-none flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg border border-gray-300 bg-white px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 {isRegenerating ? (
                   <>
@@ -352,21 +355,21 @@ function PlanPageContent() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    <span className="hidden sm:inline">Regenerating...</span>
+                    <span className="hidden xs:inline">Regenerating...</span>
                   </>
                 ) : (
                   <>
                     <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
-                    <span className="hidden sm:inline">Regenerate</span>
+                    <span className="hidden xs:inline">Regenerate</span>
                   </>
                 )}
               </button>
               <button
                 onClick={handleSave}
                 disabled={isSaving || saveSuccess}
-                className={`flex items-center gap-1.5 sm:gap-2 rounded-lg px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white transition-colors disabled:cursor-not-allowed ${
+                className={`flex-1 xs:flex-none flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white transition-colors disabled:cursor-not-allowed ${
                   saveSuccess
                     ? 'bg-green-500'
                     : 'bg-green-600 hover:bg-green-700 disabled:opacity-50'
@@ -378,28 +381,28 @@ function PlanPageContent() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    <span className="hidden sm:inline">Saving...</span>
+                    <span className="hidden xs:inline">Saving...</span>
                   </>
                 ) : saveSuccess ? (
                   <>
                     <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="hidden sm:inline">Saved!</span>
+                    <span className="hidden xs:inline">Saved!</span>
                   </>
                 ) : (
                   <>
                     <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                     </svg>
-                    <span className="hidden sm:inline">Save Plan</span>
+                    <span className="hidden xs:inline">Save</span>
                   </>
                 )}
               </button>
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex items-center gap-1.5 sm:gap-2 rounded-lg border border-red-300 bg-white px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/30"
+                className="flex-1 xs:flex-none flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg border border-red-300 bg-white px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/30"
               >
                 {isDeleting ? (
                   <>
@@ -407,14 +410,14 @@ function PlanPageContent() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    <span className="hidden sm:inline">Deleting...</span>
+                    <span className="hidden xs:inline">Deleting...</span>
                   </>
                 ) : (
                   <>
                     <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
-                    <span className="hidden sm:inline">Delete</span>
+                    <span className="hidden xs:inline">Delete</span>
                   </>
                 )}
               </button>

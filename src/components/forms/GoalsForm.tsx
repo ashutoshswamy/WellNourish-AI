@@ -116,35 +116,37 @@ export function GoalsForm() {
 
           {/* Custom Goal Input */}
           {showCustomInput && (
-            <div className="p-4 rounded-lg border border-emerald-300 bg-emerald-50 dark:bg-emerald-900/20">
+            <div className="p-3 sm:p-4 rounded-lg border border-emerald-300 bg-emerald-50 dark:bg-emerald-900/20">
               <label className="block text-sm font-medium text-foreground mb-2">
                 Enter your custom goal
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col xs:flex-row gap-2">
                 <input
                   type="text"
                   value={customGoalInput}
                   onChange={(e) => setCustomGoalInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="e.g., Improve endurance, Better sleep"
-                  className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-foreground placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  placeholder="e.g., Improve endurance"
+                  className="flex-1 px-3 sm:px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-foreground placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm sm:text-base"
                   autoFocus
                 />
-                <button
-                  type="button"
-                  onClick={handleCustomGoalSubmit}
-                  disabled={!customGoalInput.trim()}
-                  className="px-4 py-2 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  Set
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowCustomInput(false)}
-                  className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  Cancel
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCustomGoalSubmit}
+                    disabled={!customGoalInput.trim()}
+                    className="flex-1 xs:flex-none px-3 sm:px-4 py-2 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
+                  >
+                    Set
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomInput(false)}
+                    className="flex-1 xs:flex-none px-3 sm:px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm sm:text-base"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -179,30 +181,30 @@ export function GoalsForm() {
       </div>
 
       {/* Activity Level Selection */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <label className="block text-sm font-medium text-foreground">
           Activity Level
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 sm:gap-3">
           {activityLevelOptions.map((option) => (
             <button
               key={option.value}
               type="button"
               onClick={() => setValue('activity_level', option.value as OnboardingData['activity_level'], { shouldValidate: true })}
-              className={`flex flex-col items-start p-4 rounded-lg border transition-all text-left ${
+              className={`flex flex-col items-start p-3 sm:p-4 rounded-lg border transition-all text-left ${
                 selectedActivityLevel === option.value
                   ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
                   : 'border-gray-300 dark:border-gray-600 hover:border-emerald-300'
               }`}
             >
-              <div className={`font-medium ${
+              <div className={`font-medium text-sm sm:text-base ${
                 selectedActivityLevel === option.value
                   ? 'text-emerald-600 dark:text-emerald-400'
                   : 'text-foreground'
               }`}>
                 {option.label}
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <div className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1 line-clamp-2">
                 {option.description}
               </div>
             </button>
