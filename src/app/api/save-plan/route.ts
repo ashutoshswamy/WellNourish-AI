@@ -13,7 +13,6 @@ const savePlanSchema = z.object({
     daily_calories: z.number(),
     meal_plan: z.any(),
     workout_plan: z.any(),
-    shopping_list: z.array(z.any()),
     warnings: z.array(z.string()),
     confidence_score: z.number(),
     metadata: z.object({

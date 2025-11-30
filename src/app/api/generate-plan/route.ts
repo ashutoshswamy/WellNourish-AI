@@ -129,8 +129,9 @@ export async function POST(request: NextRequest) {
 
     // Initialize Gemini
     const genAI = new GoogleGenerativeAI(apiKey);
+    const modelName = 'gemini-2.5-flash';
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash',
+      model: modelName,
       generationConfig: {
         temperature: 0.7,
         topP: 0.95,
@@ -156,15 +157,17 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       if (error instanceof GeminiParseError) {
         console.error('Failed to parse Gemini response:', error.message);
-        console.error('Raw response (first 1000 chars):', responseText?.slice(0, 1000));
+        console.error('Raw response (first 2000 chars):', responseText?.slice(0, 2000));
         return NextResponse.json(
           { 
             error: 'Failed to parse AI response. Please try again.',
-            details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+            details: error.message,
+            rawPreview: responseText?.slice(0, 500),
           },
           { status: 500 }
         );
       }
+      console.error('Unexpected error parsing response:', error);
       throw error;
     }
 
@@ -195,7 +198,7 @@ export async function POST(request: NextRequest) {
       is_active: true,
       is_favorite: false,
       completion_percentage: 0,
-      ai_model_used: 'gemini-2.0-flash',
+      ai_model_used: modelName,
       generation_prompt: prompt,
       generation_tokens: totalTokens || null,
       start_date: new Date().toISOString().split('T')[0],
@@ -227,7 +230,6 @@ export async function POST(request: NextRequest) {
       daily_calories: parsedPlan.daily_calories,
       meal_plan: parsedPlan.meal_plan,
       workout_plan: parsedPlan.workout_plan,
-      shopping_list: parsedPlan.shopping_list,
       warnings: parsedPlan.warnings,
       confidence_score: parsedPlan.confidence_score,
       metadata: {

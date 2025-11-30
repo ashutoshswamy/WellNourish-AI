@@ -4,20 +4,11 @@
 
 import type { MealPlanData, WorkoutPlanData } from '@/types/database.types';
 
-export interface ShoppingListItem {
-  name: string;
-  amount: number;
-  unit: string;
-  category?: string;
-  notes?: string;
-}
-
 export interface GeminiPlanResponse {
   summary: string;
   daily_calories: number;
   meal_plan: MealPlanData;
   workout_plan: WorkoutPlanData;
-  shopping_list: ShoppingListItem[];
   warnings: string[];
   confidence_score: number;
 }
@@ -114,7 +105,6 @@ function validateResponse(data: unknown): asserts data is GeminiPlanResponse {
     'daily_calories',
     'meal_plan',
     'workout_plan',
-    'shopping_list',
     'warnings',
     'confidence_score',
   ];
@@ -140,10 +130,6 @@ function validateResponse(data: unknown): asserts data is GeminiPlanResponse {
 
   if (!Array.isArray(response.warnings)) {
     throw new GeminiParseError('warnings must be an array');
-  }
-
-  if (!Array.isArray(response.shopping_list)) {
-    throw new GeminiParseError('shopping_list must be an array');
   }
 
   // Validate meal_plan structure
@@ -239,13 +225,6 @@ function sanitizeResponse(data: GeminiPlanResponse): GeminiPlanResponse {
         notes: data.workout_plan?.notes,
         progression_strategy: data.workout_plan?.progression_strategy,
       },
-      shopping_list: (data.shopping_list || []).map((item) => ({
-        name: item?.name || 'Unknown Item',
-        amount: item?.amount || 0,
-        unit: item?.unit || 'unit',
-        category: item?.category,
-        notes: item?.notes,
-      })),
       warnings: (data.warnings || []).filter((w) => typeof w === 'string'),
       confidence_score: Math.min(100, Math.max(0, Math.round(data.confidence_score || 0))),
     };
@@ -265,6 +244,9 @@ export function parseGeminiResponse(responseText: string): GeminiPlanResponse {
     throw new GeminiParseError('Empty or invalid response from Gemini');
   }
 
+  // Log the response length for debugging
+  console.log(`Gemini response length: ${responseText.length} chars`);
+
   try {
     // Extract JSON from the response
     let jsonString = extractJsonFromResponse(responseText);
@@ -274,6 +256,7 @@ export function parseGeminiResponse(responseText: string): GeminiPlanResponse {
     try {
       parsed = JSON.parse(jsonString);
     } catch (firstError) {
+      console.error('Initial JSON parse failed, attempting to fix...');
       // Attempt to fix the JSON and try again
       const fixedJson = tryFixJson(jsonString);
       try {
@@ -281,6 +264,8 @@ export function parseGeminiResponse(responseText: string): GeminiPlanResponse {
         console.warn('JSON was malformed but was auto-fixed');
       } catch {
         // If fixing didn't help, throw the original error with more context
+        console.error('JSON fix failed. First 500 chars:', jsonString.slice(0, 500));
+        console.error('Last 500 chars:', jsonString.slice(-500));
         throw firstError;
       }
     }
@@ -296,9 +281,9 @@ export function parseGeminiResponse(responseText: string): GeminiPlanResponse {
     }
 
     if (error instanceof SyntaxError) {
-      throw new GeminiParseError(`Invalid JSON in response: ${error.message}`, responseText);
+      throw new GeminiParseError(`Invalid JSON in response: ${error.message}`, responseText.slice(0, 1000));
     }
 
-    throw new GeminiParseError(`Failed to parse response: ${(error as Error).message}`, responseText);
+    throw new GeminiParseError(`Failed to parse response: ${(error as Error).message}`, responseText.slice(0, 1000));
   }
 }
