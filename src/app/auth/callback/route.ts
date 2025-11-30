@@ -75,33 +75,6 @@ export async function GET(request: Request) {
   );
 
   /**
-   * Helper function to determine redirect path based on user's onboarding status
-   * Always checks if user has completed onboarding regardless of flow type
-   * This ensures OAuth signups are redirected to onboarding even if flow param is lost
-   */
-  const getRedirectPath = async (isSignupFlow: boolean): Promise<string> => {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (user) {
-      // Always check if user has completed onboarding
-      // This handles cases where OAuth provider doesn't preserve the flow parameter
-      const { data: preferences } = await supabase
-        .from('user_preferences')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-      
-      // If no preferences exist, user needs to complete onboarding
-      if (!preferences) {
-        return '/onboarding';
-      }
-    }
-    
-    // User has completed onboarding, redirect to dashboard
-    return '/dashboard';
-  };
-
-  /**
    * Helper function to construct the full redirect URL
    */
   const buildRedirectUrl = (path: string, forwardedHost: string | null): string => {
@@ -156,22 +129,32 @@ export async function GET(request: Request) {
 
   // Handle OAuth code exchange
   if (code) {
-    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+    const { data: sessionData, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (!exchangeError) {
+    if (!exchangeError && sessionData?.user) {
       const forwardedHost = request.headers.get('x-forwarded-host');
+      const user = sessionData.user;
       
-      // Get redirect path (will check for user preferences)
-      const redirectPath = await getRedirectPath(flow === 'signup');
+      console.log('OAuth callback - user authenticated:', user.id, user.email);
+      
+      // Check if user has completed onboarding by looking for preferences
+      const { data: preferences, error: preferencesError } = await supabase
+        .from('user_preferences')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      console.log('Preferences check:', { preferences, preferencesError });
+      
+      // Determine redirect path based on whether preferences exist
+      const redirectPath = preferences ? '/dashboard' : '/onboarding';
+      
+      console.log('Redirecting to:', redirectPath);
       
       // Send welcome email for new OAuth signups (users without preferences)
-      // This ensures email is sent even if flow param is lost during OAuth redirect
-      if (redirectPath === '/onboarding') {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user?.email) {
-          const userName = user.user_metadata?.full_name || user.user_metadata?.name;
-          await sendWelcomeEmail(user.email, userName);
-        }
+      if (!preferences && user.email) {
+        const userName = user.user_metadata?.full_name || user.user_metadata?.name;
+        await sendWelcomeEmail(user.email, userName);
       }
       
       const redirectUrl = buildRedirectUrl(redirectPath, forwardedHost);
@@ -179,12 +162,12 @@ export async function GET(request: Request) {
     }
 
     // Log the error for debugging
-    console.error('Code exchange error:', exchangeError.message, exchangeError);
+    console.error('Code exchange error:', exchangeError?.message, exchangeError);
     
     // Redirect to error page with more context
     const errorUrl = new URL('/auth/auth-code-error', origin);
     errorUrl.searchParams.set('error', 'code_exchange_failed');
-    errorUrl.searchParams.set('error_description', exchangeError.message);
+    errorUrl.searchParams.set('error_description', exchangeError?.message || 'Unknown error during code exchange');
     return NextResponse.redirect(errorUrl);
   }
 
