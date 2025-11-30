@@ -8,7 +8,7 @@ import { WelcomeEmail } from '@/components/emails/WelcomeEmail';
 /**
  * Send a welcome email to newly signed up users
  */
-async function sendWelcomeEmail(email: string, userName?: string) {
+async function sendWelcomeEmail(email: string) {
   if (!process.env.RESEND_API_KEY) {
     console.warn('RESEND_API_KEY not configured, skipping welcome email');
     return;
@@ -19,7 +19,7 @@ async function sendWelcomeEmail(email: string, userName?: string) {
       from: FROM_EMAIL,
       to: email,
       subject: 'Welcome to WellNourish AI! 🥗',
-      react: React.createElement(WelcomeEmail, { userName }),
+      react: React.createElement(WelcomeEmail, { email }),
     });
     console.log('Welcome email sent successfully to:', email);
   } catch (error) {
@@ -108,8 +108,7 @@ export async function GET(request: Request) {
       if (isSignupVerification) {
         const { data: { user } } = await supabase.auth.getUser();
         if (user?.email) {
-          const userName = user.user_metadata?.full_name || user.user_metadata?.name;
-          await sendWelcomeEmail(user.email, userName);
+          await sendWelcomeEmail(user.email);
         }
       }
       
@@ -153,8 +152,7 @@ export async function GET(request: Request) {
       
       // Send welcome email for new OAuth signups (users without preferences)
       if (!preferences && user.email) {
-        const userName = user.user_metadata?.full_name || user.user_metadata?.name;
-        await sendWelcomeEmail(user.email, userName);
+        await sendWelcomeEmail(user.email);
       }
       
       const redirectUrl = buildRedirectUrl(redirectPath, forwardedHost);

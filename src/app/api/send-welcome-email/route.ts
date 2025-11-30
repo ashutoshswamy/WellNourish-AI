@@ -5,7 +5,7 @@ import { WelcomeEmail } from '@/components/emails/WelcomeEmail';
 
 export async function POST(request: Request) {
   try {
-    const { email, userName } = await request.json();
+    const { email } = await request.json();
 
     if (!email) {
       return NextResponse.json(
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       from: FROM_EMAIL,
       to: email,
       subject: 'Welcome to WellNourish AI! 🥗',
-      react: React.createElement(WelcomeEmail, { userName }),
+      react: React.createElement(WelcomeEmail, { email }),
     });
 
     if (error) {

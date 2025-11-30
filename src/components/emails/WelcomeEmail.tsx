@@ -1,130 +1,107 @@
 import * as React from 'react';
 
 interface WelcomeEmailProps {
-  userName?: string;
+  email?: string;
+  siteUrl?: string;
 }
 
-export const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ userName }) => {
-  const displayName = userName || 'there';
-  
+export const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ 
+  email,
+  siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://wellnourish.ai'
+}) => {
   return (
-    <div style={{
-      fontFamily: '"Trebuchet MS", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-      maxWidth: '600px',
-      margin: '0 auto',
-      padding: '40px 20px',
-      backgroundColor: '#ffffff',
-    }}>
-      {/* Header */}
-      <div style={{
-        textAlign: 'center' as const,
-        marginBottom: '40px',
-      }}>
-        <h1 style={{
-          fontSize: '28px',
-          fontWeight: 'bold',
-          color: '#16a34a',
-          margin: '0',
-        }}>
-          WellNourish AI
-        </h1>
-      </div>
+    <html lang="en">
+      <body style={{ margin: 0, background: '#f6f8f5', fontFamily: 'Arial, sans-serif' }}>
+        <table width="100%" cellPadding={0} cellSpacing={0} style={{ padding: '36px 12px', background: '#f6f8f5' }}>
+          <tbody>
+            <tr>
+              <td align="center">
+                <table width={600} style={{ maxWidth: '600px', background: '#ffffff', borderRadius: '8px', padding: '28px 36px', border: '1px solid #e6efe6' }}>
+                  <tbody>
+                    {/* Header */}
+                    <tr>
+                      <td align="center" style={{ color: '#2f8f3e', fontSize: '22px', fontWeight: 700 }}>
+                        WellNourish AI
+                      </td>
+                    </tr>
 
-      {/* Welcome Message */}
-      <div style={{
-        backgroundColor: '#f0fdf4',
-        borderRadius: '12px',
-        padding: '32px',
-        marginBottom: '32px',
-      }}>
-        <h2 style={{
-          fontSize: '24px',
-          fontWeight: 'bold',
-          color: '#166534',
-          margin: '0 0 16px 0',
-        }}>
-          Welcome to WellNourish AI, {displayName}!
-        </h2>
-        <p style={{
-          fontSize: '16px',
-          lineHeight: '1.6',
-          color: '#374151',
-          margin: '0',
-        }}>
-          We&apos;re thrilled to have you on board. Your journey to a healthier lifestyle starts now!
-        </p>
-      </div>
+                    {/* Welcome Banner */}
+                    <tr>
+                      <td style={{ background: '#eef8ef', padding: '16px 18px', borderRadius: '8px', fontSize: '16px', fontWeight: 700, color: '#1e3a26', marginTop: '12px' }}>
+                        Welcome to WellNourish AI
+                      </td>
+                    </tr>
 
-      {/* Features Section */}
-      <div style={{ marginBottom: '32px' }}>
-        <h3 style={{
-          fontSize: '18px',
-          fontWeight: '600',
-          color: '#1f2937',
-          marginBottom: '20px',
-        }}>
-          Here&apos;s what you can do with WellNourish AI:
-        </h3>
-        
-        <div style={{ marginBottom: '16px' }}>
-          <strong style={{ color: '#1f2937' }}>Personalized Meal Plans</strong>
-          <p style={{ margin: '4px 0 0 0', color: '#6b7280', fontSize: '14px' }}>
-            Get AI-generated meal plans tailored to your dietary preferences and goals.
-          </p>
-        </div>
+                    {/* Spacer */}
+                    <tr>
+                      <td style={{ height: '14px' }}></td>
+                    </tr>
 
-        <div style={{ marginBottom: '16px' }}>
-          <strong style={{ color: '#1f2937' }}>Custom Workout Plans</strong>
-          <p style={{ margin: '4px 0 0 0', color: '#6b7280', fontSize: '14px' }}>
-            Receive workout routines designed to match your fitness level and goals.
-          </p>
-        </div>
+                    {/* Welcome Message */}
+                    <tr>
+                      <td style={{ fontSize: '15px', color: '#2b2b2b', lineHeight: 1.6 }}>
+                        Welcome — your account is ready. Use the link below to go to the site and start creating your personalized meal &amp; workout plans.
+                      </td>
+                    </tr>
 
-        <div style={{ marginBottom: '16px' }}>
-          <strong style={{ color: '#1f2937' }}>Track Your Progress</strong>
-          <p style={{ margin: '4px 0 0 0', color: '#6b7280', fontSize: '14px' }}>
-            Monitor your health journey and celebrate your achievements.
-          </p>
-        </div>
-      </div>
+                    {/* Spacer */}
+                    <tr>
+                      <td style={{ height: '18px' }}></td>
+                    </tr>
 
-      {/* CTA Button */}
-      <div style={{
-        textAlign: 'center' as const,
-        marginBottom: '32px',
-      }}>
-        <a
-          href={process.env.NEXT_PUBLIC_APP_URL || 'https://wellnourish.ai'}
-          style={{
-            display: 'inline-block',
-            backgroundColor: '#16a34a',
-            color: '#ffffff',
-            padding: '14px 32px',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '16px',
-          }}
-        >
-          Get Started
-        </a>
-      </div>
+                    {/* CTA Button */}
+                    <tr>
+                      <td align="center">
+                        <a
+                          href={siteUrl}
+                          style={{
+                            background: '#2f8f3e',
+                            color: '#ffffff',
+                            padding: '12px 26px',
+                            borderRadius: '6px',
+                            textDecoration: 'none',
+                            fontWeight: 700,
+                            display: 'inline-block',
+                          }}
+                        >
+                          Get Started
+                        </a>
+                      </td>
+                    </tr>
 
-      {/* Footer */}
-      <div style={{
-        borderTop: '1px solid #e5e7eb',
-        paddingTop: '24px',
-        textAlign: 'center' as const,
-      }}>
-        <p style={{
-          fontSize: '12px',
-          color: '#9ca3af',
-          margin: '0',
-        }}>
-          © {new Date().getFullYear()} WellNourish AI. All rights reserved.
-        </p>
-      </div>
-    </div>
+                    {/* Spacer */}
+                    <tr>
+                      <td style={{ height: '18px' }}></td>
+                    </tr>
+
+                    {/* Account Email */}
+                    <tr>
+                      <td style={{ fontSize: '13px', color: '#6c7a6c', lineHeight: 1.5 }}>
+                        Account email: <strong>{email}</strong>
+                      </td>
+                    </tr>
+
+                    {/* Divider */}
+                    <tr>
+                      <td style={{ paddingTop: '22px' }}>
+                        <hr style={{ border: 'none', borderTop: '1px solid #e6efe6' }} />
+                      </td>
+                    </tr>
+
+                    {/* Footer */}
+                    <tr>
+                      <td align="center" style={{ fontSize: '12px', color: '#9aa59a' }}>
+                        © 2025 WellNourish AI — Pune, Maharashtra
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </body>
+    </html>
   );
 };
 
