@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Mail, CheckCircle, Loader2, ArrowLeft } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 export default function ForgotPasswordPage() {
@@ -37,89 +39,123 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20">
-          <svg
-            className="h-6 w-6 text-green-600 dark:text-green-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-            />
-          </svg>
-        </div>
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center"
+      >
+        <motion.div 
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", delay: 0.2 }}
+          className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10"
+        >
+          <CheckCircle className="h-8 w-8 text-primary" />
+        </motion.div>
         <h2 className="mt-4 text-2xl font-bold">Check your email</h2>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          We&apos;ve sent a password reset link to <strong>{email}</strong>.
+        <p className="mt-2 text-sm text-muted">
+          We&apos;ve sent a password reset link to <strong className="text-foreground">{email}</strong>.
           <br />
           Please check your inbox and follow the instructions.
         </p>
+        <div className="mt-6 space-y-3">
+          <button
+            onClick={() => {
+              setSuccess(false);
+              setEmail('');
+            }}
+            className="text-sm font-medium text-primary hover:text-primary-dark transition-colors"
+          >
+            Use a different email
+          </button>
+          <p className="text-xs text-muted">
+            Didn&apos;t receive the email?{' '}
+            <button
+              onClick={handleResetPassword}
+              disabled={loading}
+              className="font-medium text-primary hover:text-primary-dark disabled:opacity-50 transition-colors"
+            >
+              Resend
+            </button>
+          </p>
+        </div>
         <Link
           href="/login"
-          className="mt-6 inline-block text-sm font-medium text-green-600 hover:text-green-500 dark:text-green-400 dark:hover:text-green-300"
+          className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-foreground transition-colors"
         >
+          <ArrowLeft className="h-4 w-4" />
           Back to sign in
         </Link>
-      </div>
+      </motion.div>
     );
   }
 
   return (
     <>
       <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Reset password</h1>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          Enter your email address and we&apos;ll send you a link to reset your
-          password.
+        <h1 className="text-2xl font-bold tracking-tight">Reset password</h1>
+        <p className="mt-2 text-sm text-muted">
+          Enter your email address and we&apos;ll send you a link to reset your password.
         </p>
       </div>
 
       {error && (
-        <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-600 dark:text-red-400">
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-xl bg-red-500/10 border border-red-500/20 p-4 text-sm text-red-500"
+        >
           {error}
-        </div>
+        </motion.div>
       )}
 
-      <form onSubmit={handleResetPassword} className="space-y-6">
+      <form onSubmit={handleResetPassword} className="space-y-5">
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            className="block text-sm font-medium mb-2"
           >
             Email address
           </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
-            placeholder="you@example.com"
-          />
+          <div className="relative">
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted" />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="block w-full rounded-xl border border-border bg-background pl-12 pr-4 py-3 text-sm placeholder-muted focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+              placeholder="you@example.com"
+            />
+          </div>
         </div>
 
-        <button
+        <motion.button
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
           type="submit"
           disabled={loading}
-          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-primary to-primary-dark shadow-lg shadow-primary/25 hover:shadow-primary/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
-          {loading ? 'Sending...' : 'Send reset link'}
-        </button>
+          {loading ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Sending...
+            </>
+          ) : (
+            'Send reset link'
+          )}
+        </motion.button>
       </form>
 
-      <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+      <p className="text-center text-sm text-muted">
         Remember your password?{' '}
         <Link
           href="/login"
-          className="font-medium text-green-600 hover:text-green-500 dark:text-green-400 dark:hover:text-green-300"
+          className="font-medium text-primary hover:text-primary-dark transition-colors"
         >
           Sign in
         </Link>

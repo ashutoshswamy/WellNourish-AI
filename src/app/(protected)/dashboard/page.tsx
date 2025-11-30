@@ -13,8 +13,7 @@ import {
   Sparkles,
   ChevronRight,
   Utensils,
-  Zap,
-  AlertCircle
+  Zap
 } from 'lucide-react';
 
 // Calculate BMR using Mifflin-St Jeor Equation
@@ -78,6 +77,11 @@ export default async function DashboardPage() {
     .eq('user_id', user.id)
     .single() as { data: UserPreferences | null };
 
+  // Redirect to onboarding if user hasn't completed it
+  if (!preferences) {
+    redirect('/onboarding');
+  }
+
   // Fetch active plan
   const { data: activePlan } = await supabase
     .from('generated_plans')
@@ -105,9 +109,6 @@ export default async function DashboardPage() {
   const tdee = hasProfile && preferences
     ? calculateTDEE(bmr, preferences.activity_level)
     : 0;
-
-  // Check if user needs onboarding
-  const needsOnboarding = !preferences;
 
   const colorClasses = {
     blue: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
@@ -160,30 +161,6 @@ export default async function DashboardPage() {
             Here&apos;s your personalized wellness overview.
           </p>
         </div>
-
-        {/* Onboarding Alert */}
-        {needsOnboarding && (
-          <div className="mb-6 sm:mb-8 p-4 sm:p-5 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl sm:rounded-2xl">
-            <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
-              <div className="p-2 sm:p-3 bg-amber-500/20 rounded-lg sm:rounded-xl w-fit">
-                <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-amber-500" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-base sm:text-lg">Complete Your Profile</h3>
-                <p className="text-xs sm:text-sm text-muted mt-1">
-                  Set up your preferences to get personalized meal and workout plans.
-                </p>
-                <Link
-                  href="/onboarding"
-                  className="inline-flex items-center gap-2 mt-3 sm:mt-4 px-4 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all"
-                >
-                  Complete Setup
-                  <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Latest Plan Banner */}
         {activePlan && (
@@ -286,7 +263,7 @@ export default async function DashboardPage() {
         )}
 
         {/* Empty State */}
-        {(!savedPlans || savedPlans.length === 0) && !needsOnboarding && (
+        {(!savedPlans || savedPlans.length === 0) && (
           <div className="bg-card rounded-xl sm:rounded-2xl p-8 sm:p-10 border border-border text-center">
             <div className="mx-auto w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 mb-4 sm:mb-6">
               <Sparkles className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />

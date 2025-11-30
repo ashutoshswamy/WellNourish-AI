@@ -146,11 +146,6 @@ export const pageSEOConfig: Record<string, PageSEOConfig> = {
     description: 'Create a new password for your WellNourish AI account.',
     noindex: true,
   },
-  magicLink: {
-    title: 'Magic Link Login',
-    description: 'Sign in to WellNourish AI using a secure magic link sent to your email.',
-    noindex: true,
-  },
   dashboard: {
     title: 'Dashboard',
     description:

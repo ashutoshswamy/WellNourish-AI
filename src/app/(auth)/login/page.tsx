@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Zap, Loader2 } from 'lucide-react';
+import { Mail, Lock, Loader2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
@@ -22,7 +22,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -30,6 +30,22 @@ export default function LoginPage() {
       if (error) {
         setError(error.message);
         return;
+      }
+
+      // Check if user has completed onboarding
+      if (data.user) {
+        const { data: preferences } = await supabase
+          .from('user_preferences')
+          .select('id')
+          .eq('user_id', data.user.id)
+          .single();
+
+        // If no preferences exist, redirect to onboarding
+        if (!preferences) {
+          router.push('/onboarding');
+          router.refresh();
+          return;
+        }
       }
 
       router.push('/dashboard');
@@ -199,16 +215,6 @@ export default function LoginPage() {
       </div>
 
       <div className="space-y-3">
-        <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
-          <Link
-            href="/magic-link"
-            className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-border rounded-xl text-sm font-medium hover:bg-primary/5 hover:border-primary/30 transition-all"
-          >
-            <Zap className="h-5 w-5 text-accent" />
-            Sign in with Magic Link
-          </Link>
-        </motion.div>
-
         <motion.button
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}

@@ -123,14 +123,14 @@ export async function GET(request: Request) {
   if (token_hash && type) {
     const { error: verifyError } = await supabase.auth.verifyOtp({
       token_hash,
-      type: type as 'signup' | 'recovery' | 'email' | 'magiclink',
+      type: type as 'signup' | 'recovery' | 'email',
     });
 
     if (!verifyError) {
       const forwardedHost = request.headers.get('x-forwarded-host');
       
       // For email signup verification, redirect to onboarding
-      // For other types (recovery, magiclink), use the provided next parameter or dashboard
+      // For other types (recovery), use the provided next parameter or dashboard
       const isSignupVerification = type === 'signup';
       const redirectPath = isSignupVerification ? '/onboarding' : next;
       
