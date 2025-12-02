@@ -240,8 +240,10 @@ export default function OnboardingPage() {
           : 'prefer_not_to_say';
       };
 
-      // Update profile with basic info
-      const profileUpdate = {
+      // Upsert profile with basic info (handles case where profile doesn't exist)
+      const profileData = {
+        id: user.id,
+        email: user.email!,
         height_cm: data.height_cm,
         weight_kg: data.weight_kg,
         gender: mapGender(data.gender),
@@ -256,8 +258,9 @@ export default function OnboardingPage() {
 
       const { error: profileError } = await supabase
         .from('profiles')
-        .update(profileUpdate as never)
-        .eq('id', user.id);
+        .upsert(profileData as never, {
+          onConflict: 'id',
+        });
 
       if (profileError) {
         throw profileError;
