@@ -18,7 +18,7 @@ async function sendWelcomeEmail(email: string) {
     await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: 'Welcome to WellNourish AI! 🥗',
+      subject: 'Welcome to WellNourish AI!',
       react: React.createElement(WelcomeEmail, { email }),
     });
     console.log('Welcome email sent successfully to:', email);
@@ -99,10 +99,9 @@ export async function GET(request: Request) {
     if (!verifyError) {
       const forwardedHost = request.headers.get('x-forwarded-host');
       
-      // For email signup verification, redirect to onboarding
-      // For other types (recovery), use the provided next parameter or dashboard
+      // For email signup verification and other types, redirect to dashboard
       const isSignupVerification = type === 'signup';
-      const redirectPath = isSignupVerification ? '/onboarding' : next;
+      const redirectPath = '/dashboard';
       
       // Send welcome email for new signups
       if (isSignupVerification) {
@@ -145,8 +144,8 @@ export async function GET(request: Request) {
       
       console.log('Preferences check:', { preferences, preferencesError });
       
-      // Determine redirect path based on whether preferences exist
-      const redirectPath = preferences ? '/dashboard' : '/onboarding';
+      // Always redirect to dashboard after login
+      const redirectPath = '/dashboard';
       
       console.log('Redirecting to:', redirectPath);
       
