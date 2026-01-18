@@ -1,0 +1,36 @@
+Terms of Service for WellNourish AI
+
+Last Updated: January 18, 2026
+
+1. Acceptance of Terms
+By accessing or using the WellNourish AI application (the "Service"), you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the Service.
+
+2. Medical Disclaimer (CRITICAL - PLEASE READ)
+WellNourish AI is an artificial intelligence-powered tool designed to provide general health, diet, and workout suggestions.
+- NO MEDICAL ADVICE: The Service is for informational purposes only. It is NOT intended to be a substitute for professional medical advice, diagnosis, or treatment.
+- CONSULT YOUR DOCTOR: Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition, diet change, or exercise program.
+- RISK: You agree that your use of the Service is at your own risk. Exercise and dietary changes carry inherent risks. WellNourish AI is not responsible for any injuries or health complications that may result from following the AI-generated plans.
+
+3. Artificial Intelligence Disclaimer
+- GENERATIVE AI: This Service utilizes advanced Generative AI (specifically Google's Gemini API) to create plans. AI can hallucinate or make errors.
+- ACCURACY: While we strive for accuracy, specific medical interactions (e.g., allergies vs. ingredients) may possibly be misidentified by the AI. You must verify all recommendations before consumption or practice.
+- NO GUARANTEE: We make no guarantees that the plans generated will achieve your specific health goals.
+
+4. User Responsibilities
+- ACCURATE DATA: You agree to provide accurate, current, and complete information regarding your health, medical conditions, and allergies. Providing false information may lead to dangerous recommendations.
+- SAFETY: You agree not to use this Service if you have a history of severe eating disorders or critical medical conditions unless under strict supervision of a medical professional.
+
+5. Account Security
+You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password.
+
+6. Termination
+We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.
+
+7. Limitation of Liability
+In no event shall WellNourish AI, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.
+
+8. Changes
+We reserve the right, at our sole discretion, to modify or replace these Terms at any time.
+
+9. Contact Us
+If you have any questions about these Terms, please contact us.

@@ -1,0 +1,28 @@
+Cookies Policy for WellNourish AI
+
+Last Updated: January 18, 2026
+
+1. What Are Cookies?
+Cookies are small text files that are placed on your computer or mobile device by websites that you visit. They are widely used in order to make websites work, or work more efficiently, as well as to provide information to the owners of the site.
+
+2. How We Use Cookies
+WellNourish AI uses cookies to securely identify you and keep you signed in. We use the following types of cookies:
+
+- Essential Cookies: These are necessary for the website to function and cannot be switched off. We use them for:
+  - Authentication: To keep you logged in as you navigate between pages (handled by Supabase).
+  - Security: To prevent Cross-Site Request Forgery (CSRF) and other attacks.
+
+- AI Functionality Cookies: These help remember your session state when generating plans.
+
+3. Third-Party Cookies
+- Supabase: Uses cookies to manage your authentication session securely.
+- Google: If you sign in via Google OAuth, Google may set cookies to authenticate your identity.
+
+4. Managing Cookies
+Most web browsers allow some control of most cookies through the browser settings. However, if you disable cookies, you will not be able to log in or use the core AI plan generation features of WellNourish AI.
+
+5. Changes to This Policy
+We may update this Cookies Policy from time to time. We will notify you of any changes by posting the new policy on this page.
+
+6. Contact Us
+If you have any questions about this Cookies Policy, please contact us.

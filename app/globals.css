@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-poppins);
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  --color-border: var(--border);
+}
+
+:root {
+  /* Surface & Brand Colors */
+  --background: #ffffff;
+  --foreground: #1e293b; /* Slate 800 - softer black */
+  
+  /* Primary - Deep Emerald for Trust & Professionalism */
+  --primary: #059669; 
+  --primary-foreground: #ffffff;
+  
+  /* Secondary - Clean Slate */
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  
+  /* Muted - For subtitles/details */
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  
+  /* Accents */
+  --accent: #d1fae5;
+  --accent-foreground: #065f46;
+  
+  --border: #e2e8f0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #020617; /* Deep Slate 950 */
+    --foreground: #f8fafc;
+    
+    --primary: #10b981; /* Brighter Emerald */
+    --primary-foreground: #ffffff;
+    
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+    
+    --muted: #0f172a;
+    --muted-foreground: #94a3b8;
+    
+    --accent: #064e3b;
+    --accent-foreground: #d1fae5;
+    
+    --border: #1e293b;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-poppins), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

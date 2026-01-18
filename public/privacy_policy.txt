@@ -1,0 +1,42 @@
+Privacy Policy for WellNourish AI
+
+Last Updated: January 18, 2026
+
+1. Introduction
+Welcome to WellNourish AI. We respect your privacy and are committed to protecting your personal data, especially your sensitive health information. This privacy policy informs you how we handle your data when you use our AI-powered health planning application.
+
+2. Data We Collect
+We collect specific personal and health data necessary to generate your plans:
+- Identity Data: Name, email address, and authentication credentials (via Google or GitHub User IDs).
+- Health & Physical Data: Age, gender, height, weight, activity level.
+- Medical & Preference Data: Specific medical conditions, allergies, dietary preferences (e.g., Vegan, Keto), and diverse cuisine preferences.
+- Usage Data: Information on how you interact with the generated plans.
+
+3. How We Use Your Data
+We use your data solely for the following purposes:
+- AI Plan Generation: Your health data (excluding personally identifiable markers where possible) is processed by our AI provider (Google Gemini) to generate personalized diet and workout schedules.
+- Account Management: To maintain your user profile and save your generated plans in our database.
+- Service Improvement: To understand usage patterns and improve the quality of AI prompts.
+
+4. Data Sharing and Third Parties
+We do not sell your personal data. We share data only with necessary service providers:
+- Supabase: We use Supabase for secure database hosting and authentication services. Your data is stored securely on their servers.
+- Google Gemini (AI Provider): To generate your plans, your anonymized health parameters (e.g., "30 year old male, vegan, allergic to peanuts") are sent to the Gemini API.
+- Analytics: We may use anonymous analytics tools to monitor app stability.
+
+5. Data Security
+We implement robust security measures to protect your health data.
+- Encryption: Data is encrypted in transit and at rest where applicable via our providers (Supabase).
+- Access Control: Only you can access your private health profile and generated plans through your authenticated account.
+
+6. Your Rights
+You have the right to:
+- Access the personal data we hold about you.
+- Request correction of accurate data (e.g., updating your weight or allergies).
+- Request deletion of your account and all associated data.
+
+7. Changes to This Privacy Policy
+We may update our Privacy Policy. We will notify you of any changes by posting the new Privacy Policy on this page.
+
+8. Contact Us
+If you have any questions about this Privacy Policy, please contact us.
