@@ -1,12 +1,19 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { NextResponse } from "next/server"
-import { z } from "zod"
 import { onboardingSchema } from "@/app/onboarding/schema"
+import { createClient } from "@/utils/supabase/server"
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
 
 export async function POST(req: Request) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const body = await req.json()
     // Validate input
     const validation = onboardingSchema.safeParse(body)
@@ -106,17 +113,17 @@ export async function POST(req: Request) {
     // First try with the requested model
     try {
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-3-flash-preview", 
+            model: "gemini-1.5-flash", 
             generationConfig: { responseMimeType: "application/json" } 
         })
         const result = await model.generateContent(prompt)
         const response = await result.response
         text = response.text()
     } catch (modelError) {
-        console.warn("Gemini 3 Flash failed, falling back to 2.5 Flash", modelError)
+        console.warn("Gemini 1.5 Flash failed, falling back to 1.5 Pro", modelError)
         // Fallback to stable preview
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash", 
+            model: "gemini-1.5-pro", 
             generationConfig: { responseMimeType: "application/json" } 
         })
         const result = await model.generateContent(prompt)
