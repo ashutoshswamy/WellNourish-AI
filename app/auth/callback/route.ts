@@ -13,11 +13,13 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error && data?.user) {
       // Check if user is new (created in the last minute) and signed up via OAuth
-      // We exclude 'email' provider because welcome email is handled in signup action for them
-      const isNewUser = new Date(data.user.created_at).getTime() > Date.now() - 60 * 1000;
+      // OR if the user just verified their email (confirmed in the last minute)
+      const now = Date.now();
+      const isNewUser = new Date(data.user.created_at).getTime() > now - 60 * 1000;
       const isOAuthUser = data.user.app_metadata.provider !== 'email';
+      const justVerified = data.user.email_confirmed_at && (new Date(data.user.email_confirmed_at).getTime() > now - 60 * 1000);
 
-      if (isNewUser && isOAuthUser) {
+      if ((isNewUser && isOAuthUser) || (justVerified && !isOAuthUser)) {
         try {
           const { resend } = await import("@/lib/resend");
           const { WelcomeEmail } = await import("@/components/emails/WelcomeEmail");
@@ -30,7 +32,7 @@ export async function GET(request: Request) {
             react: WelcomeEmail({ fullName }),
           });
         } catch (emailError) {
-          console.error("Failed to send welcome email to OAuth user:", emailError);
+          console.error("Failed to send welcome email:", emailError);
         }
       }
 
