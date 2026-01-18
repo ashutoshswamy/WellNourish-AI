@@ -31,7 +31,7 @@ export default function TermsPage() {
                 prose-li:marker:text-emerald-500">
                 
                 <h3>1. Acceptance of Terms</h3>
-                <p>By accessing or using the WellNourish AI application (the "Service"), you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the Service.</p>
+                <p>By accessing or using the WellNourish AI application (the &quot;Service&quot;), you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the Service.</p>
 
                 <div className="bg-emerald-50 dark:bg-emerald-950/30 border-l-4 border-emerald-500 p-6 rounded-r-xl my-8">
                   <h3 className="mt-0 text-emerald-800 dark:text-emerald-400">2. Medical Disclaimer (CRITICAL)</h3>
@@ -45,7 +45,7 @@ export default function TermsPage() {
 
                 <h3>3. Artificial Intelligence Disclaimer</h3>
                 <ul>
-                  <li><strong>GENERATIVE AI:</strong> This Service utilizes advanced Generative AI (specifically Google's Gemini API) to create plans. AI can hallucinate or make errors.</li>
+                  <li><strong>GENERATIVE AI:</strong> This Service utilizes advanced Generative AI (specifically Google&apos;s Gemini API) to create plans. AI can hallucinate or make errors.</li>
                   <li><strong>ACCURACY:</strong> While we strive for accuracy, specific medical interactions (e.g., allergies vs. ingredients) may possibly be misidentified by the AI. You must verify all recommendations before consumption or practice.</li>
                   <li><strong>NO GUARANTEE:</strong> We make no guarantees that the plans generated will achieve your specific health goals.</li>
                 </ul>
@@ -60,7 +60,7 @@ export default function TermsPage() {
                 <p>You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password.</p>
 
                 <h3>6. Termination</h3>
-                <p>We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+                <p>We reserve the right to withdraw or amend our Service, and any service or material we provide on the Service, in our sole discretion without notice. We will not be liable if for any reason all or any part of the Service is unavailable at any time or for any period. From time to time, we may restrict access to some parts of the Service, or the entire Service, to users, including registered users.</p>
 
                 <h3>7. Limitation of Liability</h3>
                 <p>In no event shall WellNourish AI, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.</p>

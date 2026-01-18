@@ -92,7 +92,15 @@ export default function LoginPage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                  <Link 
+                    href="/forgot-password"
+                    className="text-sm font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
                 <div className="relative">
                   <input 
                     name="password" 
@@ -162,7 +170,7 @@ export default function LoginPage() {
                 href="/signup"
                 className="text-sm font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400"
               >
-                Don't have an account? Sign up
+                Don&apos;t have an account? Sign up
               </Link>
             </div>
           </motion.div>

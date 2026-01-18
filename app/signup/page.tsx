@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { signup } from "./actions"
-import { Apple, Eye, EyeOff, Loader2 } from "lucide-react"
+import { Apple, Eye, EyeOff, Loader2, Mail, CheckCircle } from "lucide-react"
 import { Icons } from "@/components/ui/icons"
 import { createClient } from "@/utils/supabase/client"
 import Link from "next/link"
@@ -12,6 +12,7 @@ import Link from "next/link"
 export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -51,6 +52,9 @@ export default function SignupPage() {
     if (result?.error) {
       setError(result.error)
       setLoading(false)
+    } else if (result?.success) {
+      setSuccess(true)
+      setLoading(false)
     }
   }
 
@@ -73,22 +77,56 @@ export default function SignupPage() {
       {/* Right Side - Form */}
       <div className="flex flex-col justify-center items-center p-8 bg-background">
         <div className="w-full max-w-md space-y-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Create an account
-            </h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Enter your details below to get started
-            </p>
-          </div>
+          {success ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white dark:bg-slate-950 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 text-center"
+            >
+              <div className="mx-auto w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mb-6">
+                <Mail className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                Check your email
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                We&apos;ve sent a confirmation link to your email address. Please click the link to verify your account and get started.
+              </p>
+              <div className="flex items-center justify-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-xl">
+                <CheckCircle className="h-4 w-4" />
+                <span>Confirmation email sent successfully</span>
+              </div>
+              <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
+                <p className="text-sm text-gray-500 dark:text-gray-500 mb-3">
+                  Didn&apos;t receive the email? Check your spam folder or
+                </p>
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400"
+                >
+                  Go to Login
+                </Link>
+              </div>
+            </motion.div>
+          ) : (
+            <>
+              <div className="text-center">
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  Create an account
+                </h2>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  Enter your details below to get started
+                </p>
+              </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white dark:bg-slate-950 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800"
-          >
-            <form onSubmit={handleSubmit} className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-white dark:bg-slate-950 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800"
+              >
+                <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
                 <input 
@@ -198,17 +236,19 @@ export default function SignupPage() {
                   GitHub
                 </Button>
               </div>
-            </form>
+                </form>
 
-            <div className="mt-6 text-center">
-              <Link
-                href="/login"
-                className="text-sm font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400"
-              >
-                Already have an account? Sign in
-              </Link>
-            </div>
-          </motion.div>
+                <div className="mt-6 text-center">
+                  <Link
+                    href="/login"
+                    className="text-sm font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400"
+                  >
+                    Already have an account? Sign in
+                  </Link>
+                </div>
+              </motion.div>
+            </>
+          )}
         </div>
       </div>
     </div>

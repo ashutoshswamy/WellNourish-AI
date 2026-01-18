@@ -10,6 +10,7 @@ interface AuthContextType {
   // initialized implies we've checked the session at least once
   loading: boolean 
   signOut: () => Promise<void>
+  refreshUser: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextType>({
   session: null,
   loading: true,
   signOut: async () => {},
+  refreshUser: async () => {},
 })
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -45,8 +47,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setSession(null)
   }
 
+  const refreshUser = async () => {
+    const { data: { user: refreshedUser } } = await supabase.auth.getUser()
+    setUser(refreshedUser)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, session, loading, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, signOut, refreshUser }}>
       {children}
     </AuthContext.Provider>
   )

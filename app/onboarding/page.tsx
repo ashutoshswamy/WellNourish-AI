@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAuth } from "@/components/AuthProvider"
 import { onboardingSchema, type OnboardingData } from "./schema"
@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils"
 import { createClient } from "@/utils/supabase/client"
 
 const STEPS = [
-  { id: "basics", title: "The Basics", description: "Let's start with some fundamental details." },
+  { id: "basics", title: "The Basics", description: "Let&apos;s start with some fundamental details." },
   { id: "lifestyle", title: "Lifestyle", description: "How active are you currently?" },
   { id: "preferences", title: "Food Preferences", description: "What do you love to eat?" },
   { id: "health", title: "Health & Goals", description: "Any conditions we should know about?" },
@@ -26,7 +26,7 @@ export default function OnboardingPage() {
   const router = useRouter()
   const { user } = useAuth()
 
-  const { control, handleSubmit, trigger, watch, register, setValue, formState: { errors } } = useForm<OnboardingData>({
+  const { handleSubmit, trigger, watch, register, setValue, formState: { errors } } = useForm<OnboardingData>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
       cuisinePreferences: [],
@@ -38,7 +38,7 @@ export default function OnboardingPage() {
     }
   })
 
-  const [foundProfile, setFoundProfile] = useState<any>(null)
+  const [foundProfile, setFoundProfile] = useState<any>(null) // eslint-disable-line @typescript-eslint/no-explicit-any
   const [showProfilePrompt, setShowProfilePrompt] = useState(false)
   const [customGoal, setCustomGoal] = useState("")
 
@@ -65,16 +65,17 @@ export default function OnboardingPage() {
     }
 
     fetchProfile()
-  }, [user]) // Removed setValue and watch dependency to avoid loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   const loadProfileData = () => {
       if (!foundProfile) return
       
       if (foundProfile.age) setValue("age", foundProfile.age)
-      if (foundProfile.gender) setValue("gender", foundProfile.gender as any)
+      if (foundProfile.gender) setValue("gender", foundProfile.gender as "male" | "female" | "other")
       if (foundProfile.height) setValue("height", foundProfile.height)
       if (foundProfile.weight) setValue("weight", foundProfile.weight)
-      if (foundProfile.activity_level) setValue("activityLevel", foundProfile.activity_level as any)
+      if (foundProfile.activity_level) setValue("activityLevel", foundProfile.activity_level as "sedentary" | "lightly_active" | "moderately_active" | "very_active" | "extra_active")
       
       if (foundProfile.cuisine_preferences) setValue("cuisinePreferences", foundProfile.cuisine_preferences)
       if (foundProfile.dietary_preferences) setValue("dietaryPreferences", foundProfile.dietary_preferences)
@@ -239,7 +240,7 @@ export default function OnboardingPage() {
                               <button
                                 key={g}
                                 type="button"
-                                onClick={() => setValue("gender", g as any, { shouldValidate: true })}
+                                onClick={() => setValue("gender", g as "male" | "female" | "other", { shouldValidate: true })}
                                 className={cn("p-3 rounded-xl border text-sm capitalize transition-all", watchGender === g ? "bg-emerald-100 border-emerald-500 text-emerald-800" : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100", errors.gender && "border-red-500")}
                               >
                                 {g}
@@ -284,7 +285,7 @@ export default function OnboardingPage() {
                            <button
                              key={opt.val}
                              type="button"
-                             onClick={() => setValue("activityLevel", opt.val as any, { shouldValidate: true })}
+                             onClick={() => setValue("activityLevel", opt.val as "sedentary" | "lightly_active" | "moderately_active" | "very_active" | "extra_active", { shouldValidate: true })}
                              className={cn("w-full text-left p-4 rounded-xl border transition-all flex justify-between items-center group", watchActivity === opt.val ? "bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500" : "bg-white border-gray-200 hover:border-emerald-300", errors.activityLevel && !watchActivity && "border-red-500")}
                            >
                              <div>

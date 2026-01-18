@@ -1,7 +1,6 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 
 import { createClient } from "@/utils/supabase/server"
 
@@ -27,22 +26,11 @@ export async function signup(formData: FormData) {
     return { error: error.message }
   }
 
-  // Send welcome email
-  try {
-    const { resend } = await import("@/lib/resend");
-    const { WelcomeEmail } = await import("@/components/emails/WelcomeEmail");
-    
-    await resend.emails.send({
-      from: 'WellNourish AI <onboarding@wellnourishai.in>',
-      to: email,
-      subject: 'Welcome to WellNourish AI!',
-      react: WelcomeEmail({ fullName }),
-    });
-  } catch (emailError) {
-    console.error("Failed to send welcome email:", emailError);
-    // Don't block the signup flow if email fails
-  }
-
+  // Email confirmation is handled by Supabase automatically
+  // The user will receive a confirmation email with a link to verify their account
+  
   revalidatePath("/", "layout")
-  redirect("/onboarding")
+  
+  // Return success - don't redirect, let the UI show the confirmation message
+  return { success: true, message: "Please check your email to confirm your account." }
 }

@@ -1,9 +1,10 @@
+
 "use client"
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
-import { Leaf, Menu, X, User as UserIcon, LogOut, LayoutDashboard } from "lucide-react"
+import { Menu, X, User as UserIcon, LogOut, LayoutDashboard } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
 import { useAuth } from "@/components/AuthProvider"
 import { useRouter } from "next/navigation"

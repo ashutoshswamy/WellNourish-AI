@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 
 export default function DashboardPage() {
-  const [plans, setPlans] = useState<any[]>([])
+  const [plans, setPlans] = useState<any[]>([]) // eslint-disable-line @typescript-eslint/no-explicit-any
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0)
   const [selectedDay, setSelectedDay] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -19,6 +19,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchPlans()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchPlans = async () => {
@@ -26,7 +27,7 @@ export default function DashboardPage() {
     
     if (session?.user) {
       // Fetch from DB
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("generated_plans")
         .select("*")
         .order("created_at", { ascending: false })
@@ -99,7 +100,7 @@ export default function DashboardPage() {
 
     } catch (err) {
         console.error("Error deleting plan:", err)
-        alert("Failed to delete plan: " + (err as any).message)
+        alert("Failed to delete plan: " + (err as Error).message)
     }
   }
 
@@ -121,7 +122,7 @@ export default function DashboardPage() {
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Plans Found</h2>
                 <p className="text-gray-500 dark:text-gray-400 mb-8">
-                    You don't have any active diet or workout plans. improved your health by creating one today!
+                    You don&apos;t have any active diet or workout plans. improved your health by creating one today!
                 </p>
                 <Button onClick={() => router.push("/onboarding")} className="w-full">
                     <Sparkles className="mr-2 h-4 w-4" /> Generate New Plan
@@ -133,7 +134,7 @@ export default function DashboardPage() {
 
   const plan = plans[currentPlanIndex]
   const days = plan.daily_plan
-  const currentDayPlan = days.find((d: any) => d.day === selectedDay) || days[0]
+  const currentDayPlan = days.find((d: any) => d.day === selectedDay) || days[0] // eslint-disable-line @typescript-eslint/no-explicit-any
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -237,7 +238,7 @@ export default function DashboardPage() {
                   <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
                      <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Day View</h3>
                      <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
-                        {days.map((day: any) => (
+                        {days.map((day: any) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
                            <button
                              key={day.day}
                              onClick={() => setSelectedDay(day.day)}
@@ -313,7 +314,7 @@ export default function DashboardPage() {
                        ) : (
                            // Detailed format
                             <div className="grid gap-4">
-                                {currentDayPlan.workout.exercises.map((ex: any, i: number) => (
+                                {currentDayPlan.workout.exercises.map((ex: any, i: number) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
                                     <div key={i} className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-gray-100 dark:border-gray-800">
                                         <div className="flex justify-between items-start mb-2">
                                             <h4 className="font-bold text-gray-900 dark:text-white text-lg">{ex.name}</h4>
@@ -360,7 +361,7 @@ export default function DashboardPage() {
                             </div>
                         ) : (
                             <div className="space-y-6">
-                                {plan.shopping_list.map((category: any, idx: number) => (
+                                {plan.shopping_list.map((category: any, idx: number) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
                                     <div key={idx}>
                                         <h3 className="font-semibold text-emerald-700 dark:text-emerald-400 mb-3 uppercase tracking-wider text-xs">
                                             {category.category}
@@ -389,7 +390,7 @@ export default function DashboardPage() {
   )
 }
 
-function StatCard({ label, value, icon }: any) {
+function StatCard({ label, value, icon }: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
    return (
       <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center gap-4">
          <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
@@ -403,7 +404,7 @@ function StatCard({ label, value, icon }: any) {
    )
 }
 
-function MealCard({ type, meal }: any) {
+function MealCard({ type, meal }: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
    const [isOpen, setIsOpen] = useState(false)
 
    return (

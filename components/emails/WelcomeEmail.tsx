@@ -24,7 +24,7 @@ export const WelcomeEmail = ({ fullName }: WelcomeEmailProps) => {
         <Container style={container}>
           <Heading style={h1}>Welcome, {fullName}!</Heading>
           <Text style={text}>
-            We're excited to have you on board. WellNourish AI is here to help you achieve your health and fitness goals.
+            We&apos;re excited to join you on your wellness journey. With WellNourish AI, you now have the power of personalized health planning at your fitness goals.
           </Text>
           <Section style={section}>
             <Text style={text}>

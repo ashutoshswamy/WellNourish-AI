@@ -32,6 +32,7 @@ export default function PrivacyPage() {
                 
                 <h3>1. Introduction</h3>
                 <p>Welcome to WellNourish AI. We respect your privacy and are committed to protecting your personal data, especially your sensitive health information. This privacy policy informs you how we handle your data when you use our AI-powered health planning application.</p>
+                <p>We use &quot;cookies&quot; to collect information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.</p>
 
                 <h3>2. Data We Collect</h3>
                 <p>We collect specific personal and health data necessary to generate your plans:</p>
@@ -54,7 +55,7 @@ export default function PrivacyPage() {
                 <p>We do not sell your personal data. We share data only with necessary service providers:</p>
                 <ul>
                   <li><strong>Supabase:</strong> We use Supabase for secure database hosting and authentication services. Your data is stored securely on their servers.</li>
-                  <li><strong>Google Gemini (AI Provider):</strong> To generate your plans, your anonymized health parameters (e.g., "30 year old male, vegan, allergic to peanuts") are sent to the Gemini API.</li>
+                  <li><strong>Google Gemini (AI Provider):</strong> To generate your plans, your anonymized health parameters (e.g., &quot;30 year old male, vegan, allergic to peanuts&quot;) are sent to the Gemini API.</li>
                   <li><strong>Analytics:</strong> We may use anonymous analytics tools to monitor app stability.</li>
                 </ul>
 

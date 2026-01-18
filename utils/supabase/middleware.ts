@@ -15,7 +15,7 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value, options: _options }) => // options is unused here, so prefixed with underscore
             request.cookies.set(name, value)
           )
           supabaseResponse = NextResponse.next({
@@ -25,12 +25,19 @@ export async function updateSession(request: NextRequest) {
             supabaseResponse.cookies.set(name, value, options)
           )
         },
+
       },
     }
   )
 
   // refreshing the auth token
-  await supabase.auth.getUser()
+  try {
+    await supabase.auth.getUser()
+  } catch (err) {
+    // If the token is invalid, we can just ignore the error and let the user be redirected to login
+    // by the protected routes logic or just have no session.
+    console.error('Supabase middleware auth error:', err)
+  }
 
   return supabaseResponse
 }

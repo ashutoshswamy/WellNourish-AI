@@ -10,8 +10,30 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+    if (!error && data?.user) {
+      // Check if user is new (created in the last minute) and signed up via OAuth
+      // We exclude 'email' provider because welcome email is handled in signup action for them
+      const isNewUser = new Date(data.user.created_at).getTime() > Date.now() - 60 * 1000;
+      const isOAuthUser = data.user.app_metadata.provider !== 'email';
+
+      if (isNewUser && isOAuthUser) {
+        try {
+          const { resend } = await import("@/lib/resend");
+          const { WelcomeEmail } = await import("@/components/emails/WelcomeEmail");
+          const fullName = data.user.user_metadata.full_name || data.user.user_metadata.name || 'User';
+          
+          await resend.emails.send({
+            from: 'WellNourish AI <onboarding@wellnourishai.in>',
+            to: data.user.email!,
+            subject: 'Welcome to WellNourish AI!',
+            react: WelcomeEmail({ fullName }),
+          });
+        } catch (emailError) {
+          console.error("Failed to send welcome email to OAuth user:", emailError);
+        }
+      }
+
       const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === 'development'
       

@@ -10,7 +10,6 @@ import {
   Utensils, 
   Activity, 
   Sparkles, 
-  CheckCircle2, 
   ShieldCheck, 
   Zap, 
   Users, 
@@ -121,7 +120,7 @@ export default function Home() {
                 Science meets simplicity.
               </h3>
               <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                We don't just give you a generic PDF. We build a dynamic, living plan that adapts to your needs.
+                We don&apos;t just give you a generic PDF. We build a dynamic, living plan that adapts to your needs.
               </p>
             </AnimatedSection>
 
@@ -180,7 +179,6 @@ export default function Home() {
                 title="Track & Thrive" 
                 description="Access your dashboard to view your daily meals and workouts. Download your plan, stick to it, and see the results."
                 side="left"
-                last={true}
               />
             </div>
           </div>
@@ -221,7 +219,7 @@ export default function Home() {
                 
                 <div className="relative z-10 px-8 py-20 md:p-24 text-center">
                   <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
-                    Your healthier self is waiting.
+                  Let&apos;s build your perfect health plan.
                   </h2>
                   <p className="text-emerald-100 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light">
                     Join thousands who have already transformed their lives with intelligent, data-driven planning.
@@ -261,7 +259,7 @@ function FeatureCard({ icon, title, description, delay, color }: { icon: React.R
   )
 }
 
-function Step({ number, title, description, side, last = false }: { number: string, title: string, description: string, side: "left" | "right", last?: boolean }) {
+function Step({ number, title, description, side }: { number: string, title: string, description: string, side: "left" | "right" }) {
   return (
     <div className={`flex flex-col md:flex-row items-center justify-between mb-16 md:mb-0 relative ${side === 'right' ? 'md:flex-row-reverse' : ''}`}>
        <div className="hidden md:block absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-emerald-500 rounded-full border-4 border-white dark:border-slate-900 z-10 shadow-md"></div>
