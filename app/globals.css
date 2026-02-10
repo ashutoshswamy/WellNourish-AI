@@ -21,48 +21,99 @@
   --color-border: var(--border);
 }
 
-:root {
-  /* Surface & Brand Colors */
-  --background: #ffffff;
-  --foreground: #1e293b; /* Slate 800 - softer black */
+@layer base {
+  :root {
+    /* Pure & Premium */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%; /* Deep Slate */
 
-  /* Primary - Deep Emerald for Trust & Professionalism */
-  --primary: #059669;
-  --primary-foreground: #ffffff;
+    /* Primary - Sophisticated Emerald */
+    --primary: 158 64% 52%; /* Vivid Emerald */
+    --primary-foreground: 222 47% 11%;
 
-  /* Secondary - Clean Slate */
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
+    /* Secondary - Soft & Subtle */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222 47% 11%;
 
-  /* Muted - For subtitles/details */
-  --muted: #f8fafc;
-  --muted-foreground: #64748b;
+    /* Muted - For depth */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-  /* Accents */
-  --accent: #d1fae5;
-  --accent-foreground: #065f46;
+    /* Accents - Trust & Energy */
+    --accent: 142 71% 45%; 
+    --accent-foreground: 210 40% 98%;
 
-  --border: #e2e8f0;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 158 64% 52%;
+
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 222 47% 4%; /* Almost Black Blue */
+    --foreground: 210 40% 98%;
+
+    --primary: 158 64% 52%;
+    --primary-foreground: 222 47% 4%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 158 64% 52%;
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #020617; /* Deep Slate 950 */
-    --foreground: #f8fafc;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
 
-    --primary: #10b981; /* Brighter Emerald */
-    --primary-foreground: #ffffff;
+@layer utilities {
+  .glass {
+    @apply bg-white/70 dark:bg-black/70 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-xl;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500;
+  }
 
-    --secondary: #1e293b;
-    --secondary-foreground: #f8fafc;
+  .animate-aurora {
+    animation: aurora 20s linear infinite;
+  }
 
-    --muted: #0f172a;
-    --muted-foreground: #94a3b8;
+  .animate-text-shimmer {
+    animation: text-shimmer 3s ease-out infinite alternate;
+  }
+}
 
-    --accent: #064e3b;
-    --accent-foreground: #d1fae5;
+@keyframes aurora {
+  0% {
+    background-position: 50% 50%, 50% 50%;
+  }
+  100% {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
 
-    --border: #1e293b;
+@keyframes text-shimmer {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -200% 0;
   }
 }
 
