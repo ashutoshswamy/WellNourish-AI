@@ -48,7 +48,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-black selection:bg-emerald-500/30 selection:text-emerald-500">
+    <div className="min-h-screen bg-background selection:bg-primary/20 selection:text-primary">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -57,73 +57,66 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-          {/* Enhanced background gradient */}
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-50/80 via-white to-white dark:from-emerald-950/30 dark:via-black dark:to-black opacity-100"></div>
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-300/10 rounded-full blur-[100px] animate-blob"></div>
-            <div className="absolute top-[20%] right-[-10%] w-[35%] h-[35%] bg-teal-300/10 rounded-full blur-[100px] animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-indigo-300/10 rounded-full blur-[100px] animate-blob animation-delay-4000"></div>
+        <section className="relative pt-28 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute inset-0 bg-gradient-to-b from-secondary/60 via-background to-background"></div>
           </div>
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <AnimatedSection>
-              <div className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/5 px-4 py-1.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400 mb-8 backdrop-blur-sm shadow-sm hover:bg-emerald-500/10 transition-colors">
-                <Sparkles className="mr-2 h-4 w-4 text-emerald-500" />
-                <span>AI-Powered Precision Health Logic</span>
+              <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1 text-xs font-medium text-primary mb-8">
+                <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                <span>AI-Powered Precision Health</span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-slate-900 dark:text-white mb-8 leading-[1.05] drop-shadow-sm">
-                Your Body. <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 animate-gradient-x">
-                  Intelligently Fueled.
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-6 leading-[1.1]">
+                Your body,{" "}
+                <span className="text-gradient-warm">
+                  intelligently fueled
                 </span>
               </h1>
 
-              <p className="mt-8 text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-12 leading-relaxed font-light">
+              <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
                 Stop guessing. Start thriving. Get a hyper-personalized
                 nutrition and workout plan tailored to your unique biology,
-                completely powered by advanced AI.
+                powered by AI.
               </p>
 
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
                 <Link href={planLink}>
                   <Button
                     size="lg"
-                    className="group text-lg px-10 py-7 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 shadow-xl shadow-slate-900/10 dark:shadow-white/5 transition-all duration-300 hover:-translate-y-1"
+                    className="group text-base px-8 py-4"
                   >
                     {user ? "Go to Dashboard" : "Get Your Custom Plan"}
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                   </Button>
                 </Link>
                 <Link href="#how-it-works">
                   <Button
                     variant="outline"
                     size="lg"
-                    className="text-lg px-10 py-7 rounded-full border-2 border-slate-200 dark:border-slate-800 bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300"
+                    className="text-base px-8 py-4"
                   >
                     See How It Works
                   </Button>
                 </Link>
               </div>
 
-              {/* Enhanced Trust Indicators */}
-              <div className="mt-16 pt-10 flex flex-col items-center">
-                <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-6">
-                  Backed by Data, Powered by Intelligence
-                </p>
-                <div className="grid gap-4 sm:grid-cols-3 w-full max-w-3xl">
-                  <div className="flex items-center justify-center gap-3 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 px-4 py-3 text-slate-600 dark:text-slate-300 shadow-sm">
-                    <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                    <span className="font-medium">100% Private Data</span>
+              {/* Trust Indicators */}
+              <div className="mt-14 flex flex-col items-center">
+                <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-primary" />
+                    <span>100% Private Data</span>
                   </div>
-                  <div className="flex items-center justify-center gap-3 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 px-4 py-3 text-slate-600 dark:text-slate-300 shadow-sm">
-                    <Zap className="w-5 h-5 text-amber-500" />
-                    <span className="font-medium">Instant Generation</span>
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-accent" />
+                    <span>Instant Generation</span>
                   </div>
-                  <div className="flex items-center justify-center gap-3 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 px-4 py-3 text-slate-600 dark:text-slate-300 shadow-sm">
-                    <Users className="w-5 h-5 text-blue-500" />
-                    <span className="font-medium">Expert Vetted</span>
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-muted-foreground" />
+                    <span>Expert Vetted</span>
                   </div>
                 </div>
               </div>
@@ -134,108 +127,102 @@ export default function Home() {
         {/* Features Grid */}
         <section
           id="features"
-          className="scroll-mt-28 py-32 bg-white dark:bg-slate-950 relative overflow-hidden"
+          className="scroll-mt-24 py-24 bg-background relative"
         >
-          {/* Decorative background element */}
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-slate-50 dark:bg-slate-900/20 -skew-x-12 z-0 hidden lg:block pointer-events-none"></div>
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <AnimatedSection className="text-center mb-24">
-              <h2 className="text-sm font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase mb-3">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimatedSection className="text-center mb-16">
+              <p className="text-xs font-semibold text-primary tracking-wider uppercase mb-3">
                 Why WellNourish AI?
+              </p>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
+                Science meets simplicity
               </h2>
-              <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-6">
-                Science meets simplicity.
-              </h3>
-              <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
                 We don&apos;t just give you a generic PDF. We build a dynamic,
                 living plan that adapts to your needs.
               </p>
             </AnimatedSection>
 
-            <div className="grid md:grid-cols-3 gap-10">
+            <div className="grid md:grid-cols-3 gap-6">
               <FeatureCard
-                icon={<Brain className="h-8 w-8 text-white" />}
+                icon={<Brain className="h-5 w-5" />}
                 title="Cognitive Analysis"
-                description="Our AI engine doesn't just look at weight. It interprets your activity patterns, metabolic rate, and health history to formulate the perfect caloric intake."
+                description="Our AI interprets your activity patterns, metabolic rate, and health history to formulate the perfect caloric intake."
                 delay={0.1}
-                color="from-purple-500 to-indigo-600"
+                accent="text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/30"
               />
               <FeatureCard
-                icon={<Utensils className="h-8 w-8 text-white" />}
+                icon={<Utensils className="h-5 w-5" />}
                 title="Culinary Matched"
-                description="Hate broccoli? Love spicy food? Our meal generation respects your palette while strictly adhering to your macro needs. Healthy food actually tastes good here."
-                delay={0.2}
-                color="from-emerald-500 to-teal-600"
+                description="Hate broccoli? Love spicy food? Our meal generation respects your palate while hitting your exact macro needs."
+                delay={0.15}
+                accent="text-primary bg-primary/10"
               />
               <FeatureCard
-                icon={<Activity className="h-8 w-8 text-white" />}
+                icon={<Activity className="h-5 w-5" />}
                 title="Adaptive Fitness"
-                description="Whether you have a full gym or just a yoga mat, we generate routines that maximize hypertrophy and cardiovascular health based on your equipment."
-                delay={0.3}
-                color="from-orange-500 to-red-600"
+                description="Whether you have a full gym or just a yoga mat, we generate routines that maximize results with your equipment."
+                delay={0.2}
+                accent="text-accent bg-accent/10"
               />
             </div>
           </div>
         </section>
 
-        {/* How It Works Section */}
+        {/* How It Works */}
         <section
           id="how-it-works"
-          className="scroll-mt-28 py-32 bg-slate-50 dark:bg-slate-900"
+          className="scroll-mt-24 py-24 bg-secondary/30 dark:bg-secondary/20"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection className="mb-20 text-center">
-              <h2 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimatedSection className="mb-16 text-center">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
                 How it works
               </h2>
-              <p className="text-xl text-slate-600 dark:text-slate-400">
+              <p className="text-lg text-muted-foreground">
                 Three simple steps to your new lifestyle.
               </p>
             </AnimatedSection>
 
-            <div className="relative">
-              {/* Connecting Line */}
-              <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-slate-200 dark:bg-slate-800 -translate-x-1/2 hidden md:block"></div>
-
+            <div className="space-y-0">
               <Step
                 number="01"
                 title="Profile & Goals"
-                description="Tell us about yourself. Age, weight, dietary restrictions, and what you want to achieve. The more we know, the better the plan."
-                side="left"
-                icon={<ClipboardList className="h-7 w-7 text-emerald-600" />}
+                description="Tell us about yourself — age, weight, dietary restrictions, and what you want to achieve."
+                icon={<ClipboardList className="h-5 w-5 text-primary" />}
+                isLast={false}
               />
               <Step
                 number="02"
                 title="AI Generation"
-                description="Our Gemini-powered engine processes your data against thousands of nutritional and fitness datapoints to construct your unique regimen."
-                side="right"
-                icon={<Sparkles className="h-7 w-7 text-emerald-600" />}
+                description="Our Gemini-powered engine processes your data against thousands of nutritional and fitness datapoints."
+                icon={<Sparkles className="h-5 w-5 text-primary" />}
+                isLast={false}
               />
               <Step
                 number="03"
                 title="Track & Thrive"
-                description="Access your dashboard to view your daily meals and workouts. Download your plan, stick to it, and see the results."
-                side="left"
-                icon={<Rocket className="h-7 w-7 text-emerald-600" />}
+                description="Access your dashboard for daily meals and workouts. Download your plan and see the results."
+                icon={<Rocket className="h-5 w-5 text-primary" />}
+                isLast={true}
               />
             </div>
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="py-32 bg-white dark:bg-black">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+        {/* FAQ */}
+        <section className="py-24 bg-background">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimatedSection className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-foreground">
                 Frequently Asked Questions
               </h2>
             </AnimatedSection>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <FAQItem
                 question="Is the generated plan really unique?"
-                answer="Yes. We use a Large Language Model (LLM) that analyzes every specific detail you provide. No two plans are exactly the same because no two people are."
+                answer="Yes. We use a Large Language Model that analyzes every specific detail you provide. No two plans are exactly the same because no two people are."
               />
               <FAQItem
                 question="Can I change my preferences later?"
@@ -249,36 +236,30 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-24 bg-slate-50 dark:bg-slate-900/50">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* CTA */}
+        <section className="py-20 bg-secondary/30 dark:bg-secondary/20">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection>
-              <div className="group relative rounded-[3rem] overflow-hidden bg-emerald-900 shadow-2xl">
-                {/* Background Image/Gradient */}
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1543362906-ac1b782b38f8?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-overlay transition-transform duration-700 group-hover:scale-105"></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/90 to-black/80"></div>
+              <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-[hsl(130,18%,42%)] to-[hsl(130,20%,28%)] p-12 md:p-16 text-center">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
+                  Let&apos;s build your perfect health plan.
+                </h2>
+                <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto">
+                  Join thousands who have already transformed their lives with
+                  intelligent, data-driven planning.
+                </p>
 
-                <div className="relative z-10 px-8 py-20 md:p-24 text-center">
-                  <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
-                    Let&apos;s build your perfect health plan.
-                  </h2>
-                  <p className="text-emerald-100 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light">
-                    Join thousands who have already transformed their lives with
-                    intelligent, data-driven planning.
-                  </p>
-
-                  <Link href={planLink}>
-                    <Button
-                      size="lg"
-                      className="bg-white text-emerald-900 hover:bg-emerald-50 border-none px-12 py-8 text-xl rounded-full font-bold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-                    >
-                      Generate My Plan Now
-                    </Button>
-                  </Link>
-                  <p className="mt-6 text-sm text-emerald-200/60">
-                    No credit card required for initial generation.
-                  </p>
-                </div>
+                <Link href={planLink}>
+                  <Button
+                    size="lg"
+                    className="bg-white text-[hsl(130,18%,30%)] hover:bg-white/90 border-none px-10 py-4 text-base font-semibold shadow-md"
+                  >
+                    Generate My Plan Now
+                  </Button>
+                </Link>
+                <p className="mt-4 text-xs text-white/40">
+                  No credit card required.
+                </p>
               </div>
             </AnimatedSection>
           </div>
@@ -295,37 +276,29 @@ function FeatureCard({
   title,
   description,
   delay,
-  color,
+  accent,
 }: {
   icon: React.ReactNode;
   title: string;
   description: string;
   delay: number;
-  color: string;
+  accent: string;
 }) {
   return (
-    <AnimatedSection delay={delay} className="group">
-      <motion.div
-        whileHover={{ y: -6 }}
-        transition={{ type: "spring", stiffness: 220, damping: 20 }}
-        className="p-10 bg-white dark:bg-slate-900 rounded-[2rem] hover:shadow-2xl transition-all duration-500 border border-slate-100 dark:border-slate-800 relative overflow-hidden"
-      >
+    <AnimatedSection delay={delay}>
+      <div className="group p-7 bg-background rounded-xl border border-border hover:border-primary/20 hover:shadow-md transition-all duration-300 h-full">
         <div
-          className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${color} opacity-5 rounded-bl-[100px] transition-opacity group-hover:opacity-10`}
-        ></div>
-
-        <div
-          className={`mb-8 bg-gradient-to-br ${color} p-4 rounded-2xl w-fit shadow-lg group-hover:scale-110 transition-transform duration-500`}
+          className={`mb-5 p-2.5 rounded-lg w-fit ${accent}`}
         >
           {icon}
         </div>
-        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+        <h3 className="text-lg font-semibold text-foreground mb-2">
           {title}
         </h3>
-        <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed">
           {description}
         </p>
-      </motion.div>
+      </div>
     </AnimatedSection>
   );
 }
@@ -334,51 +307,42 @@ function Step({
   number,
   title,
   description,
-  side,
   icon,
+  isLast,
 }: {
   number: string;
   title: string;
   description: string;
-  side: "left" | "right";
   icon: React.ReactNode;
+  isLast: boolean;
 }) {
   return (
-    <div
-      className={`flex flex-col md:flex-row items-center justify-between mb-16 md:mb-0 relative ${side === "right" ? "md:flex-row-reverse" : ""}`}
-    >
-      <div className="hidden md:block absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-emerald-500 rounded-full border-4 border-white dark:border-slate-900 z-10 shadow-md"></div>
-
-      <div
-        className={`w-full md:w-[45%] ${side === "left" ? "md:text-right md:pr-12" : "md:text-left md:pl-12"} mb-8 md:mb-0`}
-      >
-        <AnimatedSection>
-          <div className="inline-flex items-center gap-3 p-3 rounded-2xl bg-white/80 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700/70 mb-4 md:hidden">
+    <AnimatedSection>
+      <div className="flex gap-5">
+        {/* Timeline */}
+        <div className="flex flex-col items-center">
+          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
             {icon}
-            <span className="font-bold text-emerald-600">{number}</span>
           </div>
-          <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">
+          {!isLast && (
+            <div className="w-px flex-1 bg-border my-2"></div>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className={`pb-10 ${isLast ? "pb-0" : ""}`}>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-semibold text-primary uppercase tracking-wider">Step {number}</span>
+          </div>
+          <h3 className="text-xl font-semibold text-foreground mb-2">
             {title}
           </h3>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-muted-foreground leading-relaxed">
             {description}
           </p>
-        </AnimatedSection>
-      </div>
-
-      <div
-        className={`w-full md:w-[45%] ${side === "left" ? "md:pl-12" : "md:pr-12"}`}
-      >
-        <div className="h-64 rounded-3xl bg-white/70 dark:bg-slate-900/70 border border-slate-200/70 dark:border-slate-800 flex flex-col items-center justify-center gap-4 text-slate-500 dark:text-slate-400 shadow-sm">
-          <div className="h-14 w-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
-            {icon}
-          </div>
-          <span className="text-5xl font-black text-slate-300 dark:text-slate-600">
-            {number}
-          </span>
         </div>
       </div>
-    </div>
+    </AnimatedSection>
   );
 }
 
@@ -386,16 +350,16 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 overflow-hidden">
+    <div className="border border-border rounded-xl bg-background overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center p-6 text-left"
+        className="w-full flex justify-between items-center p-5 text-left hover:bg-muted/50 transition-colors"
       >
-        <span className="font-bold text-lg text-slate-900 dark:text-white">
+        <span className="font-medium text-foreground pr-4">
           {question}
         </span>
         <ChevronDown
-          className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
       <AnimatePresence>
@@ -404,9 +368,10 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="p-6 pt-0 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/50">
+            <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
               {answer}
             </div>
           </motion.div>

@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils"
 import { createClient } from "@/utils/supabase/client"
 
 const STEPS = [
-  { id: "basics", title: "The Basics", description: "Let&apos;s start with some fundamental details." },
+  { id: "basics", title: "The Basics", description: "Let's start with some fundamental details." },
   { id: "lifestyle", title: "Lifestyle", description: "How active are you currently?" },
   { id: "preferences", title: "Food Preferences", description: "What do you love to eat?" },
   { id: "health", title: "Health & Goals", description: "Any conditions we should know about?" },
@@ -55,8 +55,6 @@ export default function OnboardingPage() {
 
       if (data && !error) {
         setFoundProfile(data)
-        // If data exists, prompt the user
-        // We only prompt if we are on step 0 and form is largely empty (checking age as proxy)
         const currentAge = watch("age")
         if (!currentAge) {
              setShowProfilePrompt(true)
@@ -86,7 +84,6 @@ export default function OnboardingPage() {
       setShowProfilePrompt(false)
   }
 
-  // Watch values for conditional rendering or UI feedback
   const watchGender = watch("gender")
   const watchActivity = watch("activityLevel")
   const watchGoals = watch("goals")
@@ -96,7 +93,6 @@ export default function OnboardingPage() {
     
     if (currentStep === 0) fieldsToValidate = ["age", "gender", "height", "weight"]
     if (currentStep === 1) fieldsToValidate = ["activityLevel"]
-    // Step 2 & 3 are largely optional text arrays now, but good to validate just in case schema changes
     if (currentStep === 2) fieldsToValidate = ["cuisinePreferences", "dietaryPreferences"] 
     if (currentStep === 3) fieldsToValidate = ["goals", "medicalConditions", "allergies", "planDuration"]
 
@@ -117,7 +113,6 @@ export default function OnboardingPage() {
   const onSubmit = async (data: OnboardingData) => {
     setIsGenerating(true)
     try {
-      // 1. Update Profile first
       const supabase = createClient()
       if (user) {
           const updates = {
@@ -138,7 +133,6 @@ export default function OnboardingPage() {
           await supabase.from('profiles').upsert(updates)
       }
 
-      // 2. Generate Plan
       const response = await fetch("/api/generate-plan", {
         method: "POST",
         body: JSON.stringify(data),
@@ -148,7 +142,6 @@ export default function OnboardingPage() {
       
       const planData = await response.json()
       
-      // Inject user profile data into planData for history context
       planData.user_profile = {
         goals: data.goals,
         dietary_preferences: data.dietaryPreferences,
@@ -156,7 +149,6 @@ export default function OnboardingPage() {
         calories: planData.nutrition_summary?.daily_calories
       }
       
-      // Save locally (always as backup/latest)
       localStorage.setItem("wellnourish_plan", JSON.stringify(planData))
       
       if (user) {
@@ -177,23 +169,22 @@ export default function OnboardingPage() {
     }
   }
 
-  // Common input class
-  const inputClass = "w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-emerald-500 border-gray-200 dark:border-gray-800 transition-all placeholder:text-gray-400"
+  const inputClass = "w-full p-3 rounded-lg border bg-background focus:ring-2 focus:ring-primary/40 focus:border-primary/40 border-border transition-all placeholder:text-muted-foreground text-sm"
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col justify-center items-center p-4">
+    <div className="min-h-screen bg-secondary/30 dark:bg-background flex flex-col justify-center items-center p-4">
       {/* Progress Bar */}
-      <div className="w-full max-w-2xl mb-8">
+      <div className="w-full max-w-2xl mb-6">
         <div className="flex justify-between mb-2">
           {STEPS.map((step, index) => (
-             <div key={step.id} className={cn("text-xs font-semibold uppercase tracking-wider", index <= currentStep ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400")}>
+             <div key={step.id} className={cn("text-xs font-medium tracking-wide", index <= currentStep ? "text-primary" : "text-muted-foreground")}>
                Step {index + 1}
              </div>
           ))}
         </div>
-        <div className="h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+        <div className="h-1.5 bg-border rounded-full overflow-hidden">
           <motion.div 
-            className="h-full bg-emerald-500"
+            className="h-full bg-primary rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${((currentStep + 1) / STEPS.length) * 100}%` }}
             transition={{ duration: 0.3 }}
@@ -203,45 +194,45 @@ export default function OnboardingPage() {
 
       <motion.div 
         layout
-        className="bg-white dark:bg-black w-full max-w-2xl rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden"
+        className="bg-background w-full max-w-2xl rounded-xl shadow-sm border border-border overflow-hidden"
       >
-        <div className="p-8 md:p-12">
+        <div className="p-8 md:p-10">
            <AnimatePresence mode="wait">
              <motion.div
                key={currentStep}
-               initial={{ opacity: 0, x: 20 }}
+               initial={{ opacity: 0, x: 15 }}
                animate={{ opacity: 1, x: 0 }}
-               exit={{ opacity: 0, x: -20 }}
-               transition={{ duration: 0.3 }}
+               exit={{ opacity: 0, x: -15 }}
+               transition={{ duration: 0.25 }}
              >
-               <div className="mb-8">
-                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{STEPS[currentStep].title}</h2>
-                 <p className="text-gray-500 dark:text-gray-400">{STEPS[currentStep].description}</p>
+               <div className="mb-6">
+                 <h2 className="text-2xl font-bold text-foreground mb-1">{STEPS[currentStep].title}</h2>
+                 <p className="text-muted-foreground text-sm">{STEPS[currentStep].description}</p>
                </div>
 
-               <form id="onboarding-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+               <form id="onboarding-form" onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                   {/* Step 1: Basics */}
                   {currentStep === 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                        <div>
-                          <label className="block text-sm font-medium mb-2">Age</label>
+                          <label className="block text-sm font-medium mb-1.5">Age</label>
                           <input 
                             type="number" 
                             {...register("age", { valueAsNumber: true })} 
-                            className={cn(inputClass, errors.age ? "border-red-500 focus:ring-red-500" : "")} 
+                            className={cn(inputClass, errors.age ? "border-red-500 focus:ring-red-400/40" : "")} 
                             placeholder="25" 
                           />
                           {errors.age && <p className="text-red-500 text-xs mt-1">{errors.age.message}</p>}
                        </div>
                        <div>
-                          <label className="block text-sm font-medium mb-2">Gender</label>
+                          <label className="block text-sm font-medium mb-1.5">Gender</label>
                           <div className="grid grid-cols-3 gap-2">
                             {["male", "female", "other"].map(g => (
                               <button
                                 key={g}
                                 type="button"
                                 onClick={() => setValue("gender", g as "male" | "female" | "other", { shouldValidate: true })}
-                                className={cn("p-3 rounded-xl border text-sm capitalize transition-all", watchGender === g ? "bg-emerald-100 border-emerald-500 text-emerald-800" : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100", errors.gender && "border-red-500")}
+                                className={cn("p-2.5 rounded-lg border text-sm capitalize transition-all", watchGender === g ? "bg-primary/10 border-primary text-primary font-medium" : "bg-background border-border text-muted-foreground hover:bg-muted", errors.gender && "border-red-500")}
                               >
                                 {g}
                               </button>
@@ -250,21 +241,21 @@ export default function OnboardingPage() {
                           {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender.message}</p>}
                        </div>
                        <div>
-                          <label className="block text-sm font-medium mb-2">Height (cm)</label>
+                          <label className="block text-sm font-medium mb-1.5">Height (cm)</label>
                           <input 
                             type="number" 
                             {...register("height", { valueAsNumber: true })} 
-                            className={cn(inputClass, errors.height ? "border-red-500 focus:ring-red-500" : "")} 
+                            className={cn(inputClass, errors.height ? "border-red-500 focus:ring-red-400/40" : "")} 
                             placeholder="175" 
                           />
                           {errors.height && <p className="text-red-500 text-xs mt-1">{errors.height.message}</p>}
                        </div>
                        <div>
-                          <label className="block text-sm font-medium mb-2">Weight (kg)</label>
+                          <label className="block text-sm font-medium mb-1.5">Weight (kg)</label>
                           <input 
                             type="number" 
                             {...register("weight", { valueAsNumber: true })} 
-                            className={cn(inputClass, errors.weight ? "border-red-500 focus:ring-red-500" : "")} 
+                            className={cn(inputClass, errors.weight ? "border-red-500 focus:ring-red-400/40" : "")} 
                             placeholder="70" 
                           />
                           {errors.weight && <p className="text-red-500 text-xs mt-1">{errors.weight.message}</p>}
@@ -274,7 +265,7 @@ export default function OnboardingPage() {
 
                   {/* Step 2: Activity */}
                   {currentStep === 1 && (
-                     <div className="space-y-3">
+                     <div className="space-y-2">
                         {[
                           { val: "sedentary", label: "Sedentary", desc: "Little or no exercise" },
                           { val: "lightly_active", label: "Lightly Active", desc: "Exercise 1-3 times/week" },
@@ -286,24 +277,24 @@ export default function OnboardingPage() {
                              key={opt.val}
                              type="button"
                              onClick={() => setValue("activityLevel", opt.val as "sedentary" | "lightly_active" | "moderately_active" | "very_active" | "extra_active", { shouldValidate: true })}
-                             className={cn("w-full text-left p-4 rounded-xl border transition-all flex justify-between items-center group", watchActivity === opt.val ? "bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500" : "bg-white border-gray-200 hover:border-emerald-300", errors.activityLevel && !watchActivity && "border-red-500")}
+                             className={cn("w-full text-left p-4 rounded-lg border transition-all flex justify-between items-center", watchActivity === opt.val ? "bg-primary/5 border-primary" : "bg-background border-border hover:border-primary/30", errors.activityLevel && !watchActivity && "border-red-500")}
                            >
                              <div>
-                               <div className={cn("font-medium", watchActivity === opt.val ? "text-emerald-800" : "text-gray-900")}>{opt.label}</div>
-                               <div className="text-sm text-gray-500">{opt.desc}</div>
+                               <div className={cn("font-medium text-sm", watchActivity === opt.val ? "text-primary" : "text-foreground")}>{opt.label}</div>
+                               <div className="text-xs text-muted-foreground mt-0.5">{opt.desc}</div>
                              </div>
-                             {watchActivity === opt.val && <Check className="h-5 w-5 text-emerald-600" />}
+                             {watchActivity === opt.val && <Check className="h-4 w-4 text-primary" />}
                            </button>
                         ))}
                         {errors.activityLevel && <p className="text-red-500 text-xs mt-1">{errors.activityLevel.message}</p>}
                      </div>
                   )}
 
-                  {/* Step 3: Preferences (Now Inputs) */}
+                  {/* Step 3: Preferences */}
                   {currentStep === 2 && (
-                    <div className="space-y-6">
+                    <div className="space-y-5">
                        <div>
-                         <label className="block text-sm font-medium mb-3">Cuisines you enjoy (Comma separated)</label>
+                         <label className="block text-sm font-medium mb-1.5">Cuisines you enjoy (Comma separated)</label>
                          <input
                             type="text"
                             {...register("cuisinePreferences", { setValueAs: (v) => typeof v === 'string' ? v.split(',').map((s: string) => s.trim()).filter(Boolean) : v })}
@@ -314,7 +305,7 @@ export default function OnboardingPage() {
                        </div>
                        
                        <div>
-                         <label className="block text-sm font-medium mb-3">Dietary Restrictions (Comma separated)</label>
+                         <label className="block text-sm font-medium mb-1.5">Dietary Restrictions (Comma separated)</label>
                          <input
                             type="text"
                             {...register("dietaryPreferences", { setValueAs: (v) => typeof v === 'string' ? v.split(',').map((s: string) => s.trim()).filter(Boolean) : v })}
@@ -327,14 +318,13 @@ export default function OnboardingPage() {
 
                    {/* Step 4: Health & Goals */}
                   {currentStep === 3 && (
-                     <div className="space-y-6">
+                     <div className="space-y-5">
                         <div>
                           <label className="block text-sm font-medium mb-2">Health Goals</label>
-                          <div className="flex flex-wrap gap-3 mb-3">
+                          <div className="flex flex-wrap gap-2 mb-3">
                              {["Weight Loss", "Muscle Gain", "Maintenance", "Better Energy", "Improve Digestion"].concat(
                                (watchGoals || []).filter(g => !["Weight Loss", "Muscle Gain", "Maintenance", "Better Energy", "Improve Digestion"].includes(g))
                              )
-                             // Unique items just in case
                              .filter((v, i, a) => a.indexOf(v) === i)
                              .map(g => (
                                <button
@@ -345,7 +335,7 @@ export default function OnboardingPage() {
                                     if (current.includes(g)) setValue("goals", current.filter(x => x !== g), { shouldValidate: true })
                                     else setValue("goals", [...current, g], { shouldValidate: true })
                                  }}
-                                 className={cn("p-3 rounded-xl border text-sm text-center transition-all", (watchGoals || []).includes(g) ? "bg-emerald-50 border-emerald-500 text-emerald-800 font-medium" : "bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700", errors.goals && (watchGoals || []).length === 0 && "border-red-500")}
+                                 className={cn("px-3 py-2 rounded-lg border text-sm transition-all", (watchGoals || []).includes(g) ? "bg-primary/10 border-primary text-primary font-medium" : "bg-background border-border text-muted-foreground hover:bg-muted", errors.goals && (watchGoals || []).length === 0 && "border-red-500")}
                                >
                                  {g}
                                </button>
@@ -374,6 +364,7 @@ export default function OnboardingPage() {
                             <Button 
                               type="button" 
                               variant="outline"
+                              size="sm"
                               onClick={() => {
                                 if (!customGoal.trim()) return
                                 const current = watchGoals || []
@@ -382,7 +373,7 @@ export default function OnboardingPage() {
                                 }
                                 setCustomGoal("")
                               }}
-                              className="shrink-0 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                              className="shrink-0"
                             >
                                 Add
                             </Button>
@@ -390,9 +381,8 @@ export default function OnboardingPage() {
                           {errors.goals && <p className="text-red-500 text-xs mt-1">{errors.goals.message}</p>}
                         </div>
 
-                        {/* Medical Conditions */}
                         <div>
-                           <label className="block text-sm font-medium mb-3">Medical Conditions (Comma separated)</label>
+                           <label className="block text-sm font-medium mb-1.5">Medical Conditions (Comma separated)</label>
                            <input
                               type="text"
                               {...register("medicalConditions", { setValueAs: (v) => typeof v === 'string' ? v.split(',').map((s: string) => s.trim()).filter(Boolean) : v })}
@@ -401,9 +391,8 @@ export default function OnboardingPage() {
                             />
                         </div>
 
-                        {/* Allergies */}
                         <div>
-                           <label className="block text-sm font-medium mb-3">Allergies (Comma separated)</label>
+                           <label className="block text-sm font-medium mb-1.5">Allergies (Comma separated)</label>
                            <input
                               type="text"
                               {...register("allergies", { setValueAs: (v) => typeof v === 'string' ? v.split(',').map((s: string) => s.trim()).filter(Boolean) : v })}
@@ -418,21 +407,21 @@ export default function OnboardingPage() {
            </AnimatePresence>
         </div>
 
-        <div className="p-8 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-900/50 flex justify-between items-center">
+        <div className="px-8 py-5 border-t border-border bg-muted/30 flex justify-between items-center">
             <Button variant="ghost" onClick={prevStep} disabled={isGenerating}>
-               <ChevronLeft className="mr-2 h-4 w-4" /> 
-               {currentStep === 0 ? "Back to Dashboard" : "Back"}
+               <ChevronLeft className="mr-1 h-4 w-4" /> 
+               {currentStep === 0 ? "Dashboard" : "Back"}
             </Button>
 
             {currentStep < STEPS.length - 1 ? (
                <Button onClick={nextStep}>
-                  Next Step <ChevronRight className="ml-2 h-4 w-4" />
+                  Next <ChevronRight className="ml-1 h-4 w-4" />
                </Button>
             ) : (
                <Button onClick={() => (document.getElementById("onboarding-form") as HTMLFormElement)?.requestSubmit()} disabled={isGenerating}>
                   {isGenerating ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating Plan...
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...
                     </>
                   ) : (
                     <>
@@ -447,19 +436,19 @@ export default function OnboardingPage() {
       {/* Profile Load Prompt Modal */}
       <AnimatePresence>
         {showProfilePrompt && (
-           <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+           <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
                <motion.div 
-                 initial={{ opacity: 0, scale: 0.95 }}
+                 initial={{ opacity: 0, scale: 0.97 }}
                  animate={{ opacity: 1, scale: 1 }}
-                 exit={{ opacity: 0, scale: 0.95 }}
-                 className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-sm p-6 shadow-2xl border border-gray-100 dark:border-gray-800"
+                 exit={{ opacity: 0, scale: 0.97 }}
+                 className="bg-background rounded-xl w-full max-w-sm p-6 shadow-xl border border-border"
                >
                    <div className="flex flex-col items-center text-center mb-6">
-                       <div className="bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-full mb-4">
-                           <Sparkles className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                       <div className="bg-primary/10 p-3 rounded-full mb-4">
+                           <Sparkles className="h-5 w-5 text-primary" />
                        </div>
-                       <h3 className="text-xl font-bold text-gray-900 dark:text-white">Found Existing Profile</h3>
-                       <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
+                       <h3 className="text-lg font-semibold text-foreground">Found Existing Profile</h3>
+                       <p className="text-muted-foreground text-sm mt-2">
                            We found your saved health profile. Would you like to use this data to pre-fill the form?
                        </p>
                    </div>

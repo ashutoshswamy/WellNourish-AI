@@ -26,7 +26,6 @@ export default function DashboardPage() {
     const { data: { session } } = await supabase.auth.getSession()
     
     if (session?.user) {
-      // Fetch from DB
       const { data } = await supabase
         .from("generated_plans")
         .select("*")
@@ -35,7 +34,6 @@ export default function DashboardPage() {
       if (data && data.length > 0) {
         setPlans(data.map(p => ({ ...p.plan_data, id: p.id, created_at: p.created_at })))
       }
-      // If no data, plans remains [], showing empty state correctly
     } else {
       checkLocal()
     }
@@ -70,22 +68,18 @@ export default function DashboardPage() {
             throw error
         }
         
-        // If count is 0, it might mean RLS prevented it or it doesn't exist
         if (count === 0) {
             console.warn("No rows deleted. Check RLS policies or if plan exists.")
             alert("Could not delete plan. You might not have permission.")
             return
         }
 
-        // Update local state
         const newPlans = plans.filter(p => p.id !== planId)
         setPlans(newPlans)
         
-        // Remove from localStorage if it matches
         const storedPlanStr = localStorage.getItem("wellnourish_plan")
         if (storedPlanStr) {
              console.log("Found stored plan, checking for removal...")
-             // aggressive removal for now to ensure sync
              if (plans.length === 1 || plans[0].id === planId) {
                   console.log("Removing wellnourish_plan from localStorage")
                   localStorage.removeItem("wellnourish_plan")
@@ -107,22 +101,22 @@ export default function DashboardPage() {
   const [showShoppingList, setShowShoppingList] = useState(false)
 
   if (loading) return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-black">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
       </div>
   )
 
   if (plans.length === 0) {
       return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
             <Navbar />
-            <div className="text-center max-w-md">
-                <div className="bg-emerald-100 dark:bg-emerald-900/30 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                    <Calendar className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+            <div className="text-center max-w-sm">
+                <div className="bg-primary/10 p-4 rounded-full w-14 h-14 flex items-center justify-center mx-auto mb-5">
+                    <Calendar className="h-7 w-7 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Plans Found</h2>
-                <p className="text-gray-500 dark:text-gray-400 mb-8">
-                    You don&apos;t have any active diet or workout plans. improved your health by creating one today!
+                <h2 className="text-xl font-bold text-foreground mb-2">No Plans Found</h2>
+                <p className="text-muted-foreground text-sm mb-6">
+                    You don&apos;t have any active diet or workout plans. Start by creating one.
                 </p>
                 <Button onClick={() => router.push("/onboarding")} className="w-full">
                     <Sparkles className="mr-2 h-4 w-4" /> Generate New Plan
@@ -137,42 +131,42 @@ export default function DashboardPage() {
   const currentDayPlan = days.find((d: any) => d.day === selectedDay) || days[0] // eslint-disable-line @typescript-eslint/no-explicit-any
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-secondary/20 dark:bg-background">
       <Navbar />
       
-      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         <AnimatedSection>
-           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-3">
               <div>
-                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Your Wellness Plan</h1>
-                 <p className="text-gray-500 dark:text-gray-400">Personalized for your goals</p>
+                 <h1 className="text-2xl font-bold text-foreground">Your Wellness Plan</h1>
+                 <p className="text-muted-foreground text-sm">Personalized for your goals</p>
               </div>
               <div className="flex gap-2 items-center">
-                 <Button variant="outline" onClick={() => setShowShoppingList(true)}>
+                 <Button variant="outline" size="sm" onClick={() => setShowShoppingList(true)}>
                     <ShoppingBasket className="mr-2 h-4 w-4" /> Shopping List
                  </Button>
-                 <Button onClick={() => router.push("/onboarding")}>New Plan</Button>
+                 <Button size="sm" onClick={() => router.push("/onboarding")}>New Plan</Button>
               </div>
            </div>
 
            {/* Stats Overview */}
-           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <StatCard label="Daily Calories" value={plan.nutrition_summary.daily_calories} icon={<Flame className="text-orange-500" />} />
-              <StatCard label="Protein" value={plan.nutrition_summary.macros.protein} icon={<Utensils className="text-emerald-500" />} />
+           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+              <StatCard label="Daily Calories" value={plan.nutrition_summary.daily_calories} icon={<Flame className="text-amber-500" />} />
+              <StatCard label="Protein" value={plan.nutrition_summary.macros.protein} icon={<Utensils className="text-primary" />} />
               <StatCard label="Hydration" value={plan.nutrition_summary.hydration_goal} icon={<Droplets className="text-blue-500" />} />
               <StatCard label="Duration" value={`${days.length} Days`} icon={<Calendar className="text-purple-500" />} />
            </div>
 
-           <div className="grid lg:grid-cols-4 gap-8">
-              {/* Sidebar - Plan History & Days */}
-              <div className="lg:col-span-1 space-y-8">
+           <div className="grid lg:grid-cols-4 gap-6">
+              {/* Sidebar */}
+              <div className="lg:col-span-1 space-y-6">
                   {/* Plan Switcher */}
-                  <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-                      <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-emerald-500" />
+                  <div className="bg-background rounded-xl p-5 border border-border">
+                      <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2 text-sm">
+                        <Calendar className="h-4 w-4 text-primary" />
                         Plan History
                       </h3>
-                      <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                      <div className="space-y-1.5 max-h-[280px] overflow-y-auto">
                         {plans.map((p, i) => (
                               <div
                                 key={p.id || i}
@@ -180,41 +174,41 @@ export default function DashboardPage() {
                                   setCurrentPlanIndex(i)
                                   setSelectedDay(1)
                                 }}
-                                className={`w-full text-left p-3 rounded-xl border transition-all flex justify-between items-start cursor-pointer group ${
+                                className={`w-full text-left p-3 rounded-lg border transition-all flex justify-between items-start cursor-pointer text-sm ${
                                   currentPlanIndex === i
-                                    ? "bg-emerald-50 border-emerald-500 text-emerald-900 dark:bg-emerald-900/30 dark:border-emerald-500/50 dark:text-emerald-100" 
-                                    : "bg-gray-50 dark:bg-slate-800 border-transparent hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-600 dark:text-gray-400"
+                                    ? "bg-primary/5 border-primary text-foreground" 
+                                    : "bg-muted/30 border-transparent hover:bg-muted text-muted-foreground"
                                 }`}
                               >
                                  <div className="flex-1 min-w-0 mr-2">
-                                    <div className="font-semibold text-sm truncate">
+                                    <div className="font-medium truncate">
                                       {p.user_profile?.goals?.[0] || `${p.plan_duration || "7"} Day Plan`}
                                     </div>
                                     
-                                    <div className="flex flex-wrap gap-1 mt-1.5">
+                                    <div className="flex flex-wrap gap-1 mt-1">
                                         {p.user_profile?.calories && (
-                                            <span className="text-[10px] px-1.5 py-0.5 bg-white/50 dark:bg-black/20 rounded border border-gray-200 dark:border-gray-700">
+                                            <span className="text-[10px] px-1.5 py-0.5 bg-muted rounded border border-border">
                                                 {p.user_profile.calories} kcal
                                             </span>
                                         )}
                                         {p.user_profile?.dietary_preferences?.[0] && (
-                                            <span className="text-[10px] px-1.5 py-0.5 bg-white/50 dark:bg-black/20 rounded border border-gray-200 dark:border-gray-700">
+                                            <span className="text-[10px] px-1.5 py-0.5 bg-muted rounded border border-border">
                                                 {p.user_profile.dietary_preferences[0]}
                                             </span>
                                         )}
                                     </div>
 
-                                    <div className="text-xs opacity-60 mt-1.5 flex items-center gap-1">
+                                    <div className="text-xs opacity-60 mt-1 flex items-center gap-1">
                                       <Calendar className="h-3 w-3" />
                                       {new Date(p.created_at || Date.now()).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                                      <span className="mx-1">•</span>
+                                      <span className="mx-0.5">·</span>
                                       {p.plan_duration || "7"} Days
                                     </div>
                                  </div>
                                  {p.id && (
                                      <button 
                                         onClick={(e) => deletePlan(p.id, e)}
-                                        className="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 transition-colors shrink-0"
+                                        className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-muted-foreground hover:text-red-500 transition-colors shrink-0"
                                      >
                                         <Trash2 className="h-3.5 w-3.5" />
                                      </button>
@@ -222,7 +216,7 @@ export default function DashboardPage() {
                               </div>
                         ))}
                       </div>
-                      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                      <div className="mt-3 pt-3 border-t border-border">
                         <Button 
                           variant="outline" 
                           size="sm" 
@@ -235,21 +229,21 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Day Picker */}
-                  <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-                     <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Day View</h3>
-                     <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
+                  <div className="bg-background rounded-xl p-5 border border-border">
+                     <h3 className="font-semibold text-foreground mb-3 text-sm">Day View</h3>
+                     <div className="space-y-1 max-h-[350px] overflow-y-auto pr-1">
                         {days.map((day: any) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
                            <button
                              key={day.day}
                              onClick={() => setSelectedDay(day.day)}
-                             className={`w-full text-left p-3 rounded-xl border transition-all flex justify-between items-center text-sm ${
+                             className={`w-full text-left p-2.5 rounded-lg border transition-all flex justify-between items-center text-sm ${
                                selectedDay === day.day 
-                                 ? "bg-emerald-600 text-white shadow-md border-emerald-600" 
-                                 : "bg-gray-50 dark:bg-slate-800 border-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+                                 ? "bg-primary text-primary-foreground border-primary" 
+                                 : "bg-muted/30 border-transparent text-muted-foreground hover:bg-muted"
                              }`}
                            >
-                              <span className="font-semibold">Day {day.day}</span>
-                              <span className="text-xs opacity-80 truncate ml-2">
+                              <span className="font-medium">Day {day.day}</span>
+                              <span className="text-xs opacity-70 truncate ml-2">
                                   {typeof day.workout === 'string' ? "Workout" : day.workout.type}
                               </span>
                            </button>
@@ -258,15 +252,15 @@ export default function DashboardPage() {
                   </div>
               </div>
 
-              {/* Main Content - Meals & Workout */}
-              <div className="lg:col-span-3 space-y-6">
+              {/* Main Content */}
+              <div className="lg:col-span-3 space-y-5">
                  {/* Meals */}
-                 <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                       <Utensils className="h-6 w-6 text-emerald-600" />
+                 <div className="bg-background rounded-xl p-5 border border-border">
+                    <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-foreground">
+                       <Utensils className="h-5 w-5 text-primary" />
                        Nutrition
                     </h2>
-                    <div className="space-y-4">
+                    <div className="space-y-2.5">
                        <MealCard type="Breakfast" meal={currentDayPlan.meals.breakfast} />
                        <MealCard type="Lunch" meal={currentDayPlan.meals.lunch} />
                        <MealCard type="Dinner" meal={currentDayPlan.meals.dinner} />
@@ -275,56 +269,54 @@ export default function DashboardPage() {
                  </div>
 
                  {/* Workout */}
-                 <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                       <Dumbbell className="h-6 w-6 text-purple-600" />
+                 <div className="bg-background rounded-xl p-5 border border-border">
+                    <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-foreground">
+                       <Dumbbell className="h-5 w-5 text-purple-500" />
                        {currentDayPlan.workout.type}
                     </h2>
                     
-                    <div className="flex flex-wrap gap-4 mb-6">
-                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-slate-800 px-3 py-1.5 rounded-full">
-                            <Clock className="h-4 w-4" />
+                    <div className="flex flex-wrap gap-2 mb-5">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted px-2.5 py-1.5 rounded-lg">
+                            <Clock className="h-3.5 w-3.5" />
                             {currentDayPlan.workout.duration}
                         </div>
                         {currentDayPlan.workout.warmup && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-slate-800 px-3 py-1.5 rounded-full">
-                                <span className="font-semibold text-purple-600">Warmup:</span>
+                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted px-2.5 py-1.5 rounded-lg">
+                                <span className="font-medium text-purple-600 dark:text-purple-400">Warmup:</span>
                                 {currentDayPlan.workout.warmup}
                             </div>
                         )}
                          {currentDayPlan.workout.cooldown && (
-                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-slate-800 px-3 py-1.5 rounded-full">
-                                <span className="font-semibold text-purple-600">Cooldown:</span>
+                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted px-2.5 py-1.5 rounded-lg">
+                                <span className="font-medium text-purple-600 dark:text-purple-400">Cooldown:</span>
                                 {currentDayPlan.workout.cooldown}
                             </div>
                         )}
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                        {Array.isArray(currentDayPlan.workout.exercises) && typeof currentDayPlan.workout.exercises[0] === 'string' ? (
-                           // Legacy format support
-                           <ul className="space-y-3">
+                           <ul className="space-y-2">
                                {currentDayPlan.workout.exercises.map((ex: string, i: number) => (
-                                  <li key={i} className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
-                                     <div className="h-2 w-2 rounded-full bg-purple-500" />
+                                  <li key={i} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg text-sm">
+                                     <div className="h-1.5 w-1.5 rounded-full bg-purple-500" />
                                      <span>{ex}</span>
                                   </li>
                                ))}
                            </ul>
                        ) : (
-                           // Detailed format
-                            <div className="grid gap-4">
+                            <div className="grid gap-3">
                                 {currentDayPlan.workout.exercises.map((ex: any, i: number) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
-                                    <div key={i} className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-gray-100 dark:border-gray-800">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h4 className="font-bold text-gray-900 dark:text-white text-lg">{ex.name}</h4>
-                                            <div className="flex gap-2 text-xs font-mono">
-                                                <span className="bg-white dark:bg-slate-900 px-2 py-1 rounded border border-gray-200 dark:border-gray-700">{ex.sets} Sets</span>
-                                                <span className="bg-white dark:bg-slate-900 px-2 py-1 rounded border border-gray-200 dark:border-gray-700">{ex.reps} Reps</span>
+                                    <div key={i} className="bg-muted/40 rounded-lg p-4 border border-border">
+                                        <div className="flex justify-between items-start mb-1.5">
+                                            <h4 className="font-semibold text-foreground">{ex.name}</h4>
+                                            <div className="flex gap-1.5 text-xs">
+                                                <span className="bg-background px-2 py-0.5 rounded border border-border font-mono">{ex.sets} Sets</span>
+                                                <span className="bg-background px-2 py-0.5 rounded border border-border font-mono">{ex.reps} Reps</span>
                                             </div>
                                         </div>
                                         {ex.notes && (
-                                            <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                                            <p className="text-xs text-muted-foreground italic">
                                                 Tip: {ex.notes}
                                             </p>
                                         )}
@@ -340,37 +332,37 @@ export default function DashboardPage() {
         
         {/* Shopping List Modal */}
         {showShoppingList && (
-            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowShoppingList(false)}>
+            <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowShoppingList(false)}>
                 <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.97 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-2xl flex flex-col"
+                    className="bg-background rounded-xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-xl border border-border flex flex-col"
                     onClick={e => e.stopPropagation()}
                 >
-                    <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
-                        <h2 className="text-2xl font-bold flex items-center gap-2">
-                            <ShoppingBasket className="h-6 w-6 text-emerald-600" />
+                    <div className="p-5 border-b border-border flex justify-between items-center">
+                        <h2 className="text-lg font-bold flex items-center gap-2 text-foreground">
+                            <ShoppingBasket className="h-5 w-5 text-primary" />
                             Shopping List
                         </h2>
-                        <button onClick={() => setShowShoppingList(false)} className="text-gray-400 hover:text-gray-600 p-2">✕</button>
+                        <button onClick={() => setShowShoppingList(false)} className="text-muted-foreground hover:text-foreground p-1.5 rounded-lg hover:bg-muted transition-colors">✕</button>
                     </div>
-                    <div className="p-6 overflow-y-auto">
+                    <div className="p-5 overflow-y-auto">
                         {!plan.shopping_list || plan.shopping_list.length === 0 ? (
-                            <div className="text-center py-12 text-gray-500">
+                            <div className="text-center py-10 text-muted-foreground text-sm">
                                 <p>No shopping list available for this plan.</p>
                             </div>
                         ) : (
-                            <div className="space-y-6">
+                            <div className="space-y-5">
                                 {plan.shopping_list.map((category: any, idx: number) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
                                     <div key={idx}>
-                                        <h3 className="font-semibold text-emerald-700 dark:text-emerald-400 mb-3 uppercase tracking-wider text-xs">
+                                        <h3 className="font-medium text-primary mb-2 uppercase tracking-wider text-xs">
                                             {category.category}
                                         </h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
                                             {category.items.map((item: string, i: number) => (
-                                                <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-100 dark:border-gray-800">
-                                                    <div className="h-2 w-2 rounded-full bg-emerald-400" />
-                                                    <span className="text-sm text-gray-700 dark:text-gray-300">{item}</span>
+                                                <div key={i} className="flex items-center gap-2.5 p-2.5 bg-muted/40 rounded-lg border border-border">
+                                                    <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                                                    <span className="text-sm text-foreground">{item}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -379,8 +371,8 @@ export default function DashboardPage() {
                             </div>
                         )}
                     </div>
-                    <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-slate-800/50">
-                        <Button className="w-full" onClick={() => setShowShoppingList(false)}>Close</Button>
+                    <div className="p-4 border-t border-border bg-muted/30">
+                        <Button className="w-full" size="sm" onClick={() => setShowShoppingList(false)}>Close</Button>
                     </div>
                 </motion.div>
             </div>
@@ -392,13 +384,13 @@ export default function DashboardPage() {
 
 function StatCard({ label, value, icon }: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
    return (
-      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center gap-4">
-         <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+      <div className="bg-background p-3.5 rounded-xl border border-border flex items-center gap-3">
+         <div className="p-2 bg-muted rounded-lg">
             {icon}
          </div>
          <div>
-            <div className="text-sm text-gray-500">{label}</div>
-            <div className="text-lg font-bold">{value}</div>
+            <div className="text-xs text-muted-foreground">{label}</div>
+            <div className="text-sm font-bold text-foreground">{value}</div>
          </div>
       </div>
    )
@@ -408,34 +400,34 @@ function MealCard({ type, meal }: any) { // eslint-disable-line @typescript-esli
    const [isOpen, setIsOpen] = useState(false)
 
    return (
-      <div className="border border-gray-100 dark:border-gray-800 rounded-xl overflow-hidden bg-white dark:bg-slate-900">
+      <div className="border border-border rounded-lg overflow-hidden bg-background">
          <button 
            onClick={() => setIsOpen(!isOpen)}
-           className="w-full flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+           className="w-full flex items-center justify-between p-3.5 hover:bg-muted/50 transition-colors"
          >
-            <div className="flex items-center gap-4">
-               <span className="text-xs font-bold uppercase tracking-wider text-gray-500 w-20 text-left">{type}</span>
-               <span className="font-semibold text-gray-900 dark:text-white">{meal.name}</span>
+            <div className="flex items-center gap-3">
+               <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground w-16 text-left">{type}</span>
+               <span className="font-medium text-foreground text-sm">{meal.name}</span>
             </div>
-            <div className="flex items-center gap-4">
-               <span className="text-sm text-gray-500">{meal.calories} kcal</span>
-               {isOpen ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+            <div className="flex items-center gap-3">
+               <span className="text-xs text-muted-foreground">{meal.calories} kcal</span>
+               {isOpen ? <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />}
             </div>
          </button>
          
          {isOpen && (
-            <div className="p-4 border-t border-gray-100 dark:border-gray-800">
-               <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 italic">
+            <div className="p-4 border-t border-border">
+               <p className="text-sm text-muted-foreground mb-3 italic">
                    {meal.description}
                </p>
                
                {meal.ingredients && (
-                   <div className="mb-4">
-                       <h4 className="text-xs font-bold uppercase text-gray-400 mb-2">Ingredients</h4>
-                       <ul className="grid grid-cols-2 gap-2">
+                   <div className="mb-3">
+                       <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-2 tracking-wider">Ingredients</h4>
+                       <ul className="grid grid-cols-2 gap-1.5">
                            {meal.ingredients.map((ing: string, i: number) => (
-                               <li key={i} className="text-sm text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                                   <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                               <li key={i} className="text-sm text-foreground flex items-center gap-2">
+                                   <div className="h-1 w-1 rounded-full bg-primary" />
                                    {ing}
                                </li>
                            ))}
@@ -445,8 +437,8 @@ function MealCard({ type, meal }: any) { // eslint-disable-line @typescript-esli
 
                {meal.preparation && (
                    <div>
-                       <h4 className="text-xs font-bold uppercase text-gray-400 mb-2">Preparation</h4>
-                       <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                       <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-2 tracking-wider">Preparation</h4>
+                       <p className="text-sm text-foreground leading-relaxed">
                            {meal.preparation}
                        </p>
                    </div>

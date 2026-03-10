@@ -33,15 +33,12 @@ export default function ProfilePage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
   const [customGoal, setCustomGoal] = useState("")
   
-  // New state for setting password
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isSettingPassword, setIsSettingPassword] = useState(false)
   
   const router = useRouter()
   const supabase = createClient()
-
-
 
   const fetchProfile = useCallback(async () => {
     try {
@@ -143,8 +140,6 @@ export default function ProfilePage() {
         console.error(`Supabase linkIdentity error:`, error)
         throw error
       }
-      // If successful, this should redirect to provider OAuth page
-      // So we only reach here if there's an issue
       if (!data?.url) {
         throw new Error("No redirect URL returned from Supabase")
       }
@@ -194,7 +189,6 @@ export default function ProfilePage() {
       const identity = user?.identities?.find(i => i.provider === provider)
       if (!identity) throw new Error("Identity not found")
       
-      // Check if we have another identity (OAuth or email) to log in with
       const otherIdentities = user?.identities?.filter(i => i.provider !== provider) || []
       if (otherIdentities.length === 0) {
         throw new Error("Cannot disconnect your only login method. Please connect another account (Google or GitHub) first.")
@@ -204,7 +198,6 @@ export default function ProfilePage() {
       if (error) throw error
       
       setMessage({ type: 'success', text: `${provider.charAt(0).toUpperCase() + provider.slice(1)} account disconnected.` })
-      // Refresh the user data
       await refreshUser()
     } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       console.error(`Error unlinking ${provider}:`, error)
@@ -215,80 +208,69 @@ export default function ProfilePage() {
     }
   }
 
-  // Get user info
   const userName = user?.user_metadata?.full_name || user?.user_metadata?.name || "User"
   const userEmail = user?.email || ""
   const userAvatar = user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null
   
-  // Get connected providers from actual identities
   const identities = user?.identities || []
-  // const identityCount = identities.length
   const connectedProviders = identities.map(i => i.provider)
   const isGoogleConnected = connectedProviders.includes("google")
   const isGithubConnected = connectedProviders.includes("github")
   
-  // Check if user signed up with email/password (has email identity)
   const hasEmailIdentity = connectedProviders.includes("email")
-  
-  // Count OAuth providers (exclude email)
   const oauthProviderCount = connectedProviders.filter(p => p !== "email").length
   
-  // User can disconnect an OAuth account if:
-  // 1. They have an email identity (signed up with email/password) - can disconnect any OAuth
-  // 2. They have more than 1 OAuth provider - can disconnect one but must keep at least one
-  // NOTE: Setting a password via updateUser does NOT create a new identity, so it doesn't help
   const canDisconnectOAuth = hasEmailIdentity || (oauthProviderCount > 1)
   const canDisconnectGoogle = isGoogleConnected && canDisconnectOAuth
   const canDisconnectGithub = isGithubConnected && canDisconnectOAuth
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-black">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
       </div>
     )
   }
 
-  // Common input class for high visibility
-  const inputClass = "w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-400"
+  const inputClass = "w-full rounded-lg border border-border bg-background text-foreground px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all placeholder:text-muted-foreground text-sm"
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-black font-sans">
+    <div className="min-h-screen bg-secondary/20 dark:bg-background font-sans">
       <Navbar />
-      <div className="pt-24 pb-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="pt-20 pb-12 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection>
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-sm border border-slate-100 dark:border-slate-800">
-            <div className="flex items-center mb-8 border-b border-slate-100 dark:border-slate-800 pb-6">
-              <div className="bg-primary/10 p-3 rounded-full mr-4">
-                <User className="h-6 w-6 text-primary" />
+          <div className="bg-background rounded-xl p-6 md:p-8 border border-border">
+            <div className="flex items-center mb-6 border-b border-border pb-5">
+              <div className="bg-primary/10 p-2.5 rounded-lg mr-4">
+                <User className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Your Profile</h1>
-                <p className="text-slate-500 dark:text-slate-400">Manage your personal health data for better AI recommendations.</p>
+                <h1 className="text-xl font-bold text-foreground">Your Profile</h1>
+                <p className="text-muted-foreground text-sm">Manage your personal health data for better AI recommendations.</p>
               </div>
             </div>
 
             {/* User Info Section */}
-            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl p-6 mb-8 border border-emerald-100 dark:border-emerald-800/50">
+            <div className="bg-primary/5 rounded-xl p-5 mb-6 border border-primary/10">
               <div className="flex items-center gap-4">
                 {userAvatar ? (
                   <Image 
                     src={userAvatar} 
                     alt={userName}
-                    width={64}
-                    height={64}
-                    className="w-16 h-16 rounded-full border-2 border-white dark:border-slate-700 shadow-md"
+                    width={52}
+                    height={52}
+                    className="w-13 h-13 rounded-full border-2 border-background shadow-sm"
                     unoptimized={userAvatar.startsWith('http')}
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-800 flex items-center justify-center border-2 border-white dark:border-slate-700 shadow-md">
-                    <User className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+                  <div className="w-13 h-13 rounded-full bg-primary/10 flex items-center justify-center border-2 border-background shadow-sm">
+                    <User className="h-6 w-6 text-primary" />
                   </div>
                 )}
                 <div className="flex-1">
-                  <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{userName}</h2>
-                  <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 mt-1">
-                    <Mail className="h-4 w-4" />
+                  <h2 className="text-lg font-semibold text-foreground">{userName}</h2>
+                  <div className="flex items-center gap-1.5 text-muted-foreground mt-0.5">
+                    <Mail className="h-3.5 w-3.5" />
                     <span className="text-sm">{userEmail}</span>
                   </div>
                 </div>
@@ -296,32 +278,30 @@ export default function ProfilePage() {
             </div>
 
             {/* Connected Accounts Section */}
-            <div className="bg-white dark:bg-slate-800/50 rounded-2xl p-6 mb-8 border border-slate-200 dark:border-slate-700">
-              <div className="flex items-center gap-3 mb-4">
-                <Link2 className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Connected Accounts</h3>
+            <div className="bg-background rounded-xl p-5 mb-6 border border-border">
+              <div className="flex items-center gap-2.5 mb-3">
+                <Link2 className="h-4 w-4 text-muted-foreground" />
+                <h3 className="text-sm font-semibold text-foreground">Connected Accounts</h3>
               </div>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+              <p className="text-xs text-muted-foreground mb-4">
                 Connect your accounts for easier sign-in and enhanced security.
               </p>
               
-              {/* Show warning if user has only one OAuth connection and can't disconnect */}
               {!hasEmailIdentity && oauthProviderCount === 1 && !isSettingPassword && (
-                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-3 mb-4">
-                  <p className="text-sm text-amber-700 dark:text-amber-400">
+                <div className="bg-amber-50 dark:bg-amber-900/15 border border-amber-200 dark:border-amber-800/40 rounded-lg p-3 mb-4">
+                  <p className="text-xs text-amber-700 dark:text-amber-400">
                     <strong>Note:</strong> To disconnect your account, please connect another account or <button onClick={() => setIsSettingPassword(true)} className="underline font-semibold hover:text-amber-800 dark:hover:text-amber-300">set a password</button> first.
                   </p>
                 </div>
               )}
               
-              {/* Set Password Section */}
               {!hasEmailIdentity && (
-                <div className="mb-4">
+                <div className="mb-3">
                   {isSettingPassword ? (
-                    <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
-                      <h4 className="font-medium text-slate-900 dark:text-white mb-2">Set Password</h4>
-                      <p className="text-xs text-slate-500 mb-3">Set a password to log in with email and enable disconnecting social accounts.</p>
-                      <form onSubmit={handleSetPassword} className="space-y-3">
+                    <div className="bg-muted/50 p-4 rounded-lg border border-border">
+                      <h4 className="font-medium text-foreground text-sm mb-1">Set Password</h4>
+                      <p className="text-xs text-muted-foreground mb-3">Set a password to log in with email and enable disconnecting social accounts.</p>
+                      <form onSubmit={handleSetPassword} className="space-y-2.5">
                         <input
                           type="password"
                           placeholder="New Password (min 6 chars)"
@@ -345,12 +325,12 @@ export default function ProfilePage() {
                       </form>
                     </div>
                   ) : (
-                     <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                         <div className="flex items-center gap-3">
-                            <Mail className="h-5 w-5 text-slate-400" />
+                     <div className="p-3.5 rounded-lg bg-muted/30 border border-border flex items-center justify-between">
+                         <div className="flex items-center gap-2.5">
+                            <Mail className="h-4 w-4 text-muted-foreground" />
                              <div>
-                                <p className="font-medium text-slate-900 dark:text-white">Email & Password</p>
-                                <p className="text-xs text-slate-500 dark:text-slate-400">Not set</p>
+                                <p className="font-medium text-foreground text-sm">Email & Password</p>
+                                <p className="text-xs text-muted-foreground">Not set</p>
                             </div>
                          </div>
                          <Button variant="outline" size="sm" onClick={() => setIsSettingPassword(true)}>
@@ -361,14 +341,14 @@ export default function ProfilePage() {
                 </div>
               )}
               
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {/* Google */}
-                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
-                  <div className="flex items-center gap-3">
-                    <Icons.google className="h-5 w-5" />
+                <div className="flex items-center justify-between p-3.5 rounded-lg bg-muted/30 border border-border">
+                  <div className="flex items-center gap-2.5">
+                    <Icons.google className="h-4 w-4" />
                     <div>
-                      <p className="font-medium text-slate-900 dark:text-white">Google</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                      <p className="font-medium text-foreground text-sm">Google</p>
+                      <p className="text-xs text-muted-foreground">
                         {isGoogleConnected ? "Connected" : "Not connected"}
                       </p>
                     </div>
@@ -378,19 +358,19 @@ export default function ProfilePage() {
                     size="sm"
                     onClick={() => isGoogleConnected ? unlinkAccount("google") : linkAccount("google")}
                     disabled={linking === "google" || (isGoogleConnected && !canDisconnectGoogle)}
-                    className={isGoogleConnected ? "border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed" : ""}
+                    className={isGoogleConnected ? "border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/15 disabled:opacity-50 disabled:cursor-not-allowed" : ""}
                     title={isGoogleConnected && !canDisconnectGoogle ? "Connect another account to disconnect this one" : undefined}
                   >
                     {linking === "google" ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : isGoogleConnected ? (
                       <>
-                        <Unlink className="h-4 w-4 mr-1" />
+                        <Unlink className="h-3.5 w-3.5 mr-1" />
                         Disconnect
                       </>
                     ) : (
                       <>
-                        <Link2 className="h-4 w-4 mr-1" />
+                        <Link2 className="h-3.5 w-3.5 mr-1" />
                         Connect
                       </>
                     )}
@@ -398,12 +378,12 @@ export default function ProfilePage() {
                 </div>
 
                 {/* GitHub */}
-                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
-                  <div className="flex items-center gap-3">
-                    <Icons.github className="h-5 w-5" />
+                <div className="flex items-center justify-between p-3.5 rounded-lg bg-muted/30 border border-border">
+                  <div className="flex items-center gap-2.5">
+                    <Icons.github className="h-4 w-4" />
                     <div>
-                      <p className="font-medium text-slate-900 dark:text-white">GitHub</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                      <p className="font-medium text-foreground text-sm">GitHub</p>
+                      <p className="text-xs text-muted-foreground">
                         {isGithubConnected ? "Connected" : "Not connected"}
                       </p>
                     </div>
@@ -413,19 +393,19 @@ export default function ProfilePage() {
                     size="sm"
                     onClick={() => isGithubConnected ? unlinkAccount("github") : linkAccount("github")}
                     disabled={linking === "github" || (isGithubConnected && !canDisconnectGithub)}
-                    className={isGithubConnected ? "border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed" : ""}
+                    className={isGithubConnected ? "border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/15 disabled:opacity-50 disabled:cursor-not-allowed" : ""}
                     title={isGithubConnected && !canDisconnectGithub ? "Connect another account to disconnect this one" : undefined}
                   >
                     {linking === "github" ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : isGithubConnected ? (
                       <>
-                        <Unlink className="h-4 w-4 mr-1" />
+                        <Unlink className="h-3.5 w-3.5 mr-1" />
                         Disconnect
                       </>
                     ) : (
                       <>
-                        <Link2 className="h-4 w-4 mr-1" />
+                        <Link2 className="h-3.5 w-3.5 mr-1" />
                         Connect
                       </>
                     )}
@@ -434,22 +414,22 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* Health Data Section Title */}
-            <div className="flex items-center gap-3 mb-4">
-              <User className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Health Data</h3>
+            {/* Health Data Section */}
+            <div className="flex items-center gap-2.5 mb-4">
+              <User className="h-4 w-4 text-muted-foreground" />
+              <h3 className="text-sm font-semibold text-foreground">Health Data</h3>
             </div>
 
             {message && (
-              <div className={`p-4 rounded-xl mb-6 ${message.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
+              <div className={`p-3.5 rounded-lg mb-5 text-sm ${message.type === 'success' ? 'bg-primary/5 text-primary border border-primary/10' : 'bg-red-50 dark:bg-red-900/15 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/30'}`}>
                 {message.text}
               </div>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Age</label>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-foreground">Age</label>
                   <input
                     type="number"
                     {...register("age", { valueAsNumber: true })}
@@ -458,8 +438,8 @@ export default function ProfilePage() {
                   />
                   {errors.age && <p className="text-red-500 text-xs">{errors.age.message}</p>}
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Gender</label>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-foreground">Gender</label>
                   <select
                     {...register("gender")}
                     className={inputClass}
@@ -471,8 +451,8 @@ export default function ProfilePage() {
                   </select>
                   {errors.gender && <p className="text-red-500 text-xs">{errors.gender.message}</p>}
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Height (cm)</label>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-foreground">Height (cm)</label>
                   <input
                     type="number"
                     {...register("height", { valueAsNumber: true })}
@@ -481,8 +461,8 @@ export default function ProfilePage() {
                   />
                   {errors.height && <p className="text-red-500 text-xs">{errors.height.message}</p>}
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Weight (kg)</label>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-foreground">Weight (kg)</label>
                   <input
                     type="number"
                     {...register("weight", { valueAsNumber: true })}
@@ -493,8 +473,8 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Activity Level</label>
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-foreground">Activity Level</label>
                 <select
                   {...register("activityLevel")}
                   className={inputClass}
@@ -509,13 +489,12 @@ export default function ProfilePage() {
                  {errors.activityLevel && <p className="text-red-500 text-xs">{errors.activityLevel.message}</p>}
               </div>
 
-               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Health Goals</label>
-                <div className="flex flex-wrap gap-2 mb-3">
+               <div className="space-y-1.5">
+                <label className="text-sm font-medium text-foreground">Health Goals</label>
+                <div className="flex flex-wrap gap-1.5 mb-2.5">
                    {(control._formValues.goals || [])
                     .filter((g: string) => !["Weight Loss", "Muscle Gain", "Maintenance", "Better Energy", "Improve Digestion"].includes(g))
                     .concat(["Weight Loss", "Muscle Gain", "Maintenance", "Better Energy", "Improve Digestion"])
-                    // Remove duplicates just in case, though logic should prevent them
                     .reduce((acc: string[], curr: string) => acc.includes(curr) ? acc : [...acc, curr], [])
                     .map((g: string) => (
                      <button
@@ -526,7 +505,7 @@ export default function ProfilePage() {
                           if (current.includes(g)) setValue("goals", current.filter(x => x !== g), { shouldValidate: true })
                           else setValue("goals", [...current, g], { shouldValidate: true })
                        }}
-                       className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${(control._formValues.goals || []).includes(g) ? "bg-emerald-100 border-emerald-500 text-emerald-800 font-medium" : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300"}`}
+                       className={`px-2.5 py-1 rounded-lg text-xs border transition-colors ${(control._formValues.goals || []).includes(g) ? "bg-primary/10 border-primary text-primary font-medium" : "bg-muted/30 border-border text-muted-foreground"}`}
                      >
                        {g}
                      </button>
@@ -547,7 +526,7 @@ export default function ProfilePage() {
                       className={inputClass}
                       placeholder="Add custom goal (e.g. Marathon Training)"
                     />
-                    <Button type="button" onClick={addCustomGoal} variant="outline" className="shrink-0 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white">
+                    <Button type="button" onClick={addCustomGoal} variant="outline" size="sm" className="shrink-0">
                         Add
                     </Button>
                 </div>
@@ -555,19 +534,19 @@ export default function ProfilePage() {
                 {errors.goals && <p className="text-red-500 text-xs">{errors.goals.message}</p>}
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Dietary Preferences</label>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-foreground">Dietary Preferences</label>
                    <input
                     type="text"
                     {...register("dietaryPreferences", { setValueAs: (v) => typeof v === 'string' ? v.split(',').map((s: string) => s.trim()).filter(Boolean) : v })}
                     className={inputClass}
                     placeholder="e.g. Vegetarian, Keto (comma separated)"
                   />
-                  <p className="text-xs text-slate-500 dark:text-slate-500">Separate with commas</p>
+                  <p className="text-xs text-muted-foreground">Separate with commas</p>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Cuisine Preferences</label>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-foreground">Cuisine Preferences</label>
                    <input
                     type="text"
                     {...register("cuisinePreferences", { setValueAs: (v) => typeof v === 'string' ? v.split(',').map((s: string) => s.trim()).filter(Boolean) : v })}
@@ -578,9 +557,9 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Medical Conditions</label>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-foreground">Medical Conditions</label>
                   <input
                     type="text"
                     {...register("medicalConditions", { setValueAs: (v) => typeof v === 'string' ? v.split(',').map((s: string) => s.trim()).filter(Boolean) : v })}
@@ -588,8 +567,8 @@ export default function ProfilePage() {
                     placeholder="e.g. Diabetes (comma separated)"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Allergies</label>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-foreground">Allergies</label>
                   <input
                     type="text"
                      {...register("allergies", { setValueAs: (v) => typeof v === 'string' ? v.split(',').map((s: string) => s.trim()).filter(Boolean) : v })}
@@ -599,8 +578,8 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="pt-6">
-                <Button type="submit" size="lg" disabled={saving} className="w-full sm:w-auto">
+              <div className="pt-4">
+                <Button type="submit" disabled={saving} className="w-full sm:w-auto">
                   {saving ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />

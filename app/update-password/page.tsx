@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { updatePassword } from "./actions";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, Leaf } from "lucide-react";
 
 export default function UpdatePasswordPage() {
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,6 @@ export default function UpdatePasswordPage() {
     
     const formData = new FormData(event.currentTarget);
     
-    // Client-side validation
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
 
@@ -40,11 +39,14 @@ export default function UpdatePasswordPage() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left Side - Visual */}
-      <div className="hidden lg:flex relative bg-emerald-900 justify-center items-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2053&auto=format&fit=crop')] bg-cover bg-center opacity-50 mix-blend-overlay"></div>
-        <div className="relative z-10 p-12 text-white max-w-lg">
-          <h1 className="text-5xl font-bold mb-6">Secure your<br />account.</h1>
-          <p className="text-emerald-100 text-xl">
+      <div className="hidden lg:flex relative bg-[hsl(130,20%,28%)] justify-center items-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(130,18%,42%)]/20 to-transparent"></div>
+        <div className="relative z-10 p-12 text-white max-w-md">
+          <div className="mb-6 p-3 rounded-xl bg-white/10 w-fit">
+            <Leaf className="h-8 w-8 text-white/80" />
+          </div>
+          <h1 className="text-4xl font-bold mb-4 leading-tight">Secure your<br />account.</h1>
+          <p className="text-white/60 text-lg leading-relaxed">
             Choose a strong password to protect your health data.
           </p>
         </div>
@@ -52,38 +54,37 @@ export default function UpdatePasswordPage() {
 
       {/* Right Side - Form */}
       <div className="flex flex-col justify-center items-center p-8 bg-background">
-        <div className="w-full max-w-md space-y-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <div className="w-full max-w-sm space-y-8">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-foreground">
               Reset Password
             </h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mt-1 text-sm text-muted-foreground">
               Enter your new password below
             </p>
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white dark:bg-slate-950 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800"
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Password</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">New Password</label>
                 <div className="relative">
                   <input
                     name="password"
                     type={showPassword ? "text" : "password"}
                     required
                     minLength={6}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all pr-10"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:outline-none transition-all pr-10 text-sm"
                     placeholder="••••••••"
                   />
                    <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 outline-none"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground outline-none"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -92,20 +93,20 @@ export default function UpdatePasswordPage() {
               </div>
 
                <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm Password</label>
+                <label className="block text-sm font-medium text-foreground mb-1.5">Confirm Password</label>
                 <div className="relative">
                   <input
                     name="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     required
                     minLength={6}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all pr-10"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:outline-none transition-all pr-10 text-sm"
                     placeholder="••••••••"
                   />
                    <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 outline-none"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground outline-none"
                     tabIndex={-1}
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -114,13 +115,13 @@ export default function UpdatePasswordPage() {
               </div>
 
               {error && (
-                <div className="text-red-500 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+                <div className="text-red-600 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/15 p-3 rounded-lg border border-red-100 dark:border-red-900/30">
                   {error}
                 </div>
               )}
 
-              <Button type="submit" className="w-full py-6 text-lg rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/20" disabled={loading}>
-                {loading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+              <Button type="submit" className="w-full" size="lg" disabled={loading}>
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Update Password
               </Button>
             </form>

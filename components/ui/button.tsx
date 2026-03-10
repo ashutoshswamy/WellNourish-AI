@@ -14,25 +14,26 @@ interface ButtonProps extends HTMLMotionProps<"button"> {
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", loading, children, ...props }, ref) => {
     const variants = {
-      primary: "bg-primary text-primary-foreground hover:bg-emerald-700 shadow-lg shadow-primary/20 hover:shadow-primary/30",
+      primary: "bg-primary text-primary-foreground hover:brightness-110 shadow-sm",
       secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-      outline: "bg-transparent border-2 border-slate-200 text-slate-900 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800",
-      ghost: "bg-transparent text-slate-900 hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-800",
+      outline: "bg-transparent border border-border text-foreground hover:bg-muted",
+      ghost: "bg-transparent text-foreground hover:bg-muted",
     }
 
     const sizes = {
       sm: "px-3 py-1.5 text-sm",
-      md: "px-6 py-3 text-base",
-      lg: "px-8 py-4 text-lg",
+      md: "px-5 py-2.5 text-sm",
+      lg: "px-7 py-3.5 text-base",
     }
 
     return (
       <motion.button
         ref={ref}
-        whileTap={{ scale: 0.95 }}
-        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+        whileHover={{ scale: 1.005 }}
+        transition={{ duration: 0.15 }}
         className={cn(
-          "inline-flex items-center justify-center rounded-xl font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
+          "inline-flex items-center justify-center rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
           variants[variant],
           sizes[size],
           className

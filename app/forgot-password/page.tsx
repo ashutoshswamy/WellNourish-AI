@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { resetPassword } from "./actions";
-import { Loader2, Mail, ArrowLeft } from "lucide-react";
+import { Loader2, Mail, ArrowLeft, Leaf } from "lucide-react";
 import Link from "next/link";
 
 export default function ForgotPasswordPage() {
@@ -33,11 +33,14 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left Side - Visual */}
-      <div className="hidden lg:flex relative bg-emerald-900 justify-center items-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2053&auto=format&fit=crop')] bg-cover bg-center opacity-50 mix-blend-overlay"></div>
-        <div className="relative z-10 p-12 text-white max-w-lg">
-          <h1 className="text-5xl font-bold mb-6">Recover your<br />account.</h1>
-          <p className="text-emerald-100 text-xl">
+      <div className="hidden lg:flex relative bg-[hsl(130,20%,28%)] justify-center items-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(130,18%,42%)]/20 to-transparent"></div>
+        <div className="relative z-10 p-12 text-white max-w-md">
+          <div className="mb-6 p-3 rounded-xl bg-white/10 w-fit">
+            <Leaf className="h-8 w-8 text-white/80" />
+          </div>
+          <h1 className="text-4xl font-bold mb-4 leading-tight">Recover your<br />account.</h1>
+          <p className="text-white/60 text-lg leading-relaxed">
             Get back to your personalized health journey in no time.
           </p>
         </div>
@@ -45,64 +48,63 @@ export default function ForgotPasswordPage() {
 
       {/* Right Side - Form */}
       <div className="flex flex-col justify-center items-center p-8 bg-background">
-        <div className="w-full max-w-md space-y-8">
-            <Link href="/login" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
+        <div className="w-full max-w-sm space-y-6">
+            <Link href="/login" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Login
             </Link>
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-foreground">
               Forgot Password?
             </h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mt-1 text-sm text-muted-foreground">
               Enter email associated with your account
             </p>
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white dark:bg-slate-950 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800"
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             {success ? (
               <div className="text-center space-y-4">
-                <div className="bg-emerald-100 dark:bg-emerald-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
-                    <Mail className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+                <div className="bg-primary/10 w-14 h-14 rounded-full flex items-center justify-center mx-auto">
+                    <Mail className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Check your email</h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <h3 className="text-xl font-semibold text-foreground">Check your email</h3>
+                <p className="text-muted-foreground text-sm">
                    {success}
                 </p>
                 <div className="pt-4">
                      <Link href="/login">
-                        <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                        <Button className="w-full">
                             Back to Login
                         </Button>
                      </Link>
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
                   <input
                     name="email"
                     type="email"
                     required
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/40 focus:border-primary/40 focus:outline-none transition-all text-sm"
                     placeholder="hello@example.com"
                   />
                 </div>
 
                 {error && (
-                  <div className="text-red-500 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+                  <div className="text-red-600 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/15 p-3 rounded-lg border border-red-100 dark:border-red-900/30">
                     {error}
                   </div>
                 )}
 
-                <Button type="submit" className="w-full py-6 text-lg rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/20" disabled={loading}>
-                  {loading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+                <Button type="submit" className="w-full" size="lg" disabled={loading}>
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Send Reset Link
                 </Button>
               </form>
