@@ -32,7 +32,12 @@ export function GenerateButton() {
         router.refresh();
       } else {
         const text = await res.text();
-        setError(text || "Failed to generate plan. Please try again.");
+        try {
+          const errorData = JSON.parse(text);
+          setError(errorData.message || errorData.error || "Failed to generate plan.");
+        } catch {
+          setError(text || "Failed to generate plan. Please try again.");
+        }
       }
     } catch {
       setError("Something went wrong. Please try again.");

@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { createAuthenticatedClient } from "@/lib/supabase-server";
 import Link from "next/link";
@@ -46,6 +46,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Dashboard() {
   const { userId, getToken } = await auth();
+  const user = await currentUser();
   if (!userId) redirect("/");
 
   const supabaseAccessToken = await getToken({ template: "supabase" });
@@ -100,7 +101,7 @@ export default async function Dashboard() {
               Dashboard
             </p>
             <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-              Hello, WellNourished User
+              Hello, {user?.firstName || "WellNourished User"}
             </h1>
           </div>
           <Link

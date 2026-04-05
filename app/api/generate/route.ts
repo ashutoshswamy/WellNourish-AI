@@ -86,8 +86,10 @@ export async function POST() {
 
     // 4. AI Generation setup
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-3.1-flash-lite-preview", 
-      generationConfig: { responseMimeType: "application/json" } 
+      model: "gemini-1.5-flash", 
+      generationConfig: { 
+        responseMimeType: "application/json",
+      } 
     });
 
     const sanitizedDiet = sanitizeForPrompt(metrics.diet_preferences);
@@ -95,7 +97,7 @@ export async function POST() {
     const sanitizedCuisines = sanitizeForPrompt(metrics.cuisine_preferences);
 
     const prompt = `
-      You are an expert nutritionist and world-class chef.
+      You are an expert nutritionist and world-class researcher.
       Create a hyper-personalized 7-day meal plan for the following user:
       - Age: ${metrics.age}
       - Gender: ${metrics.gender}
@@ -108,7 +110,9 @@ export async function POST() {
       - Cuisines: ${sanitizedCuisines}
       - Calorie Target: ${metrics.daily_calorie_target} kcal/day
 
-      Return a JSON object with a single top-level key "days" which is an array of 7 objects.
+      IMPORTANT: You MUST return ONLY a JSON object. Do not include any text before, after, or around the JSON. Do not wrap the JSON in markdown code blocks.
+      
+      The JSON object must have exactly one top-level key "days" which is an array of 7 objects.
       Each day object must have:
       - "day_number": integer (1-7)
       - "total_calories": integer
@@ -120,21 +124,37 @@ export async function POST() {
         - "protein": string (e.g. "30g")
         - "carbs": string (e.g. "45g")
         - "fat": string (e.g. "15g")
-        - "ingredients": array of strings (detailed ingredients)
-        - "instructions": string (step-by-step cooking guide)
+        - "ingredients": array of strings
+        - "instructions": string
 
-      Ensure the meals are diverse, delicious, and perfectly hit the target macros.
+      Ensure the plan is realistic, nutritionally balanced, and strictly follows the caloric target.
     `;
 
     const result = await model.generateContent(prompt);
+    
+    // Helper to extract JSON from a string that might contain markdown blocks
+    function extractJSON(text: string) {
+      const start = text.indexOf('{');
+      const end = text.lastIndexOf('}');
+      if (start !== -1 && end !== -1 && end > start) {
+        return text.substring(start, end + 1);
+      }
+      return text;
+    }
+
     const responseText = result.response.text();
     let planData;
 
     try {
-      planData = JSON.parse(responseText);
-    } catch {
-      console.error("Failed to parse Gemini JSON:", responseText);
-      return new NextResponse("AI returned invalid JSON format", { status: 500 });
+      const cleanedJson = extractJSON(responseText);
+      planData = JSON.parse(cleanedJson);
+    } catch (e) {
+      console.error("Failed to parse Gemini JSON. Raw response:", responseText);
+      return new NextResponse(JSON.stringify({ 
+        error: "AI_FORMAT_ERROR", 
+        message: "The AI returned an invalid response format. Please try again.",
+        raw: responseText.slice(0, 500)
+      }), { status: 500 });
     }
 
     // 5. Persistence into Normalized Tables
@@ -160,7 +180,7 @@ export async function POST() {
       const { data: insertedDay, error: dayError } = await supabase
         .from("plan_days")
         .insert({
-          plan_id: newPlan.id,
+          meal_plan_id: newPlan.id,
           user_id: userId,
           day_number: day.day_number,
           total_calories: day.total_calories
@@ -174,7 +194,7 @@ export async function POST() {
       }
 
       const mealsToInsert = day.meals.map((m: GeneratedMeal) => ({
-        day_id: insertedDay.id,
+        plan_day_id: insertedDay.id,
         user_id: userId,
         meal_type: m.type,
         name: m.name,

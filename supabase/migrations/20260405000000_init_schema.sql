@@ -129,3 +129,4 @@ CREATE POLICY "Users can view their own weight logs" ON public.weight_logs
 
 CREATE POLICY "Users can manage their own weight logs" ON public.weight_logs
     FOR ALL USING (auth.jwt() ->> 'sub' = user_id);
+
