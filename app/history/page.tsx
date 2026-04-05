@@ -1,20 +1,22 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
+import { createAuthenticatedClient } from "@/lib/supabase-server";
 import Link from "next/link";
 import { ArrowLeft, History as HistoryIcon, Calendar, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 
 export const dynamic = "force-dynamic";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default async function HistoryPage() {
-  const { userId } = await auth();
+  const { userId, getToken } = await auth();
   if (!userId) redirect("/");
+
+  const supabaseAccessToken = await getToken({ template: "supabase" });
+  if (!supabaseAccessToken) {
+    return redirect("/");
+  }
+
+  const supabase = await createAuthenticatedClient(supabaseAccessToken);
 
   const { data: plans, error } = await supabase
     .from("meal_plans")

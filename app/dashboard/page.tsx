@@ -192,6 +192,10 @@ export default async function Dashboard() {
                         icon={<Wheat className="w-3 h-3 text-amber-400/70" />}
                         value={sumMacro(todayMeals, "carbs")}
                       />
+                      <MiniStat
+                         icon={<Activity className="w-3 h-3 text-emerald-400/70" />}
+                         value={sumMacro(todayMeals, "fat")}
+                       />
                     </div>
                   </div>
 

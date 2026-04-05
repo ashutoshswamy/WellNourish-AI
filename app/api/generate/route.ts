@@ -188,8 +188,8 @@ export async function POST() {
         .single();
 
       if (dayError || !insertedDay) {
-        console.warn(`Error inserting day ${day.day_number}:`, dayError);
-        continue;
+        console.error(`Error inserting day ${day.day_number}:`, dayError);
+        return new NextResponse(`Failed to save meal plan data (Day ${day.day_number})`, { status: 500 });
       }
 
       const mealsToInsert = day.meals.map((m: GeneratedMeal) => ({
@@ -206,7 +206,10 @@ export async function POST() {
       }));
 
       const { error: mealsError } = await supabase.from("meals").insert(mealsToInsert);
-      if (mealsError) console.warn("Meals insert error:", mealsError);
+      if (mealsError) {
+        console.error("Meals insert error:", mealsError);
+        return new NextResponse("Failed to save meals for the plan", { status: 500 });
+      }
 
       day.meals.forEach((m: GeneratedMeal) => {
         m.ingredients.forEach((ing: string) => {
