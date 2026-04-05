@@ -74,7 +74,7 @@ export async function POST() {
       .single();
 
     if (metricsError || !metrics) {
-      return new NextResponse("User metrics not found. Please complete onboarding.", { status: 404 });
+      return new NextResponse("User metrics not found. Please setup your profile.", { status: 404 });
     }
 
     // 3. Archive previous active plans for this user

@@ -95,7 +95,7 @@ export default async function HistoryPage() {
               <h3 className="text-xl font-medium text-slate-600 mb-2">No plans found</h3>
               <p className="text-slate-700 max-w-sm mx-auto">Generate your first plan to start your nutritional history.</p>
               <Link 
-                href="/onboarding" 
+                href="/profile" 
                 className="inline-flex items-center gap-2 mt-8 px-8 py-4 rounded-2xl bg-indigo-500 text-black font-bold text-sm tracking-tight hover:bg-indigo-400 transition-all shadow-lg hover:shadow-indigo-500/25"
               >
                 Create New Plan

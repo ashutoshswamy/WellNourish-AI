@@ -12,7 +12,7 @@ CREATE TYPE plan_status_type AS ENUM ('active', 'archived');
 -- 2. Create Profiles Table (Synced from Clerk Or Manual Update)
 CREATE TABLE profiles (
     user_id TEXT PRIMARY KEY, -- Clerk User ID
-    email TEXT UNIQUE,
+    email TEXT,
     full_name TEXT,
     avatar_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,

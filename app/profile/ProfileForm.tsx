@@ -30,7 +30,7 @@ import {
   Save,
 } from "lucide-react";
 import Link from "next/link";
-import { SelectionCard } from "@/components/onboarding/SelectionCard";
+import { SelectionCard } from "@/components/global/SelectionCard";
 
 const profileSchema = z.object({
   age: z.number().int().min(1, "Must be at least 1").max(120),
@@ -106,7 +106,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
     };
 
     try {
-      const res = await fetch("/api/onboarding", {
+      const res = await fetch("/api/user-metrics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),
@@ -119,7 +119,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
 
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
-      router.refresh();
+      router.push("/dashboard");
     } catch (err) {
       console.error(err);
       alert("Something went wrong saving your profile.");

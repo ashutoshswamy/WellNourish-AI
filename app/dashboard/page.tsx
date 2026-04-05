@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
+import { createAuthenticatedClient } from "@/lib/supabase-server";
 import Link from "next/link";
 import {
   Activity,
@@ -44,14 +44,14 @@ import { GenerateButton } from "@/components/dashboard/GenerateButton";
 
 export const dynamic = "force-dynamic";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default async function Dashboard() {
-  const { userId } = await auth();
+  const { userId, getToken } = await auth();
   if (!userId) redirect("/");
+
+  const supabaseAccessToken = await getToken({ template: "supabase" });
+  if (!supabaseAccessToken) redirect("/");
+
+  const supabase = await createAuthenticatedClient(supabaseAccessToken);
 
   const { data: metrics } = await supabase
     .from("user_metrics")
@@ -60,7 +60,7 @@ export default async function Dashboard() {
     .single();
 
   if (!metrics) {
-    redirect("/onboarding");
+    redirect("/profile");
   }
 
   // Fetch the current active plan
@@ -104,7 +104,7 @@ export default async function Dashboard() {
             </h1>
           </div>
           <Link
-            href="/onboarding"
+            href="/profile"
             className="self-start sm:self-auto text-sm font-medium text-slate-400 hover:text-emerald-400 transition-colors"
           >
             Update Physical Profile
@@ -281,7 +281,7 @@ export default async function Dashboard() {
               <h2 className="text-base font-semibold text-white mb-4">Actions</h2>
               <div className="space-y-2">
                 <QuickAction
-                  href="/onboarding"
+                  href="/profile"
                   icon={<Activity className="w-4 h-4" />}
                   label="Rebuild Avatar"
                 />

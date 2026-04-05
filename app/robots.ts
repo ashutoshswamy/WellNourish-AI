@@ -9,10 +9,11 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/dashboard',
           '/profile',
-          '/onboarding',
           '/api/',
           '/sign-in',
           '/sign-up',
+          '/plan',
+          '/history',
         ],
       },
     ],
