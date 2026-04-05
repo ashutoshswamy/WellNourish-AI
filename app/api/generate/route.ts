@@ -181,7 +181,6 @@ export async function POST() {
         .from("plan_days")
         .insert({
           meal_plan_id: newPlan.id,
-          user_id: userId,
           day_number: day.day_number,
           total_calories: day.total_calories
         })
@@ -195,7 +194,6 @@ export async function POST() {
 
       const mealsToInsert = day.meals.map((m: GeneratedMeal) => ({
         plan_day_id: insertedDay.id,
-        user_id: userId,
         meal_type: m.type,
         name: m.name,
         description: m.description,
