@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     const { userId, getToken } = await auth();
 
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({ error: "Unauthorized", message: "You must be signed in to complete onboarding." }, { status: 401 });
     }
 
     const rawData = await req.json();
@@ -139,7 +139,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, daily_calorie_target });
   } catch (err) {
     console.error("Onboarding pipeline failed:", err);
-    return new NextResponse("Internal server error", { status: 500 });
+    return NextResponse.json({ error: "Internal server error", message: "Something went wrong. Please try again." }, { status: 500 });
   }
 }
 

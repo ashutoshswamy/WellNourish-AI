@@ -31,7 +31,7 @@ function sanitizeForPrompt(text: string | null | undefined): string {
   return text.replace(/[\x00-\x1F\x7F-\x9F]/g, "").trim().slice(0, 500);
 }
 
-export async function POST(_req: Request) {
+export async function POST() {
   try {
     const { userId, getToken } = await auth();
     if (!userId) return new NextResponse("Unauthorized", { status: 401 });

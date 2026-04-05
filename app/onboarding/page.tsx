@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowRight,
   ArrowLeft,
   Loader2,
   User,
@@ -17,7 +16,6 @@ import {
   Zap,
   TrendingDown,
   Flame,
-  Info,
   Scale,
   Ruler,
   Calendar,
@@ -108,7 +106,7 @@ export default function OnboardingPage() {
         const errorMessage = errorData.message || errorData.error || "Failed to save metrics";
         setSubmitError(errorMessage);
       }
-    } catch (e) {
+    } catch {
       setSubmitError("A connection error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -276,13 +274,13 @@ export default function OnboardingPage() {
                         <input
                           type="number"
                           step={field.id.includes('weight') ? "0.1" : "1"}
-                          {...form.register(field.id as any, { valueAsNumber: true })}
+                          {...form.register(field.id as keyof OnboardingFormValues, { valueAsNumber: true })}
                           className="w-full bg-transparent text-2xl font-bold text-white focus:outline-none transition-all placeholder:text-white/[0.06] input-glow rounded-lg"
                           placeholder={field.placeholder}
                         />
                         <span className="text-xs font-medium text-white/15 uppercase shrink-0">{field.suffix}</span>
                       </div>
-                      {(form.formState.errors as any)[field.id] && (
+                      {form.formState.errors[field.id as keyof OnboardingFormValues] && (
                         <div className="absolute -bottom-1.5 left-5 px-2 py-0.5 rounded-md bg-red-500/90 text-[0.6rem] font-semibold text-white tracking-tight">
                           Required
                         </div>
@@ -327,7 +325,7 @@ export default function OnboardingPage() {
                       title={item.label}
                       description={item.desc}
                       selected={currentActivityLevel === item.val}
-                      onClick={() => setValue("activity_level", item.val as any)}
+                      onClick={() => setValue("activity_level", item.val as OnboardingFormValues["activity_level"])}
                     />
                   ))}
                 </div>
@@ -379,7 +377,7 @@ export default function OnboardingPage() {
                       <button
                         key={wp.val}
                         type="button"
-                        onClick={() => setValue("weekly_goal", wp.val as any)}
+                        onClick={() => setValue("weekly_goal", wp.val as OnboardingFormValues["weekly_goal"])}
                         className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all duration-300 border ${
                           currentWeeklyGoal === wp.val
                             ? "bg-lime-400/15 border-lime-400/30 text-lime-400 shadow-[0_0_12px_rgba(163,230,53,0.08)]"
@@ -544,7 +542,7 @@ export default function OnboardingPage() {
 
 /* ── Shared Sub-components ── */
 
-function SectionLabel({ icon: Icon, label }: { icon: any; label: string }) {
+function SectionLabel({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
   return (
     <div className="flex items-center gap-2.5">
       <div className="p-1.5 rounded-lg bg-lime-400/[0.06]">

@@ -180,7 +180,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
                   <input
                     type="number"
                     step={field.id.includes('weight') ? "0.1" : "1"}
-                    {...form.register(field.id as any, { valueAsNumber: true })}
+                    {...form.register(field.id as keyof ProfileFormValues, { valueAsNumber: true })}
                     className="w-full bg-transparent text-xl font-bold text-white focus:outline-none placeholder:text-white/[0.05] input-glow rounded"
                   />
                   <span className="text-[0.6rem] font-medium text-white/15 uppercase shrink-0">{field.suffix}</span>
@@ -208,7 +208,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
                   icon={item.icon}
                   title={item.label}
                   selected={currentActivityLevel === item.val}
-                  onClick={() => form.setValue("activity_level", item.val as any)}
+                  onClick={() => form.setValue("activity_level", item.val as ProfileFormValues["activity_level"])}
                   compact
                 />
               ))}
@@ -238,7 +238,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
                 <button
                   key={wp.val}
                   type="button"
-                  onClick={() => form.setValue("weekly_goal", wp.val as any)}
+                  onClick={() => form.setValue("weekly_goal", wp.val as ProfileFormValues["weekly_goal"])}
                   className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all border ${
                     currentWeeklyGoal === wp.val
                       ? "bg-lime-400/12 border-lime-400/30 text-lime-400"
@@ -369,7 +369,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
 function ProfileSection({
   title, icon: Icon, children
 }: {
-  title: string; icon: any; children: React.ReactNode
+  title: string; icon: React.ElementType; children: React.ReactNode
 }) {
   return (
     <section className="p-6 md:p-8 rounded-2xl bg-white/[0.015] border border-white/[0.05] relative overflow-hidden">
