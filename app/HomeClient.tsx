@@ -130,18 +130,18 @@ export function HomeClient() {
           {/* Stats ribbon */}
           <motion.div
             variants={itemVariants}
-            className="flex items-center justify-center gap-8 md:gap-14 mt-16 pt-10 border-t border-white/[0.04]"
+            className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-14 mt-16 pt-10 border-t border-white/[0.04]"
           >
             {[
               { value: "7-Day", label: "Meal Plans" },
               { value: "100%", label: "Personalized" },
               { value: "AI", label: "Precision" },
             ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+              <div key={stat.label} className="text-center min-w-[80px]">
+                <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
                   {stat.value}
                 </p>
-                <p className="text-xs text-[#5a6a5a] mt-1 font-medium uppercase tracking-wider">
+                <p className="text-[10px] text-[#5a6a5a] mt-1 font-medium uppercase tracking-wider">
                   {stat.label}
                 </p>
               </div>
@@ -252,7 +252,7 @@ export function HomeClient() {
 
                 {/* Content */}
                 <div
-                  className={`pl-16 md:pl-0 md:w-1/2 ${
+                  className={`pl-12 sm:pl-16 md:pl-0 md:w-1/2 ${
                     idx % 2 === 0 ? "md:pr-16" : "md:pl-16"
                   }`}
                 >
@@ -406,14 +406,14 @@ export function HomeClient() {
                 Daily Total
               </span>
             </div>
-            <div className="flex items-center gap-6 md:gap-10">
+            <div className="grid grid-cols-2 sm:flex items-center gap-6 md:gap-10 w-full sm:w-auto">
               {[
                 { label: "Calories", value: "2,150 kcal", color: "text-orange-400/80" },
                 { label: "Protein", value: "142g", color: "text-blue-400/80" },
                 { label: "Carbs", value: "245g", color: "text-amber-400/80" },
                 { label: "Fat", value: "78g", color: "text-lime-400/80" },
               ].map((macro) => (
-                <div key={macro.label} className="text-center">
+                <div key={macro.label} className="text-center sm:text-left">
                   <p className={`text-sm font-semibold ${macro.color}`}>
                     {macro.value}
                   </p>

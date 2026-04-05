@@ -239,7 +239,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
                   key={wp.val}
                   type="button"
                   onClick={() => form.setValue("weekly_goal", wp.val as ProfileFormValues["weekly_goal"])}
-                  className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all border ${
+                  className={`px-4 py-3 rounded-xl text-xs font-semibold transition-all border ${
                     currentWeeklyGoal === wp.val
                       ? "bg-lime-400/12 border-lime-400/30 text-lime-400"
                       : "bg-white/[0.02] border-white/[0.05] text-white/25 hover:border-white/[0.1] hover:text-white/45"
@@ -323,10 +323,10 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0 }}
-                className="flex items-center gap-2 text-lime-400"
+                className="flex items-center gap-2 text-lime-400 flex-1 min-w-0"
               >
-                <CheckCircle2 className="w-4 h-4" />
-                <span className="text-sm font-medium">Saved successfully</span>
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+                <span className="text-sm font-medium truncate">Saved successfully</span>
               </motion.div>
             ) : (
               <motion.span
@@ -372,7 +372,7 @@ function ProfileSection({
   title: string; icon: React.ElementType; children: React.ReactNode
 }) {
   return (
-    <section className="p-6 md:p-8 rounded-2xl bg-white/[0.015] border border-white/[0.05] relative overflow-hidden">
+    <section className="p-5 sm:p-6 md:p-8 rounded-2xl bg-white/[0.015] border border-white/[0.05] relative overflow-hidden">
       {/* Subtle corner glow */}
       <div className="absolute -top-16 -right-16 w-32 h-32 bg-lime-400/[0.03] rounded-full blur-3xl pointer-events-none" />
 

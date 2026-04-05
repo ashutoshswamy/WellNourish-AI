@@ -71,7 +71,7 @@ export function PlanClient({ plan }: { plan: Plan }) {
           <ChevronLeft className="w-5 h-5" />
         </button>
 
-        <div className="flex gap-2 overflow-x-auto scrollbar-none flex-1 justify-center px-4">
+        <div className="flex gap-2 overflow-x-auto scrollbar-none flex-1 justify-start sm:justify-center px-2 sm:px-4">
           {days.map((day, idx) => (
             <button
               key={day.id}
@@ -79,7 +79,7 @@ export function PlanClient({ plan }: { plan: Plan }) {
                 setActiveDayIdx(idx);
                 setExpandedMealId(null);
               }}
-              className={`px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
+              className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
                 activeDayIdx === idx
                   ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/20"
                   : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10"
@@ -100,11 +100,11 @@ export function PlanClient({ plan }: { plan: Plan }) {
       </div>
 
       {/* Daily summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <SummaryStat icon={<Flame className="text-orange-400" />} label="Target" value={`${currentDay.total_calories} kcal`} />
-        <SummaryStat icon={<Droplets className="text-blue-400" />} label="Protein" value={sumMacro(currentDay.meals, "protein")} />
-        <SummaryStat icon={<Wheat className="text-amber-400" />} label="Carbs" value={sumMacro(currentDay.meals, "carbs")} />
-        <SummaryStat icon={<CircleDot className="text-emerald-400" />} label="Fat" value={sumMacro(currentDay.meals, "fat")} />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <SummaryStat icon={<Flame className="w-4 h-4 text-orange-400" />} label="Target" value={`${currentDay.total_calories} kcal`} />
+        <SummaryStat icon={<Droplets className="w-4 h-4 text-blue-400" />} label="Protein" value={sumMacro(currentDay.meals, "protein")} />
+        <SummaryStat icon={<Wheat className="w-4 h-4 text-amber-400" />} label="Carbs" value={sumMacro(currentDay.meals, "carbs")} />
+        <SummaryStat icon={<CircleDot className="w-4 h-4 text-emerald-400" />} label="Fat" value={sumMacro(currentDay.meals, "fat")} />
       </div>
 
       {/* Meal cards */}
@@ -207,11 +207,11 @@ export function PlanClient({ plan }: { plan: Plan }) {
 
 function SummaryStat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string; }) {
   return (
-    <div className="p-5 rounded-3xl bg-white/[0.02] border border-white/[0.05] flex items-center gap-4">
-      <div className="p-3 rounded-2xl bg-white/5">{icon}</div>
-      <div>
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">{label}</p>
-        <p className="text-base font-bold text-white">{value}</p>
+    <div className="p-3 sm:p-5 rounded-2xl sm:rounded-3xl bg-white/[0.02] border border-white/[0.05] flex items-center gap-3 sm:gap-4">
+      <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/5 shrink-0">{icon}</div>
+      <div className="min-w-0">
+        <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5 truncate">{label}</p>
+        <p className="text-sm sm:text-base font-bold text-white truncate">{value}</p>
       </div>
     </div>
   );

@@ -113,11 +113,11 @@ export default async function Dashboard() {
         </div>
 
         {/* ── Top Stats Row ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           <StatCard
             icon={<Activity className="w-4 h-4" />}
             label="Daily Target"
-            value={`${metrics.daily_calorie_target || '—'} kcal`}
+            value={`${metrics.daily_calorie_target || "—"} kcal`}
           />
           <StatCard
             icon={<Scale className="w-4 h-4" />}
@@ -172,14 +172,14 @@ export default async function Dashboard() {
               {hasPlan && todayPlan ? (
                 <>
                   {/* Today's summary */}
-                  <div className="flex items-center gap-5 mb-5 p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.03]">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 mb-5 p-4 rounded-xl bg-white/[0.02] border border-white/[0.03]">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-emerald-400" />
-                      <span className="text-xs font-medium text-white">
+                      <span className="text-xs font-medium text-white whitespace-nowrap">
                         Day 1 Preview
                       </span>
                     </div>
-                    <div className="flex items-center gap-4 ml-auto">
+                    <div className="grid grid-cols-2 sm:flex items-center gap-x-6 gap-y-3 sm:gap-4 sm:ml-auto">
                       <MiniStat
                         icon={<Flame className="w-3 h-3 text-orange-400/70" />}
                         value={`${todayPlan.total_calories} kcal`}
@@ -193,9 +193,9 @@ export default async function Dashboard() {
                         value={sumMacro(todayMeals, "carbs")}
                       />
                       <MiniStat
-                         icon={<Activity className="w-3 h-3 text-emerald-400/70" />}
-                         value={sumMacro(todayMeals, "fat")}
-                       />
+                        icon={<Activity className="w-3 h-3 text-emerald-400/70" />}
+                        value={sumMacro(todayMeals, "fat")}
+                      />
                     </div>
                   </div>
 
@@ -311,12 +311,12 @@ export default async function Dashboard() {
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string; }) {
   return (
-    <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+    <div className="p-3 sm:p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
       <div className="flex items-center gap-2 mb-2 text-slate-500">
         {icon}
-        <span className="text-[10px] font-semibold uppercase tracking-wider">{label}</span>
+        <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider truncate">{label}</span>
       </div>
-      <p className="text-base font-semibold text-white truncate">{value}</p>
+      <p className="text-sm sm:text-base font-semibold text-white truncate">{value}</p>
     </div>
   );
 }

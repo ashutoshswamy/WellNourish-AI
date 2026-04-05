@@ -26,7 +26,11 @@ export function SelectionCard({
       onClick={onClick}
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.97 }}
-      className={`relative flex ${compact ? "flex-row items-center gap-3 p-4" : "flex-col items-center justify-center p-6"} rounded-2xl border transition-all duration-400 text-center w-full group overflow-hidden cursor-pointer ${
+      className={`relative flex ${
+        compact 
+          ? "flex-row items-center gap-2 sm:gap-3 p-3 sm:p-4" 
+          : "flex-col items-center justify-center p-6"
+      } rounded-2xl border transition-all duration-400 text-center w-full group overflow-hidden cursor-pointer ${
         selected
           ? "bg-lime-400/[0.07] border-lime-400/40 shadow-[0_4px_24px_rgba(163,230,53,0.08)]"
           : "bg-white/[0.02] border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.04]"
