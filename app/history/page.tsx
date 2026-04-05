@@ -4,6 +4,7 @@ import { createAuthenticatedClient } from "@/lib/supabase-server";
 import Link from "next/link";
 import { ArrowLeft, History as HistoryIcon, Calendar, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
+import DeletePlanButton from "@/components/history/DeletePlanButton";
 
 export const dynamic = "force-dynamic";
 
@@ -84,8 +85,14 @@ export default async function HistoryPage() {
                   </div>
                 </div>
 
-                <div className="p-3 rounded-2xl border border-white/5 bg-white/5 group-hover:bg-indigo-500 group-hover:text-black group-hover:scale-110 transition-all duration-500">
-                  <ArrowRight className="w-5 h-5" />
+                <div className="flex flex-col items-end gap-4 justify-between h-full min-h-[100px]">
+                  <div className="p-3 rounded-2xl border border-white/5 bg-white/5 group-hover:bg-indigo-500 group-hover:text-black group-hover:scale-110 transition-all duration-500">
+                    <ArrowRight className="w-5 h-5" />
+                  </div>
+                  
+                  <div className="mt-auto">
+                    <DeletePlanButton planId={plan.id} />
+                  </div>
                 </div>
               </div>
             </Link>

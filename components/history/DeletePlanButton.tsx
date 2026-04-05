@@ -1,61 +1,85 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Trash2, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Trash2, Loader2, AlertCircle } from "lucide-react";
+import { deletePlanAction } from "@/app/history/actions";
 
-export function DeletePlanButton({ planId }: { planId: string }) {
-  const [confirming, setConfirming] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const router = useRouter();
+interface DeletePlanButtonProps {
+  planId: string;
+}
 
-  const handleDelete = async () => {
-    setDeleting(true);
-    try {
-      const res = await fetch(`/api/plans?id=${planId}`, { method: "DELETE" });
-      if (res.ok) {
-        router.refresh();
-      }
-    } catch {
-      // silently fail, user can retry
-    } finally {
-      setDeleting(false);
-      setConfirming(false);
+export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
+  const [status, setStatus] = useState<"idle" | "confirming" | "deleting" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Reset to idle after 3 seconds if in confirming state
+  useEffect(() => {
+    if (status === "confirming") {
+      const timer = setTimeout(() => setStatus("idle"), 3000);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [status]);
 
-  if (confirming) {
-    return (
-      <div className="flex items-center gap-2">
-        <button
-          onClick={handleDelete}
-          disabled={deleting}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 text-xs font-medium hover:bg-red-500/30 transition-colors disabled:opacity-50"
-        >
-          {deleting ? (
-            <Loader2 className="w-3 h-3 animate-spin" />
-          ) : (
-            "Delete"
-          )}
-        </button>
-        <button
-          onClick={() => setConfirming(false)}
-          disabled={deleting}
-          className="px-3 py-1.5 rounded-lg bg-white/5 text-[#6a7a6a] text-xs font-medium hover:bg-white/10 transition-colors"
-        >
-          Cancel
-        </button>
-      </div>
-    );
+  async function handleDelete(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (status === "idle") {
+      setStatus("confirming");
+      return;
+    }
+
+    if (status === "confirming") {
+      setStatus("deleting");
+      try {
+        const result = await deletePlanAction(planId);
+        if (!result.success) {
+          setStatus("error");
+          setErrorMessage(result.error || "Failed to delete plan");
+          setTimeout(() => setStatus("idle"), 3000);
+        }
+      } catch (err) {
+        setStatus("error");
+        setErrorMessage("An unexpected error occurred");
+        setTimeout(() => setStatus("idle"), 3000);
+      }
+    }
   }
 
   return (
     <button
-      onClick={() => setConfirming(true)}
-      className="p-2 rounded-lg text-[#4a5a4a] hover:text-red-400 hover:bg-red-500/10 transition-all"
-      title="Delete plan"
+      onClick={handleDelete}
+      disabled={status === "deleting"}
+      className={`
+        relative group flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-300
+        ${status === "idle" ? "hover:bg-red-500/10 text-slate-500 hover:text-red-400" : ""}
+        ${status === "confirming" ? "bg-red-500 text-white shadow-lg shadow-red-500/25" : ""}
+        ${status === "deleting" ? "bg-red-500/50 text-white cursor-wait" : ""}
+        ${status === "error" ? "bg-amber-500/10 text-amber-500" : ""}
+      `}
+      title={status === "idle" ? "Delete Plan" : undefined}
     >
-      <Trash2 className="w-4 h-4" />
+      <div className="relative">
+        {status === "deleting" ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : status === "error" ? (
+          <AlertCircle className="w-4 h-4" />
+        ) : (
+          <Trash2 className={`w-4 h-4 ${status === "confirming" ? "animate-pulse" : ""}`} />
+        )}
+      </div>
+
+      {status === "confirming" && (
+        <span className="text-xs font-bold tracking-tight whitespace-nowrap">
+          Are you sure?
+        </span>
+      )}
+
+      {status === "error" && (
+        <span className="text-[10px] font-medium leading-none max-w-[80px] truncate">
+          {errorMessage}
+        </span>
+      )}
     </button>
   );
 }
