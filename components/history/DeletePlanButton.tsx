@@ -51,11 +51,11 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
       onClick={handleDelete}
       disabled={status === "deleting"}
       className={`
-        relative group flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-300
-        ${status === "idle" ? "hover:bg-red-500/10 text-slate-500 hover:text-red-400" : ""}
-        ${status === "confirming" ? "bg-red-500 text-white shadow-lg shadow-red-500/25" : ""}
+        relative group flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-300
+        ${status === "idle" ? "hover:bg-red-500/10 text-white/20 hover:text-red-400" : ""}
+        ${status === "confirming" ? "bg-red-500 text-white" : ""}
         ${status === "deleting" ? "bg-red-500/50 text-white cursor-wait" : ""}
-        ${status === "error" ? "bg-amber-500/10 text-amber-500" : ""}
+        ${status === "error" ? "bg-amber-500/10 text-amber-400" : ""}
       `}
       title={status === "idle" ? "Delete Plan" : undefined}
     >

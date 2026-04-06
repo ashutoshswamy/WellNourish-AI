@@ -33,79 +33,72 @@ export default async function HistoryPage() {
     <div className="flex-1 flex flex-col p-6 md:p-10 w-full">
       <div className="max-w-5xl w-full mx-auto">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-10">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-1.5 text-slate-500 hover:text-indigo-400 transition-colors text-sm mb-4"
+            className="inline-flex items-center gap-2 text-white/30 hover:text-white/60 transition-colors text-sm font-medium group mb-6"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Dashboard
+            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+            Dashboard
           </Link>
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-              <HistoryIcon className="w-6 h-6 text-indigo-400" />
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-emerald-400/[0.06]">
+              <HistoryIcon className="w-5 h-5 text-emerald-400/70" strokeWidth={1.8} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white tracking-tight">Plan History</h1>
-              <p className="text-slate-500 text-sm">Review your previous 7-day nutritional journeys.</p>
+              <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Plan History</h1>
+              <p className="text-sm text-white/30 mt-0.5">Your previous nutritional plans.</p>
             </div>
           </div>
         </div>
 
         {/* History List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {plans?.map((plan) => (
-            <Link 
+            <Link
               key={plan.id}
               href={`/plan?id=${plan.id}`}
-              className="group relative bg-white/[0.03] border border-white/[0.08] hover:border-indigo-500/30 rounded-3xl p-6 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(79,70,229,0.1)] overflow-hidden"
+              className="group relative p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-emerald-400/20 transition-all duration-300"
             >
-              {/* Background accent */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-indigo-500/10 transition-colors" />
-              
-              <div className="flex items-start justify-between relative z-10">
-                <div className="space-y-4">
+              <div className="flex items-start justify-between">
+                <div className="space-y-3 flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-lg bg-indigo-500/10">
-                      <Calendar className="w-4 h-4 text-indigo-400" />
-                    </div>
-                    <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest">
+                    <Calendar className="w-3.5 h-3.5 text-white/20" />
+                    <span className="text-[10px] font-semibold text-white/40 uppercase tracking-wider">
                       {format(new Date(plan.created_at), 'MMM d, yyyy')}
                     </span>
                   </div>
-                  
+
                   <div>
-                    <h3 className="text-xl font-bold text-white group-hover:text-indigo-300 transition-colors">
+                    <h3 className="text-base font-semibold text-white group-hover:text-emerald-300 transition-colors truncate">
                       {plan.title || "Weekly Meal Plan"}
                     </h3>
-                    <div className="flex items-center gap-3 mt-2">
+                    <div className="flex items-center gap-2.5 mt-1.5">
                       <StatusBadge status={plan.status} />
-                      <span className="text-slate-500 text-xs">• 7 Days Included</span>
+                      <span className="text-white/15 text-xs">7 days</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-4 justify-between h-full min-h-[100px]">
-                  <div className="p-3 rounded-2xl border border-white/5 bg-white/5 group-hover:bg-indigo-500 group-hover:text-black group-hover:scale-110 transition-all duration-500">
-                    <ArrowRight className="w-5 h-5" />
+                <div className="flex flex-col items-end gap-3 ml-4">
+                  <div className="p-2.5 rounded-xl border border-white/[0.05] bg-white/[0.02] text-white/30 group-hover:bg-emerald-400 group-hover:text-black group-hover:border-emerald-400 transition-all duration-300">
+                    <ArrowRight className="w-4 h-4" />
                   </div>
-                  
-                  <div className="mt-auto">
-                    <DeletePlanButton planId={plan.id} />
-                  </div>
+
+                  <DeletePlanButton planId={plan.id} />
                 </div>
               </div>
             </Link>
           ))}
 
           {(!plans || plans.length === 0) && (
-            <div className="col-span-full py-32 text-center bg-white/[0.01] border border-dashed border-white/5 rounded-[40px]">
-              <HistoryIcon className="w-16 h-16 text-slate-800 mx-auto mb-6 opacity-20" />
-              <h3 className="text-xl font-medium text-slate-600 mb-2">No plans found</h3>
-              <p className="text-slate-700 max-w-sm mx-auto">Generate your first plan to start your nutritional history.</p>
-              <Link 
-                href="/profile" 
-                className="inline-flex items-center gap-2 mt-8 px-8 py-4 rounded-2xl bg-indigo-500 text-black font-bold text-sm tracking-tight hover:bg-indigo-400 transition-all shadow-lg hover:shadow-indigo-500/25"
+            <div className="col-span-full py-24 text-center bg-white/[0.01] border border-dashed border-white/[0.05] rounded-2xl">
+              <HistoryIcon className="w-10 h-10 text-white/10 mx-auto mb-4" />
+              <h3 className="text-base font-medium text-white/40 mb-1">No plans yet</h3>
+              <p className="text-sm text-white/20 max-w-xs mx-auto">Generate your first plan to start building your history.</p>
+              <Link
+                href="/profile"
+                className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl bg-emerald-400 text-black font-semibold text-sm tracking-wide hover:bg-emerald-300 transition-all"
               >
                 Create New Plan
               </Link>
@@ -120,10 +113,10 @@ export default async function HistoryPage() {
 function StatusBadge({ status }: { status: string }) {
   const isActive = status === 'active';
   return (
-    <span className={`text-[10px] font-black uppercase tracking-tighter px-2.5 py-1 rounded-full border ${
-      isActive 
-        ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
-        : "bg-slate-500/10 border-slate-500/20 text-slate-500"
+    <span className={`text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-md ${
+      isActive
+        ? "bg-emerald-400/10 text-emerald-400"
+        : "bg-white/5 text-white/25"
     }`}>
       {status}
     </span>

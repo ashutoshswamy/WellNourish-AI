@@ -30,7 +30,6 @@ import {
   Save,
 } from "lucide-react";
 import Link from "next/link";
-import { SelectionCard } from "@/components/global/SelectionCard";
 
 const profileSchema = z.object({
   age: z.number().int().min(1, "Must be at least 1").max(120),
@@ -96,7 +95,6 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
     setIsSubmitting(true);
     setSaveSuccess(false);
 
-    // Clean data: convert NaN to null
     const formattedData = {
       ...data,
       target_weight: typeof data.target_weight === 'number' && !isNaN(data.target_weight) ? data.target_weight : null,
@@ -129,11 +127,11 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
   };
 
   return (
-    <div className="max-w-4xl w-full mx-auto">
+    <div className="max-w-3xl w-full mx-auto">
       {/* Back navigation */}
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-2 text-white/30 hover:text-white/60 transition-colors mb-8 text-sm font-medium group"
+        className="inline-flex items-center gap-2 text-white/25 hover:text-white/50 transition-colors mb-8 text-sm font-medium group"
       >
         <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
         Dashboard
@@ -141,61 +139,62 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
 
       {/* Page title */}
       <div className="mb-10">
-        <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight mb-2">Your Profile</h1>
-        <p className="text-sm text-white/30">Update your metrics and preferences. Changes will apply to your next generated plan.</p>
+        <p className="text-[10px] font-semibold text-emerald-400/60 uppercase tracking-[0.2em] mb-2">Profile</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Your Body & Goals</h1>
+        <p className="text-sm text-white/25 mt-1">Fine-tune your metrics. Changes apply to your next plan.</p>
       </div>
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
         {/* ── Section 1: Body Metrics ── */}
-        <ProfileSection title="Body Metrics" icon={Scale}>
+        <Section title="Body Metrics" icon={Scale}>
           {/* Gender */}
-          <div className="mb-6">
-            <label className="block text-xs font-medium text-white/30 tracking-wide mb-3">Gender</label>
-            <div className="grid grid-cols-3 gap-2.5">
-              <SelectionCard icon={Mars} title="Male" selected={currentGender === "Male"} onClick={() => form.setValue("gender", "Male")} compact />
-              <SelectionCard icon={Venus} title="Female" selected={currentGender === "Female"} onClick={() => form.setValue("gender", "Female")} compact />
-              <SelectionCard icon={User} title="Other" selected={currentGender === "Other"} onClick={() => form.setValue("gender", "Other")} compact />
+          <div className="mb-5">
+            <Label>Gender</Label>
+            <div className="grid grid-cols-3 gap-2">
+              <Chip icon={Mars} label="Male" active={currentGender === "Male"} onClick={() => form.setValue("gender", "Male")} />
+              <Chip icon={Venus} label="Female" active={currentGender === "Female"} onClick={() => form.setValue("gender", "Female")} />
+              <Chip icon={User} label="Other" active={currentGender === "Other"} onClick={() => form.setValue("gender", "Other")} />
             </div>
           </div>
 
           {/* Metric inputs */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
             {[
               { id: "age", label: "Age", icon: Calendar, suffix: "yrs" },
               { id: "weight_kg", label: "Weight", icon: Scale, suffix: "kg" },
               { id: "height_cm", label: "Height", icon: Ruler, suffix: "cm" },
               { id: "target_weight", label: "Goal Weight", icon: Target, suffix: "kg" },
             ].map((field) => (
-              <div key={field.id} className={`p-4 rounded-xl border transition-all ${
+              <div key={field.id} className={`p-3.5 rounded-xl border transition-all ${
                 field.id === "target_weight"
-                  ? "bg-lime-400/[0.02] border-lime-400/10"
-                  : "bg-white/[0.015] border-white/[0.05]"
+                  ? "bg-lime-400/[0.02] border-lime-400/[0.08]"
+                  : "bg-white/[0.02] border-white/[0.05]"
               }`}>
-                <div className="flex items-center gap-1.5 mb-2">
-                  <field.icon className="w-3 h-3 text-white/20" strokeWidth={1.5} />
-                  <label className="text-[0.6rem] font-medium text-white/25 tracking-wider uppercase">{field.label}</label>
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  <field.icon className="w-3 h-3 text-white/15" strokeWidth={1.5} />
+                  <span className="text-[9px] font-medium text-white/20 tracking-wider uppercase">{field.label}</span>
                 </div>
                 <div className="flex items-baseline gap-1">
                   <input
                     type="number"
                     step={field.id.includes('weight') ? "0.1" : "1"}
                     {...form.register(field.id as keyof ProfileFormValues, { valueAsNumber: true })}
-                    className="w-full bg-transparent text-xl font-bold text-white focus:outline-none placeholder:text-white/[0.05] input-glow rounded"
+                    className="w-full bg-transparent text-lg font-bold text-white focus:outline-none placeholder:text-white/[0.05] rounded"
                   />
-                  <span className="text-[0.6rem] font-medium text-white/15 uppercase shrink-0">{field.suffix}</span>
+                  <span className="text-[9px] font-medium text-white/12 uppercase shrink-0">{field.suffix}</span>
                 </div>
               </div>
             ))}
           </div>
-        </ProfileSection>
+        </Section>
 
         {/* ── Section 2: Activity & Goals ── */}
-        <ProfileSection title="Activity & Goals" icon={Activity}>
+        <Section title="Activity & Goals" icon={Activity}>
           {/* Activity Level */}
-          <div className="mb-6">
-            <label className="block text-xs font-medium text-white/30 tracking-wide mb-3">Activity level</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+          <div className="mb-5">
+            <Label>Activity level</Label>
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
               {[
                 { val: "Sedentary", label: "Sedentary", icon: User },
                 { val: "Light", label: "Light", icon: Activity },
@@ -203,32 +202,31 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
                 { val: "Active", label: "Active", icon: Flame },
                 { val: "Very Active", label: "Intense", icon: Sparkles },
               ].map((item) => (
-                <SelectionCard
+                <Chip
                   key={item.val}
                   icon={item.icon}
-                  title={item.label}
-                  selected={currentActivityLevel === item.val}
+                  label={item.label}
+                  active={currentActivityLevel === item.val}
                   onClick={() => form.setValue("activity_level", item.val as ProfileFormValues["activity_level"])}
-                  compact
                 />
               ))}
             </div>
           </div>
 
           {/* Health Goal */}
-          <div className="mb-6">
-            <label className="block text-xs font-medium text-white/30 tracking-wide mb-3">Primary goal</label>
-            <div className="grid grid-cols-3 gap-2.5">
-              <SelectionCard icon={TrendingDown} title="Lose Weight" selected={currentHealthGoal === "Lose Weight"} onClick={() => form.setValue("health_goal", "Lose Weight")} compact />
-              <SelectionCard icon={Heart} title="Maintain" selected={currentHealthGoal === "Maintain"} onClick={() => form.setValue("health_goal", "Maintain")} compact />
-              <SelectionCard icon={Zap} title="Gain Muscle" selected={currentHealthGoal === "Gain Muscle"} onClick={() => form.setValue("health_goal", "Gain Muscle")} compact />
+          <div className="mb-5">
+            <Label>Primary goal</Label>
+            <div className="grid grid-cols-3 gap-2">
+              <Chip icon={TrendingDown} label="Lose Weight" active={currentHealthGoal === "Lose Weight"} onClick={() => form.setValue("health_goal", "Lose Weight")} />
+              <Chip icon={Heart} label="Maintain" active={currentHealthGoal === "Maintain"} onClick={() => form.setValue("health_goal", "Maintain")} />
+              <Chip icon={Zap} label="Gain Muscle" active={currentHealthGoal === "Gain Muscle"} onClick={() => form.setValue("health_goal", "Gain Muscle")} />
             </div>
           </div>
 
           {/* Weekly Pace */}
           <div>
-            <label className="block text-xs font-medium text-white/30 tracking-wide mb-3">Weekly pace</label>
-            <div className="flex flex-wrap gap-2">
+            <Label>Weekly pace</Label>
+            <div className="flex flex-wrap gap-1.5">
               {[
                 { val: "Maintain", label: "Maintain" },
                 { val: "0.25kg", label: "0.25 kg/wk" },
@@ -239,10 +237,10 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
                   key={wp.val}
                   type="button"
                   onClick={() => form.setValue("weekly_goal", wp.val as ProfileFormValues["weekly_goal"])}
-                  className={`px-4 py-3 rounded-xl text-xs font-semibold transition-all border ${
+                  className={`px-3.5 py-2 rounded-lg text-xs font-medium transition-all border ${
                     currentWeeklyGoal === wp.val
-                      ? "bg-lime-400/12 border-lime-400/30 text-lime-400"
-                      : "bg-white/[0.02] border-white/[0.05] text-white/25 hover:border-white/[0.1] hover:text-white/45"
+                      ? "bg-lime-400/10 border-lime-400/25 text-lime-400"
+                      : "bg-white/[0.02] border-white/[0.05] text-white/25 hover:border-white/[0.1] hover:text-white/40"
                   }`}
                 >
                   {wp.label}
@@ -250,72 +248,56 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
               ))}
             </div>
           </div>
-        </ProfileSection>
+        </Section>
 
         {/* ── Section 3: Diet & Preferences ── */}
-        <ProfileSection title="Diet & Preferences" icon={Leaf}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="space-y-4">
-              <InputField
-                icon={<Leaf className="w-3.5 h-3.5 text-lime-400/60" />}
-                label="Diet preference"
+        <Section title="Preferences" icon={Leaf}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <InputField icon={<Leaf className="w-3.5 h-3.5" />} label="Diet">
+              <select
+                {...form.register('diet_preferences')}
+                className="w-full bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5 text-sm text-white font-medium focus:outline-none focus:border-lime-400/20 transition-all appearance-none cursor-pointer [&>option]:bg-[#0a0f0a]"
               >
-                <select
-                  {...form.register('diet_preferences')}
-                  className="select-clean w-full bg-white/[0.03] border border-white/[0.05] rounded-lg px-3.5 py-2.5 text-sm text-white font-medium focus:outline-none focus:border-lime-400/25 transition-all appearance-none cursor-pointer [&>option]:bg-[#0a0f0a]"
-                >
-                  <option value="Standard">Standard</option>
-                  <option value="Vegetarian">Vegetarian</option>
-                  <option value="Vegan">Vegan</option>
-                  <option value="Pescatarian">Pescatarian</option>
-                  <option value="Keto">Ketogenic</option>
-                  <option value="Paleo">Paleo</option>
-                </select>
-              </InputField>
+                <option value="Standard">Standard</option>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Pescatarian">Pescatarian</option>
+                <option value="Keto">Ketogenic</option>
+                <option value="Paleo">Paleo</option>
+              </select>
+            </InputField>
 
-              <InputField
-                icon={<Globe className="w-3.5 h-3.5 text-lime-400/60" />}
-                label="Cuisine preferences"
-              >
-                <input
-                  type="text"
-                  {...form.register('cuisine_preferences')}
-                  className="w-full bg-white/[0.03] border border-white/[0.05] rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-white/[0.08] focus:outline-none focus:border-lime-400/25 transition-all font-medium"
-                  placeholder="Italian, Mexican, Asian..."
-                />
-              </InputField>
-            </div>
+            <InputField icon={<Globe className="w-3.5 h-3.5" />} label="Cuisine">
+              <input
+                type="text"
+                {...form.register('cuisine_preferences')}
+                className="w-full bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/10 focus:outline-none focus:border-lime-400/20 transition-all font-medium"
+                placeholder="Italian, Mexican, Asian..."
+              />
+            </InputField>
 
-            <div className="space-y-4">
-              <InputField
-                icon={<ShieldCheck className="w-3.5 h-3.5 text-red-400/60" />}
-                label="Allergies"
-              >
-                <input
-                  type="text"
-                  {...form.register('allergies')}
-                  className="w-full bg-white/[0.03] border border-white/[0.05] rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-white/[0.08] focus:outline-none focus:border-red-400/25 transition-all font-medium"
-                  placeholder="Peanuts, Gluten..."
-                />
-              </InputField>
+            <InputField icon={<ShieldCheck className="w-3.5 h-3.5" />} label="Allergies" accent="red">
+              <input
+                type="text"
+                {...form.register('allergies')}
+                className="w-full bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/10 focus:outline-none focus:border-red-400/20 transition-all font-medium"
+                placeholder="Peanuts, Gluten..."
+              />
+            </InputField>
 
-              <InputField
-                icon={<Stethoscope className="w-3.5 h-3.5 text-orange-400/60" />}
-                label="Injuries / Limitations"
-              >
-                <input
-                  type="text"
-                  {...form.register('injuries')}
-                  className="w-full bg-white/[0.03] border border-white/[0.05] rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-white/[0.08] focus:outline-none focus:border-orange-400/25 transition-all font-medium"
-                  placeholder="Bad knee, lower back..."
-                />
-              </InputField>
-            </div>
+            <InputField icon={<Stethoscope className="w-3.5 h-3.5" />} label="Injuries" accent="orange">
+              <input
+                type="text"
+                {...form.register('injuries')}
+                className="w-full bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/10 focus:outline-none focus:border-orange-400/20 transition-all font-medium"
+                placeholder="Bad knee, lower back..."
+              />
+            </InputField>
           </div>
-        </ProfileSection>
+        </Section>
 
         {/* ── Save Footer ── */}
-        <div className="pt-6 pb-4 flex items-center justify-between gap-4 border-t border-white/[0.04]">
+        <div className="flex items-center justify-between gap-4 pt-2 pb-4">
           <AnimatePresence mode="wait">
             {saveSuccess ? (
               <motion.div
@@ -323,10 +305,10 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0 }}
-                className="flex items-center gap-2 text-lime-400 flex-1 min-w-0"
+                className="flex items-center gap-2 text-emerald-400 flex-1 min-w-0"
               >
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
-                <span className="text-sm font-medium truncate">Saved successfully</span>
+                <span className="text-sm font-medium truncate">Saved</span>
               </motion.div>
             ) : (
               <motion.span
@@ -334,9 +316,9 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-xs text-white/20"
+                className="text-xs text-white/15"
               >
-                Changes apply to your next generated plan.
+                Applies to next generated plan.
               </motion.span>
             )}
           </AnimatePresence>
@@ -344,7 +326,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center gap-2.5 px-6 py-3 rounded-xl bg-lime-400 text-black font-semibold text-sm tracking-wide transition-all hover:bg-lime-300 hover:shadow-lg hover:shadow-lime-400/10 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:scale-100"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-lime-400 text-black font-semibold text-sm transition-all hover:bg-lime-300 active:scale-[0.98] disabled:opacity-50"
           >
             {isSubmitting ? (
               <>
@@ -366,37 +348,64 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
 
 /* ── Sub-components ── */
 
-function ProfileSection({
+function Section({
   title, icon: Icon, children
 }: {
   title: string; icon: React.ElementType; children: React.ReactNode
 }) {
   return (
-    <section className="p-5 sm:p-6 md:p-8 rounded-2xl bg-white/[0.015] border border-white/[0.05] relative overflow-hidden">
-      {/* Subtle corner glow */}
-      <div className="absolute -top-16 -right-16 w-32 h-32 bg-lime-400/[0.03] rounded-full blur-3xl pointer-events-none" />
-
-      <div className="flex items-center gap-2.5 mb-6 relative z-10">
-        <div className="p-1.5 rounded-lg bg-lime-400/[0.06]">
-          <Icon className="w-4 h-4 text-lime-400/70" strokeWidth={1.8} />
-        </div>
-        <h2 className="text-base font-semibold text-white/80 tracking-tight">{title}</h2>
+    <section className="p-5 sm:p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
+      <div className="flex items-center gap-2 mb-5">
+        <Icon className="w-4 h-4 text-white/20" strokeWidth={1.5} />
+        <h2 className="text-sm font-semibold text-white/60 tracking-tight">{title}</h2>
       </div>
-      <div className="relative z-10">{children}</div>
+      {children}
     </section>
   );
 }
 
-function InputField({
-  icon, label, children
+function Label({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-[10px] font-medium text-white/25 tracking-wider uppercase mb-2.5">{children}</p>
+  );
+}
+
+function Chip({
+  icon: Icon, label, active, onClick
 }: {
-  icon: React.ReactNode; label: string; children: React.ReactNode
+  icon: React.ElementType; label: string; active: boolean; onClick: () => void
 }) {
   return (
-    <div className="space-y-2">
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex items-center gap-2 p-3 rounded-xl border text-left transition-all w-full cursor-pointer ${
+        active
+          ? "bg-lime-400/[0.07] border-lime-400/30 text-white"
+          : "bg-white/[0.02] border-white/[0.05] text-white/30 hover:border-white/[0.1] hover:text-white/50"
+      }`}
+    >
+      <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? "text-lime-400" : "text-white/20"}`} strokeWidth={1.8} />
+      <span className="text-xs font-medium truncate">{label}</span>
+    </button>
+  );
+}
+
+function InputField({
+  icon, label, children, accent = "lime"
+}: {
+  icon: React.ReactNode; label: string; children: React.ReactNode; accent?: string
+}) {
+  const colorMap: Record<string, string> = {
+    lime: "text-white/25",
+    red: "text-red-400/40",
+    orange: "text-orange-400/40",
+  };
+  return (
+    <div className="space-y-1.5">
       <div className="flex items-center gap-1.5">
-        {icon}
-        <label className="text-[0.65rem] font-medium text-white/30 tracking-wide uppercase">{label}</label>
+        <span className={colorMap[accent] || colorMap.lime}>{icon}</span>
+        <span className="text-[10px] font-medium text-white/25 tracking-wider uppercase">{label}</span>
       </div>
       {children}
     </div>
