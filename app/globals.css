@@ -1,3 +1,4 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@200,300,400,500,600,700&display=swap');
 @import "tailwindcss";
 
 html {
@@ -11,18 +12,19 @@ html {
   --accent-soft: #84cc16;
   --surface: rgba(255, 255, 255, 0.03);
   --border: rgba(255, 255, 255, 0.06);
+  --font-clash: "Clash Grotesk", sans-serif;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-poppins);
+  --font-sans: var(--font-clash);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-poppins), sans-serif;
+  font-family: var(--font-clash);
 }
 
 /* Noise grain overlay */

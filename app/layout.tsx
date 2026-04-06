@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Navbar } from "@/components/global/Navbar";
 import { Footer } from "@/components/global/Footer";
 import { AnimatedBackground } from "@/components/global/AnimatedBackground";
 import "./globals.css";
-
-const poppins = Poppins({
-  weight: ["300", "400", "500", "600", "700", "800"],
-  subsets: ["latin"],
-  variable: "--font-poppins",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wellnourishai.in"),
@@ -75,7 +68,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
-      <html lang="en" className={`${poppins.variable} h-full antialiased`}>
+      <html lang="en" className="h-full antialiased">
         <body className="grain flex flex-col min-h-screen bg-[#060b06] text-[#c4cec4] selection:bg-lime-400/20 selection:text-lime-200">
           <AnimatedBackground />
           <Navbar />
