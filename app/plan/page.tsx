@@ -1,24 +1,24 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
+import { createAuthenticatedClient } from "@/lib/supabase-server";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { PlanClient } from "@/components/plan/PlanClient";
 
 export const dynamic = "force-dynamic";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default async function PlanPage({
   searchParams,
 }: {
   searchParams: { id?: string };
 }) {
-  const { userId } = await auth();
+  const { userId, getToken } = await auth();
   if (!userId) redirect("/");
+
+  const supabaseAccessToken = await getToken({ template: "supabase" });
+  if (!supabaseAccessToken) redirect("/");
+
+  const supabase = await createAuthenticatedClient(supabaseAccessToken);
 
   const selectedId = searchParams?.id;
 
