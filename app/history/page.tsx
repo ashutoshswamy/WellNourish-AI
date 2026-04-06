@@ -5,10 +5,16 @@ import Link from "next/link";
 import { ArrowLeft, History as HistoryIcon, Calendar, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 import DeletePlanButton from "@/components/history/DeletePlanButton";
+import SortFilter from "@/components/history/SortFilter";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
-export default async function HistoryPage() {
+export default async function HistoryPage({
+  searchParams,
+}: {
+  searchParams: { sort?: string };
+}) {
   const { userId, getToken } = await auth();
   if (!userId) redirect("/");
 
@@ -19,11 +25,13 @@ export default async function HistoryPage() {
 
   const supabase = await createAuthenticatedClient(supabaseAccessToken);
 
+  const ascending = searchParams?.sort === "asc";
+
   const { data: plans, error } = await supabase
     .from("meal_plans")
     .select("*")
     .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending });
 
   if (error) {
     console.error("History fetch error:", error);
@@ -41,14 +49,19 @@ export default async function HistoryPage() {
             <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
             Dashboard
           </Link>
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-emerald-400/[0.06]">
-              <HistoryIcon className="w-5 h-5 text-emerald-400/70" strokeWidth={1.8} />
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-emerald-400/[0.06]">
+                <HistoryIcon className="w-5 h-5 text-emerald-400/70" strokeWidth={1.8} />
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Plan History</h1>
+                <p className="text-sm text-white/30 mt-0.5">Your previous nutritional plans.</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Plan History</h1>
-              <p className="text-sm text-white/30 mt-0.5">Your previous nutritional plans.</p>
-            </div>
+            <Suspense>
+              <SortFilter />
+            </Suspense>
           </div>
         </div>
 
