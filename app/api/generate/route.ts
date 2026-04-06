@@ -204,7 +204,7 @@ export async function POST() {
         responseSchema,
         temperature: 0.4,
         topP: 0.9,
-        maxOutputTokens: 8192,
+        maxOutputTokens: 65536,
       },
     });
 
