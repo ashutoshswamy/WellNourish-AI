@@ -148,7 +148,7 @@ export async function POST() {
     try {
       const cleanedJson = extractJSON(responseText);
       planData = JSON.parse(cleanedJson);
-    } catch (e) {
+    } catch (_e) {
       console.error("Failed to parse Gemini JSON. Raw response:", responseText);
       return new NextResponse(JSON.stringify({ 
         error: "AI_FORMAT_ERROR", 

@@ -38,7 +38,7 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
           setErrorMessage(result.error || "Failed to delete plan");
           setTimeout(() => setStatus("idle"), 3000);
         }
-      } catch (err) {
+      } catch (_err) {
         setStatus("error");
         setErrorMessage("An unexpected error occurred");
         setTimeout(() => setStatus("idle"), 3000);
