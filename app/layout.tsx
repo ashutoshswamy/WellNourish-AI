@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Navbar } from "@/components/global/Navbar";
@@ -69,6 +70,21 @@ export default function RootLayout({
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <html lang="en" className="h-full antialiased">
+        <head>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-DCNQYDP6QT"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-DCNQYDP6QT');
+            `}
+          </Script>
+        </head>
         <body className="grain flex flex-col min-h-screen bg-[#060b06] text-[#c4cec4] selection:bg-lime-400/20 selection:text-lime-200">
           <AnimatedBackground />
           <Navbar />
