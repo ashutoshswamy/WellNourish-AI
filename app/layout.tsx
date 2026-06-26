@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
@@ -7,6 +7,12 @@ import { Footer } from "@/components/global/Footer";
 import { AnimatedBackground } from "@/components/global/AnimatedBackground";
 import "./globals.css";
 
+export const viewport: Viewport = {
+  themeColor: "#060b06",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://wellnourishai.in"),
   title: {
@@ -14,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | WellNourish AI",
   },
   description: "Share your goals, allergies, and lifestyle. Our AI analyzes your unique profile and generates a hyper-personalized 7-day meal plan — down to the grocery list.",
-  keywords: ["AI Nutritionist", "Meal Planner", "Personalized Nutrition", "Healthy Eating", "Meal Prep", "Dietary Assistant"],
+  keywords: ["AI Nutritionist", "Meal Planner", "Personalized Nutrition", "Healthy Eating", "Meal Prep", "Dietary Assistant", "WellNourish AI", "Custom Diet Plan"],
   authors: [{ name: "WellNourish AI Team" }],
   creator: "WellNourish AI",
   publisher: "WellNourish AI",
@@ -22,6 +28,11 @@ export const metadata: Metadata = {
     email: false,
     address: false,
     telephone: false,
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     type: "website",
@@ -32,7 +43,7 @@ export const metadata: Metadata = {
     description: "Get hyper-personalized 7-day meal plans and grocery lists tailored to your unique body metrics and dietary goals.",
     images: [
       {
-        url: "/logo.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "WellNourish AI - Personalized Nutrition",
@@ -43,7 +54,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "WellNourish AI | Your Personal AI Nutritionist",
     description: "Hyper-personalized 7-day meal plans and grocery lists tailored specifically to you.",
-    images: ["/logo.png"],
+    images: ["/og-image.jpg"],
     creator: "@wellnourishai",
   },
   robots: {

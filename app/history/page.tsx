@@ -7,6 +7,12 @@ import { format } from "date-fns";
 import DeletePlanButton from "@/components/history/DeletePlanButton";
 import SortFilter from "@/components/history/SortFilter";
 import { Suspense } from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Meal Plan History",
+  description: "Browse and review your past personalized 7-day meal plans.",
+};
 
 export const dynamic = "force-dynamic";
 

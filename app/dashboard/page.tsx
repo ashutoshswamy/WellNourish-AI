@@ -41,6 +41,12 @@ interface PlanDay {
 }
 
 import { GenerateButton } from "@/components/dashboard/GenerateButton";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "View and manage your AI-generated meal plans and health metrics.",
+};
 
 export const dynamic = "force-dynamic";
 

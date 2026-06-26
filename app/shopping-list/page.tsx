@@ -4,6 +4,12 @@ import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 import { ArrowLeft, ShoppingBasket } from "lucide-react";
 import { ShoppingListClient } from "@/components/shopping/ShoppingListClient";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Grocery Shopping List",
+  description: "View the auto-generated grocery shopping list for your active 7-day meal plan.",
+};
 
 export const dynamic = "force-dynamic";
 

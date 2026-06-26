@@ -4,6 +4,12 @@ import { createAuthenticatedClient } from "@/lib/supabase-server";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { PlanClient } from "@/components/plan/PlanClient";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Meal Plan Details",
+  description: "View the detailed recipes, nutrition information, and portions for your 7-day meal plan.",
+};
 
 export const dynamic = "force-dynamic";
 

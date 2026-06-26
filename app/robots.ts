@@ -14,6 +14,7 @@ export default function robots(): MetadataRoute.Robots {
           '/sign-up',
           '/plan',
           '/history',
+          '/shopping-list',
         ],
       },
     ],
