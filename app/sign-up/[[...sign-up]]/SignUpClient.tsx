@@ -6,43 +6,104 @@ import { Logo } from "@/components/global/Logo";
 export function SignUpClient() {
   return (
     <div className="flex-1 flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-5xl overflow-hidden rounded-2xl flex flex-col md:flex-row border border-white/[0.06] shadow-[0_0_80px_rgba(163,230,53,0.04)]">
+      <div
+        className="w-full max-w-5xl overflow-hidden rounded-3xl flex flex-col md:flex-row"
+        style={{
+          border: "1px solid rgba(255,255,255,0.06)",
+          boxShadow: "0 0 100px rgba(180,245,90,0.04)",
+        }}
+      >
         {/* Left panel — branding */}
-        <div className="relative md:w-1/2 p-10 md:p-14 flex flex-col justify-between overflow-hidden bg-[#0a0f0a] border-r border-white/[0.04]">
-          {/* Decorative elements */}
-          <div className="absolute -bottom-20 -left-20 w-[20rem] h-[20rem] bg-lime-500/[0.08] rounded-full blur-[100px]" />
-          <div className="absolute top-10 right-10 w-[8rem] h-[8rem] bg-emerald-500/[0.06] rounded-full blur-[60px]" />
+        <div
+          className="relative md:w-1/2 p-10 md:p-14 flex flex-col justify-between overflow-hidden"
+          style={{
+            background: "#080e08",
+            borderRight: "1px solid rgba(255,255,255,0.04)",
+          }}
+        >
+          {/* Decorative orbs */}
+          <div
+            className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, rgba(180,245,90,0.1) 0%, transparent 70%)",
+              filter: "blur(50px)",
+            }}
+          />
+          <div
+            className="absolute top-12 left-8 w-32 h-32 rounded-full pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, rgba(52,211,153,0.07) 0%, transparent 70%)",
+              filter: "blur(30px)",
+            }}
+          />
 
-          {/* Vertical stripe accents */}
-          <div className="absolute inset-0 flex pointer-events-none opacity-[0.04]">
-            {Array.from({ length: 6 }).map((_, i) => (
+          {/* Subtle grid lines */}
+          <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.025 }}>
+            {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
-                className="h-full w-16 border-r border-lime-400/30"
+                className="absolute top-0 bottom-0 border-r"
+                style={{
+                  left: `${(i + 1) * 12.5}%`,
+                  borderColor: "rgba(180,245,90,0.5)",
+                }}
               />
             ))}
           </div>
 
+          {/* Content */}
           <div className="relative z-10">
             <Logo className="mb-12" textSize="text-lg" />
-            <h1 className="text-2xl md:text-3xl font-semibold text-white leading-tight tracking-tight">
-              Your AI-powered
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-400">
-                nutrition partner
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.25em] mb-4"
+              style={{ color: "rgba(180,245,90,0.6)" }}
+            >
+              Get started free
+            </p>
+            <h1 className="text-2xl md:text-3xl font-bold text-white leading-tight tracking-tight">
+              Your nutrition{" "}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: "linear-gradient(135deg, #b4f55a, #34d399)",
+                }}
+              >
+                journey
               </span>
               <br />
               starts here.
             </h1>
           </div>
 
-          <p className="relative z-10 text-sm text-[#4a5a4a] mt-8">
-            Personalized meal plans, tailored to your body.
-          </p>
+          <div className="relative z-10 mt-8 space-y-3">
+            {[
+              "Personalized 7-day meal plans",
+              "Macro-balanced recipes for your goals",
+              "Auto-generated grocery shopping list",
+            ].map((feat) => (
+              <div key={feat} className="flex items-center gap-2.5">
+                <div
+                  className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
+                  style={{ background: "rgba(180,245,90,0.12)", border: "1px solid rgba(180,245,90,0.2)" }}
+                >
+                  <div
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ background: "#b4f55a" }}
+                  />
+                </div>
+                <span className="text-sm" style={{ color: "#4a5a4a" }}>
+                  {feat}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Right panel — Clerk sign-up form */}
-        <div className="md:w-1/2 flex flex-col items-center justify-center p-10 md:p-14 bg-[#0a0f0a]">
+        <div
+          className="md:w-1/2 flex flex-col items-center justify-center p-10 md:p-14"
+          style={{ background: "#080e08" }}
+        >
           <SignUp />
         </div>
       </div>

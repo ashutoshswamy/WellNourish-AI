@@ -15,25 +15,43 @@ export default function SortFilter() {
   }
 
   return (
-    <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+    <div
+      className="flex items-center gap-1 p-1 rounded-xl"
+      style={{
+        background: "rgba(255,255,255,0.03)",
+        border: "1px solid rgba(255,255,255,0.05)",
+      }}
+    >
       <button
         onClick={() => setSort("desc")}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+        style={
           current === "desc"
-            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/20"
-            : "text-white/30 hover:text-white/60"
-        }`}
+            ? {
+                background: "rgba(180,245,90,0.1)",
+                color: "#b4f55a",
+                border: "1px solid rgba(180,245,90,0.2)",
+                borderRadius: "10px",
+              }
+            : { color: "#3a4a3a" }
+        }
       >
         <ArrowDownAZ className="w-3.5 h-3.5" />
         Newest
       </button>
       <button
         onClick={() => setSort("asc")}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+        style={
           current === "asc"
-            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/20"
-            : "text-white/30 hover:text-white/60"
-        }`}
+            ? {
+                background: "rgba(180,245,90,0.1)",
+                color: "#b4f55a",
+                border: "1px solid rgba(180,245,90,0.2)",
+                borderRadius: "10px",
+              }
+            : { color: "#3a4a3a" }
+        }
       >
         <ArrowUpAZ className="w-3.5 h-3.5" />
         Oldest

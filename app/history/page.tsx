@@ -25,9 +25,7 @@ export default async function HistoryPage({
   if (!userId) redirect("/");
 
   const supabaseAccessToken = await getToken({ template: "supabase" });
-  if (!supabaseAccessToken) {
-    return redirect("/");
-  }
+  if (!supabaseAccessToken) return redirect("/");
 
   const supabase = await createAuthenticatedClient(supabaseAccessToken);
 
@@ -39,30 +37,44 @@ export default async function HistoryPage({
     .eq("user_id", userId)
     .order("created_at", { ascending });
 
-  if (error) {
-    console.error("History fetch error:", error);
-  }
+  if (error) console.error("History fetch error:", error);
 
   return (
     <div className="flex-1 flex flex-col p-6 md:p-10 w-full">
       <div className="max-w-5xl w-full mx-auto">
+
         {/* Header */}
         <div className="mb-10">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-white/30 hover:text-white/60 transition-colors text-sm font-medium group mb-6"
+            className="inline-flex items-center gap-2 text-sm font-medium mb-6 group transition-colors"
+            style={{ color: "#2a3a2a" }}
           >
             <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-            Dashboard
+            <span className="group-hover:text-white transition-colors">Dashboard</span>
           </Link>
+
           <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-emerald-400/[0.06]">
-                <HistoryIcon className="w-5 h-5 text-emerald-400/70" strokeWidth={1.8} />
+            <div className="flex items-center gap-4">
+              <div
+                className="w-12 h-12 rounded-2xl flex items-center justify-center"
+                style={{
+                  background: "rgba(180,245,90,0.07)",
+                  border: "1px solid rgba(180,245,90,0.12)",
+                }}
+              >
+                <HistoryIcon className="w-5 h-5" style={{ color: "#b4f55a" }} strokeWidth={1.8} />
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Plan History</h1>
-                <p className="text-sm text-white/30 mt-0.5">Your previous nutritional plans.</p>
+                <p
+                  className="text-xs font-semibold uppercase tracking-[0.25em] mb-1"
+                  style={{ color: "rgba(180,245,90,0.7)" }}
+                >
+                  History
+                </p>
+                <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+                  Plan History
+                </h1>
               </div>
             </div>
             <Suspense>
@@ -71,39 +83,65 @@ export default async function HistoryPage({
           </div>
         </div>
 
-        {/* History List */}
+        {/* Cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {plans?.map((plan) => (
             <Link
               key={plan.id}
               href={`/plan?id=${plan.id}`}
-              className="group relative p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-emerald-400/20 transition-all duration-300"
+              className="group relative p-5 rounded-2xl transition-all duration-300"
+              style={{
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.05)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = "rgba(180,245,90,0.12)";
+                (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.05)";
+                (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+              }}
             >
               <div className="flex items-start justify-between">
                 <div className="space-y-3 flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-3.5 h-3.5 text-white/20" />
-                    <span className="text-[10px] font-semibold text-white/40 uppercase tracking-wider">
-                      {format(new Date(plan.created_at), 'MMM d, yyyy')}
+                    <Calendar className="w-3.5 h-3.5 shrink-0" style={{ color: "#2a3a2a" }} />
+                    <span
+                      className="text-[10px] font-semibold uppercase tracking-wider"
+                      style={{ color: "#3a4a3a" }}
+                    >
+                      {format(new Date(plan.created_at), "MMM d, yyyy")}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-base font-semibold text-white group-hover:text-emerald-300 transition-colors truncate">
+                    <h3
+                      className="text-base font-semibold text-white truncate transition-colors"
+                      style={{}}
+                    >
                       {plan.title || "Weekly Meal Plan"}
                     </h3>
                     <div className="flex items-center gap-2.5 mt-1.5">
                       <StatusBadge status={plan.status} />
-                      <span className="text-white/15 text-xs">7 days</span>
+                      <span className="text-[10px]" style={{ color: "#2a3a2a" }}>
+                        7 days
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-3 ml-4">
-                  <div className="p-2.5 rounded-xl border border-white/[0.05] bg-white/[0.02] text-white/30 group-hover:bg-emerald-400 group-hover:text-black group-hover:border-emerald-400 transition-all duration-300">
+                <div className="flex flex-col items-end gap-3 ml-4 shrink-0">
+                  <div
+                    className="p-2.5 rounded-xl border transition-all duration-300 group-hover:bg-[#b4f55a] group-hover:text-[#050a05] group-hover:border-[#b4f55a]"
+                    style={{
+                      background: "rgba(255,255,255,0.02)",
+                      border: "1px solid rgba(255,255,255,0.05)",
+                      color: "#3a4a3a",
+                    }}
+                  >
                     <ArrowRight className="w-4 h-4" />
                   </div>
-
                   <DeletePlanButton planId={plan.id} />
                 </div>
               </div>
@@ -111,15 +149,32 @@ export default async function HistoryPage({
           ))}
 
           {(!plans || plans.length === 0) && (
-            <div className="col-span-full py-24 text-center bg-white/[0.01] border border-dashed border-white/[0.05] rounded-2xl">
-              <HistoryIcon className="w-10 h-10 text-white/10 mx-auto mb-4" />
-              <h3 className="text-base font-medium text-white/40 mb-1">No plans yet</h3>
-              <p className="text-sm text-white/20 max-w-xs mx-auto">Generate your first plan to start building your history.</p>
+            <div
+              className="col-span-full py-24 text-center rounded-2xl"
+              style={{
+                background: "rgba(255,255,255,0.01)",
+                border: "1px dashed rgba(255,255,255,0.05)",
+              }}
+            >
+              <HistoryIcon
+                className="w-10 h-10 mx-auto mb-4"
+                style={{ color: "rgba(255,255,255,0.06)" }}
+              />
+              <h3 className="text-base font-medium mb-1" style={{ color: "#3a4a3a" }}>
+                No plans yet
+              </h3>
+              <p className="text-sm max-w-xs mx-auto mb-6" style={{ color: "#2a3a2a" }}>
+                Generate your first plan to start building your nutrition history.
+              </p>
               <Link
                 href="/profile"
-                className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl bg-emerald-400 text-black font-semibold text-sm tracking-wide hover:bg-emerald-300 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all"
+                style={{
+                  background: "#b4f55a",
+                  color: "#050a05",
+                }}
               >
-                Create New Plan
+                Generate First Plan
               </Link>
             </div>
           )}
@@ -130,13 +185,23 @@ export default async function HistoryPage({
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const isActive = status === 'active';
+  const isActive = status === "active";
   return (
-    <span className={`text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-md ${
-      isActive
-        ? "bg-emerald-400/10 text-emerald-400"
-        : "bg-white/5 text-white/25"
-    }`}>
+    <span
+      className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-md"
+      style={
+        isActive
+          ? {
+              background: "rgba(180,245,90,0.08)",
+              color: "#b4f55a",
+              border: "1px solid rgba(180,245,90,0.15)",
+            }
+          : {
+              background: "rgba(255,255,255,0.04)",
+              color: "#2a3a2a",
+            }
+      }
+    >
       {status}
     </span>
   );

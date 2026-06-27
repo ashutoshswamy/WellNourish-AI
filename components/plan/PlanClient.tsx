@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Sun,
   Coffee,
@@ -44,10 +44,17 @@ interface Plan {
 }
 
 const mealMeta = [
-  { type: "breakfast", label: "Breakfast", icon: Coffee, color: "#facc15", time: "Morning" },
-  { type: "lunch", label: "Lunch", icon: Sun, color: "#10b981", time: "Afternoon" },
-  { type: "dinner", label: "Dinner", icon: Moon, color: "#818cf8", time: "Evening" },
-  { type: "snacks", label: "Snacks", icon: Cookie, color: "#fb923c", time: "Anytime" },
+  { type: "breakfast", label: "Breakfast", icon: Coffee, color: "#facc15", iconBg: "rgba(250,204,21,0.08)", iconBorder: "rgba(250,204,21,0.15)" },
+  { type: "lunch",     label: "Lunch",     icon: Sun,    color: "#b4f55a", iconBg: "rgba(180,245,90,0.08)", iconBorder: "rgba(180,245,90,0.15)" },
+  { type: "dinner",   label: "Dinner",   icon: Moon,   color: "#818cf8", iconBg: "rgba(129,140,248,0.08)", iconBorder: "rgba(129,140,248,0.15)" },
+  { type: "snacks",   label: "Snacks",   icon: Cookie, color: "#fb923c", iconBg: "rgba(251,146,60,0.08)",  iconBorder: "rgba(251,146,60,0.15)"  },
+];
+
+const macroMeta = [
+  { key: "total_calories" as const, label: "Calories", icon: Flame,     color: "#fb923c", iconBg: "rgba(251,146,60,0.08)",  iconBorder: "rgba(251,146,60,0.15)"  },
+  { key: "protein"        as const, label: "Protein",  icon: Droplets,  color: "#60a5fa", iconBg: "rgba(96,165,250,0.08)",  iconBorder: "rgba(96,165,250,0.15)"  },
+  { key: "carbs"          as const, label: "Carbs",    icon: Wheat,     color: "#fbbf24", iconBg: "rgba(251,191,36,0.08)",  iconBorder: "rgba(251,191,36,0.15)"  },
+  { key: "fat"            as const, label: "Fat",      icon: CircleDot, color: "#34d399", iconBg: "rgba(52,211,153,0.08)",  iconBorder: "rgba(52,211,153,0.15)"  },
 ];
 
 export function PlanClient({ plan }: { plan: Plan }) {
@@ -66,12 +73,17 @@ export function PlanClient({ plan }: { plan: Plan }) {
         <button
           onClick={() => setActiveDayIdx((p) => Math.max(0, p - 1))}
           disabled={activeDayIdx === 0}
-          className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all disabled:opacity-20"
+          className="w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-20"
+          style={{
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            color: "#6a7a6a",
+          }}
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
 
-        <div className="flex gap-2 overflow-x-auto scrollbar-none flex-1 justify-start sm:justify-center px-2 sm:px-4">
+        <div className="flex gap-2 overflow-x-auto flex-1 justify-start sm:justify-center px-1">
           {days.map((day, idx) => (
             <button
               key={day.id}
@@ -79,11 +91,16 @@ export function PlanClient({ plan }: { plan: Plan }) {
                 setActiveDayIdx(idx);
                 setExpandedMealId(null);
               }}
-              className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
+              className="px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap"
+              style={
                 activeDayIdx === idx
-                  ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/20"
-                  : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10"
-              }`}
+                  ? { background: "#b4f55a", color: "#050a05" }
+                  : {
+                      background: "rgba(255,255,255,0.04)",
+                      color: "#5a6a5a",
+                      border: "1px solid rgba(255,255,255,0.04)",
+                    }
+              }
             >
               Day {day.day_number}
             </button>
@@ -93,105 +110,191 @@ export function PlanClient({ plan }: { plan: Plan }) {
         <button
           onClick={() => setActiveDayIdx((p) => Math.min(days.length - 1, p + 1))}
           disabled={activeDayIdx === days.length - 1}
-          className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all disabled:opacity-20"
+          className="w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-20"
+          style={{
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            color: "#6a7a6a",
+          }}
         >
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Daily summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-        <SummaryStat icon={<Flame className="w-4 h-4 text-orange-400" />} label="Target" value={`${currentDay.total_calories} kcal`} />
-        <SummaryStat icon={<Droplets className="w-4 h-4 text-blue-400" />} label="Protein" value={sumMacro(currentDay.meals, "protein")} />
-        <SummaryStat icon={<Wheat className="w-4 h-4 text-amber-400" />} label="Carbs" value={sumMacro(currentDay.meals, "carbs")} />
-        <SummaryStat icon={<CircleDot className="w-4 h-4 text-emerald-400" />} label="Fat" value={sumMacro(currentDay.meals, "fat")} />
+      {/* Daily summary stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {macroMeta.map((m) => {
+          const val =
+            m.key === "total_calories"
+              ? `${currentDay.total_calories} kcal`
+              : sumMacro(currentDay.meals, m.key);
+          return (
+            <div
+              key={m.label}
+              className="p-4 rounded-xl flex items-center gap-3"
+              style={{
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.05)",
+              }}
+            >
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: m.iconBg, border: `1px solid ${m.iconBorder}`, color: m.color }}
+              >
+                <m.icon className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[9px] font-bold uppercase tracking-widest mb-0.5 truncate" style={{ color: "#2a3a2a" }}>
+                  {m.label}
+                </p>
+                <p className="text-sm font-bold text-white truncate">{val}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Meal cards */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeDayIdx}
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          exit={{ opacity: 0, x: -16 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-5"
         >
           {mealMeta.map((meta) => {
-            const meal = currentDay.meals.find(m => m.meal_type === meta.type);
+            const meal = currentDay.meals.find((m) => m.meal_type === meta.type);
             if (!meal) return null;
-
             const isExpanded = expandedMealId === meal.id;
 
             return (
               <motion.div
                 layout
                 key={meal.id}
-                className={`group p-6 rounded-3xl border transition-all duration-500 overflow-hidden ${
-                  isExpanded 
-                    ? "bg-white/[0.04] border-emerald-500/30 ring-1 ring-emerald-500/10" 
-                    : "bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] hover:bg-white/[0.03]"
-                }`}
+                className="p-6 rounded-3xl transition-colors duration-300"
+                style={{
+                  background: isExpanded ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.02)",
+                  border: `1px solid ${isExpanded ? "rgba(180,245,90,0.18)" : "rgba(255,255,255,0.05)"}`,
+                }}
               >
+                {/* Meal header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-2xl bg-white/5 text-slate-400">
-                      <meta.icon className="w-5 h-5" style={{ color: isExpanded ? 'white' : meta.color }} />
+                    <div
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center"
+                      style={{ background: meta.iconBg, border: `1px solid ${meta.iconBorder}` }}
+                    >
+                      <meta.icon className="w-5 h-5" style={{ color: meta.color }} />
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{meta.label}</p>
-                      <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">{meal.name}</h3>
+                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "#3a4a3a" }}>
+                        {meta.label}
+                      </p>
+                      <h3 className="text-lg font-bold text-white leading-tight">{meal.name}</h3>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setExpandedMealId(isExpanded ? null : meal.id)}
-                    className={`mt-2 p-2 rounded-xl transition-all ${isExpanded ? 'bg-emerald-500 text-black' : 'bg-white/5 text-slate-500 hover:text-white'}`}
+                    className="mt-1 p-2 rounded-xl transition-all"
+                    style={
+                      isExpanded
+                        ? { background: "#b4f55a", color: "#050a05" }
+                        : {
+                            background: "rgba(255,255,255,0.04)",
+                            border: "1px solid rgba(255,255,255,0.06)",
+                            color: "#4a5a4a",
+                          }
+                    }
                   >
                     <Info className="w-4 h-4" />
                   </button>
                 </div>
 
-                <p className="text-sm text-slate-400 leading-relaxed font-light mb-6 line-clamp-2">
+                <p className="text-sm leading-relaxed mb-5 line-clamp-2" style={{ color: "#4a5a4a" }}>
                   {meal.description}
                 </p>
 
-                <div className="flex items-center gap-4 py-4 border-y border-white/[0.05] mb-6">
-                   <MiniMacro value={meal.protein} label="P" />
-                   <MiniMacro value={meal.carbs} label="C" />
-                   <MiniMacro value={meal.fat} label="F" />
-                   <div className="ml-auto text-sm font-bold text-white px-3 py-1 rounded-lg bg-white/5">
-                      {meal.calories} kcal
-                   </div>
+                {/* Macro row */}
+                <div
+                  className="flex items-center gap-4 py-3 mb-4"
+                  style={{ borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+                >
+                  <MiniMacro value={meal.protein} label="P" />
+                  <MiniMacro value={meal.carbs} label="C" />
+                  <MiniMacro value={meal.fat} label="F" />
+                  <div
+                    className="ml-auto px-3 py-1 rounded-lg text-sm font-bold text-white"
+                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
+                  >
+                    {meal.calories} kcal
+                  </div>
                 </div>
 
+                {/* Expanded details */}
                 <AnimatePresence>
                   {isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden space-y-6 pt-4"
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden space-y-5 pt-2"
                     >
+                      {/* Ingredients */}
                       <div>
-                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-3">Composition</h4>
+                        <h4
+                          className="text-[10px] font-bold uppercase tracking-widest mb-3"
+                          style={{ color: "#b4f55a" }}
+                        >
+                          Ingredients
+                        </h4>
                         <div className="flex flex-wrap gap-2">
                           {meal.ingredients.map((ing, i) => (
-                            <span key={i} className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 text-xs text-slate-300 font-light">
+                            <span
+                              key={i}
+                              className="px-3 py-1.5 rounded-xl text-xs"
+                              style={{
+                                background: "rgba(255,255,255,0.04)",
+                                border: "1px solid rgba(255,255,255,0.05)",
+                                color: "#c4cec4",
+                              }}
+                            >
                               {ing}
                             </span>
                           ))}
                         </div>
                       </div>
 
+                      {/* Instructions */}
                       <div>
-                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-3">Preparation</h4>
-                        <p className="text-sm text-slate-400 leading-relaxed font-light whitespace-pre-wrap">
+                        <h4
+                          className="text-[10px] font-bold uppercase tracking-widest mb-3"
+                          style={{ color: "#b4f55a" }}
+                        >
+                          Preparation
+                        </h4>
+                        <p
+                          className="text-sm leading-relaxed whitespace-pre-wrap"
+                          style={{ color: "#5a6a5a" }}
+                        >
                           {meal.instructions}
                         </p>
                       </div>
 
-                      <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex gap-3 items-center">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        <p className="text-[11px] text-emerald-400/80 font-medium">Perfectly aligned with your metabolic profile and goal speed.</p>
+                      {/* Metabolic note */}
+                      <div
+                        className="p-4 rounded-2xl flex gap-3 items-center"
+                        style={{
+                          background: "rgba(180,245,90,0.03)",
+                          border: "1px solid rgba(180,245,90,0.08)",
+                        }}
+                      >
+                        <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: "#b4f55a" }} />
+                        <p className="text-[11px] font-medium" style={{ color: "rgba(180,245,90,0.7)" }}>
+                          Perfectly aligned with your metabolic profile and goal pace.
+                        </p>
                       </div>
                     </motion.div>
                   )}
@@ -205,30 +308,47 @@ export function PlanClient({ plan }: { plan: Plan }) {
   );
 }
 
-function SummaryStat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string; }) {
+function SummaryStat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="p-3 sm:p-5 rounded-2xl sm:rounded-3xl bg-white/[0.02] border border-white/[0.05] flex items-center gap-3 sm:gap-4">
-      <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/5 shrink-0">{icon}</div>
+    <div
+      className="p-4 rounded-2xl flex items-center gap-3"
+      style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+    >
+      <div
+        className="p-2 rounded-xl shrink-0"
+        style={{ background: "rgba(255,255,255,0.04)" }}
+      >
+        {icon}
+      </div>
       <div className="min-w-0">
-        <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5 truncate">{label}</p>
-        <p className="text-sm sm:text-base font-bold text-white truncate">{value}</p>
+        <p className="text-[9px] font-bold uppercase tracking-widest truncate" style={{ color: "#2a3a2a" }}>
+          {label}
+        </p>
+        <p className="text-sm font-bold text-white truncate">{value}</p>
       </div>
     </div>
   );
 }
 
-function MiniMacro({ value, label }: { value?: string; label: string; }) {
+function MiniMacro({ value, label }: { value?: string; label: string }) {
   return (
     <div className="flex items-center gap-1.5">
-      <div className="w-5 h-5 rounded-md bg-white/5 flex items-center justify-center text-[10px] font-bold text-slate-500">{label}</div>
-      <span className="text-xs font-semibold text-slate-300">{value || "—"}</span>
+      <div
+        className="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold"
+        style={{ background: "rgba(255,255,255,0.04)", color: "#4a5a4a" }}
+      >
+        {label}
+      </div>
+      <span className="text-xs font-semibold" style={{ color: "#8a9a8a" }}>
+        {value || "—"}
+      </span>
     </div>
   );
 }
 
 function sumMacro(meals: Meal[], key: "protein" | "carbs" | "fat"): string {
   let total = 0;
-  meals.forEach(m => {
+  meals.forEach((m) => {
     const val = m[key];
     if (val) {
       const num = parseInt(val, 10);

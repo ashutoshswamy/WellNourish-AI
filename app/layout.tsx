@@ -80,7 +80,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
-      <html lang="en" className="h-full antialiased">
+      <html lang="en" className="h-full antialiased" data-scroll-behavior="smooth">
         <head>
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-DCNQYDP6QT"
@@ -96,7 +96,7 @@ export default function RootLayout({
             `}
           </Script>
         </head>
-        <body className="grain flex flex-col min-h-screen bg-[#060b06] text-[#c4cec4] selection:bg-lime-400/20 selection:text-lime-200">
+        <body className="grain flex flex-col min-h-screen bg-[#050a05] text-[#c4cec4]">
           <AnimatedBackground />
           <Navbar />
           <main className="flex-1 flex flex-col relative z-10 w-full max-w-7xl mx-auto">

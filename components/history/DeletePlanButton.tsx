@@ -12,7 +12,6 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
   const [status, setStatus] = useState<"idle" | "confirming" | "deleting" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Reset to idle after 3 seconds if in confirming state
   useEffect(() => {
     if (status === "confirming") {
       const timer = setTimeout(() => setStatus("idle"), 3000);
@@ -38,7 +37,7 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
           setErrorMessage(result.error || "Failed to delete plan");
           setTimeout(() => setStatus("idle"), 3000);
         }
-      } catch (_err) {
+      } catch {
         setStatus("error");
         setErrorMessage("An unexpected error occurred");
         setTimeout(() => setStatus("idle"), 3000);
@@ -50,35 +49,37 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
     <button
       onClick={handleDelete}
       disabled={status === "deleting"}
-      className={`
-        relative group flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-300
-        ${status === "idle" ? "hover:bg-red-500/10 text-white/20 hover:text-red-400" : ""}
-        ${status === "confirming" ? "bg-red-500 text-white" : ""}
-        ${status === "deleting" ? "bg-red-500/50 text-white cursor-wait" : ""}
-        ${status === "error" ? "bg-amber-500/10 text-amber-400" : ""}
-      `}
+      className="relative flex items-center gap-1.5 px-2 py-1.5 transition-all duration-200"
+      style={{
+        borderRadius: "10px",
+        fontSize: "11px",
+        fontWeight: 600,
+        cursor: status === "deleting" ? "wait" : "pointer",
+        ...(status === "idle"
+          ? { color: "rgba(255,255,255,0.15)", background: "transparent" }
+          : status === "confirming"
+          ? { color: "white", background: "#ef4444" }
+          : status === "deleting"
+          ? { color: "white", background: "rgba(239,68,68,0.4)" }
+          : { color: "#f59e0b", background: "rgba(245,158,11,0.08)" }),
+      }}
       title={status === "idle" ? "Delete Plan" : undefined}
     >
-      <div className="relative">
-        {status === "deleting" ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
-        ) : status === "error" ? (
-          <AlertCircle className="w-4 h-4" />
-        ) : (
-          <Trash2 className={`w-4 h-4 ${status === "confirming" ? "animate-pulse" : ""}`} />
-        )}
-      </div>
-
-      {status === "confirming" && (
-        <span className="text-xs font-bold tracking-tight whitespace-nowrap">
-          Are you sure?
-        </span>
+      {status === "deleting" ? (
+        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+      ) : status === "error" ? (
+        <AlertCircle className="w-3.5 h-3.5" />
+      ) : (
+        <Trash2
+          className={`w-3.5 h-3.5 ${status === "confirming" ? "animate-pulse" : ""}`}
+        />
       )}
 
+      {status === "confirming" && (
+        <span className="whitespace-nowrap">Confirm?</span>
+      )}
       {status === "error" && (
-        <span className="text-[10px] font-medium leading-none max-w-[80px] truncate">
-          {errorMessage}
-        </span>
+        <span className="truncate max-w-[80px]">{errorMessage}</span>
       )}
     </button>
   );
