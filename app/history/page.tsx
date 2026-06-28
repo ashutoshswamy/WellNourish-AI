@@ -89,18 +89,9 @@ export default async function HistoryPage({
             <Link
               key={plan.id}
               href={`/plan?id=${plan.id}`}
-              className="group relative p-5 rounded-2xl transition-all duration-300"
+              className="group relative p-5 rounded-2xl transition-all duration-300 border border-white/[0.05] hover:border-[rgba(180,245,90,0.12)] hover:-translate-y-0.5"
               style={{
                 background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.05)",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = "rgba(180,245,90,0.12)";
-                (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.05)";
-                (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
               }}
             >
               <div className="flex items-start justify-between">

@@ -121,10 +121,7 @@ export default async function Dashboard() {
           </div>
           <Link
             href="/profile"
-            className="self-start sm:self-auto text-sm font-medium transition-colors"
-            style={{ color: "#3a4a3a" }}
-            onMouseEnter={e => (e.currentTarget.style.color = "#b4f55a")}
-            onMouseLeave={e => (e.currentTarget.style.color = "#3a4a3a")}
+            className="self-start sm:self-auto text-sm font-medium transition-colors text-[#3a4a3a] hover:text-[#b4f55a]"
           >
             Update Profile →
           </Link>

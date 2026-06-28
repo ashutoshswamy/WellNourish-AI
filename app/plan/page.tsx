@@ -89,15 +89,8 @@ export default async function PlanPage({
 
           <Link
             href="/dashboard"
-            className="group flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold self-start sm:self-auto transition-all"
+            className="group flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold self-start sm:self-auto transition-all hover:shadow-[0_0_28px_rgba(180,245,90,0.4)]"
             style={{ background: "#b4f55a", color: "#050a05" }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow =
-                "0 0 28px rgba(180,245,90,0.4)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow = "none";
-            }}
           >
             <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
             Regenerate Plan
