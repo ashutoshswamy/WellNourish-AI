@@ -13,7 +13,7 @@
 - 🔒 **Secure Authentication**: Email/password and Google sign-in powered by **Firebase Auth**.
 - 🚀 **Real-time Data**: Persistent storage using **Firestore**.
 - 📱 **Fully Responsive**: A mobile-first design that looks stunning on every device.
-- 🎨 **Premium UI/UX**: Smooth animations with **Framer Motion** and a modern design system.
+- 🎨 **Premium UI/UX**: Smooth animations with **Framer Motion** + **GSAP** and a modern design system.
 
 ---
 
@@ -24,7 +24,7 @@
 - **Database & Backend**: [Firestore](https://firebase.google.com/docs/firestore)
 - **AI Engine**: [Google Generative AI (Gemini Pro)](https://ai.google.dev/)
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/) & [GSAP](https://gsap.com/)
 - **Form Handling**: [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)
 - **Icons**: [Lucide React](https://lucide.dev/)
 
@@ -34,7 +34,7 @@
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - A Firebase project with Authentication (Email/Password + Google providers) and Firestore enabled
 - The [Firebase CLI](https://firebase.google.com/docs/cli) (`npm i -g firebase-tools`), for deploying Firestore rules/indexes
 - A Google AI Studio API key
@@ -42,18 +42,21 @@
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/ashutoshswamy/wellnourish-ai.git
    cd wellnourish-ai
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables:**
    Create a `.env.local` file in the root directory and add the following:
+
    ```env
    # Firebase client SDK (Project settings > General)
    NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
@@ -72,10 +75,12 @@
    ```
 
 4. **Deploy Firestore rules and indexes:**
+
    ```bash
    firebase login
    firebase deploy --only firestore:rules,firestore:indexes
    ```
+
    `firebase.json` / `.firebaserc` already point at `firestore.rules` and `firestore.indexes.json` and the `wellnourishai` project — no `firebase init` needed. Composite indexes take a few minutes to build; check **Firebase Console → Firestore → Indexes** for "Enabled" before generating a plan.
 
 5. **Run the development server:**
