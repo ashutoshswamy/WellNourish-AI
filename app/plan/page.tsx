@@ -1,6 +1,5 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { createAuthenticatedClient } from "@/lib/supabase-server";
+import { adminDb, getServerUser, loadPlanWithDays } from "@/lib/firebase-admin";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { PlanClient } from "@/components/plan/PlanClient";
@@ -19,37 +18,28 @@ export default async function PlanPage({
 }: {
   searchParams: { id?: string };
 }) {
-  const { userId, getToken } = await auth();
-  if (!userId) redirect("/");
-
-  const supabaseAccessToken = await getToken({ template: "supabase" });
-  if (!supabaseAccessToken) redirect("/");
-
-  const supabase = await createAuthenticatedClient(supabaseAccessToken);
+  const user = await getServerUser();
+  if (!user) redirect("/");
 
   const selectedId = searchParams?.id;
 
-  let query = supabase
-    .from("meal_plans")
-    .select("*, plan_days(*, meals(*))")
-    .eq("user_id", userId);
-
-  if (selectedId) {
-    query = query.eq("id", selectedId);
-  } else {
-    query = query
-      .eq("status", "active")
-      .order("created_at", { ascending: false })
-      .limit(1);
+  let planId = selectedId;
+  if (!planId) {
+    const activeSnap = await adminDb
+      .collection("mealPlans")
+      .where("user_id", "==", user.uid)
+      .where("status", "==", "active")
+      .orderBy("created_at", "desc")
+      .limit(1)
+      .get();
+    planId = activeSnap.docs[0]?.id;
   }
 
-  const { data: plans, error } = await query;
+  const activePlan = planId ? await loadPlanWithDays(planId) : null;
 
-  if (error || !plans || plans.length === 0) {
+  if (!activePlan || activePlan.user_id !== user.uid) {
     redirect("/dashboard");
   }
-
-  const activePlan = plans[0];
 
   return (
     <div className="flex-1 flex flex-col p-6 md:p-10 w-full">

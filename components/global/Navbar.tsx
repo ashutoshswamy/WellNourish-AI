@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/global/Logo";
-import { UserButton, useUser } from "@clerk/nextjs";
-import { Menu, X } from "lucide-react";
+import { useUser } from "@/components/providers/AuthProvider";
+import { LogOut, Menu, X } from "lucide-react";
 import { gsap } from "gsap";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function Navbar() {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, signOutUser } = useUser();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -100,25 +100,26 @@ export function Navbar() {
           </Link>
         ))}
         {isSignedIn && (
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox:
-                  "w-9 h-9 ring-2 ring-[#b4f55a]/30 hover:ring-[#b4f55a]/50 transition-all",
-              },
-            }}
-          />
+          <button
+            onClick={() => signOutUser()}
+            aria-label="Sign out"
+            className="p-2.5 rounded-full ring-2 ring-[#b4f55a]/30 hover:ring-[#b4f55a]/50 text-[#7a8a7a] hover:text-white transition-all"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         )}
       </div>
 
       {/* Mobile toggle */}
       <div className="flex md:hidden items-center gap-4">
         {isSignedIn && (
-          <UserButton
-            appearance={{
-              elements: { avatarBox: "w-8 h-8 ring-2 ring-[#b4f55a]/30" },
-            }}
-          />
+          <button
+            onClick={() => signOutUser()}
+            aria-label="Sign out"
+            className="p-2 rounded-full ring-2 ring-[#b4f55a]/30 text-[#7a8a7a]"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         )}
         <button
           onClick={toggleMenu}

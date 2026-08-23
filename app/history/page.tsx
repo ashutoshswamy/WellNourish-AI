@@ -1,6 +1,5 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { createAuthenticatedClient } from "@/lib/supabase-server";
+import { adminDb, getServerUser } from "@/lib/firebase-admin";
 import Link from "next/link";
 import { ArrowLeft, History as HistoryIcon, Calendar, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
@@ -21,23 +20,31 @@ export default async function HistoryPage({
 }: {
   searchParams: { sort?: string };
 }) {
-  const { userId, getToken } = await auth();
-  if (!userId) redirect("/");
-
-  const supabaseAccessToken = await getToken({ template: "supabase" });
-  if (!supabaseAccessToken) return redirect("/");
-
-  const supabase = await createAuthenticatedClient(supabaseAccessToken);
+  const user = await getServerUser();
+  if (!user) redirect("/");
 
   const ascending = searchParams?.sort === "asc";
 
-  const { data: plans, error } = await supabase
-    .from("meal_plans")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending });
+  let plans: { id: string; created_at: string; status: string; title?: string }[] = [];
+  try {
+    const snap = await adminDb
+      .collection("mealPlans")
+      .where("user_id", "==", user.uid)
+      .orderBy("created_at", ascending ? "asc" : "desc")
+      .get();
 
-  if (error) console.error("History fetch error:", error);
+    plans = snap.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        created_at: data.created_at?.toDate?.().toISOString() ?? new Date().toISOString(),
+        status: data.status,
+        title: data.title,
+      };
+    });
+  } catch (err) {
+    console.error("History fetch error:", err);
+  }
 
   return (
     <div className="flex-1 flex flex-col p-6 md:p-10 w-full">

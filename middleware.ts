@@ -1,16 +1,22 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
+import { SESSION_COOKIE } from "@/lib/session-cookie";
 
-const isProtectedRoute = createRouteMatcher([
-  '/dashboard(.*)',
-  '/plan(.*)',
-  '/api(.*)'
-]);
+const isProtectedRoute = (pathname: string) =>
+  (pathname.startsWith("/dashboard") || pathname.startsWith("/plan") || pathname.startsWith("/api")) &&
+  pathname !== "/api/auth/session"; // sets the session cookie itself — can't require one first
 
-export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) {
-      await auth.protect();
+// Only checks that a session cookie exists — the Admin SDK can't run on the
+// Edge runtime, so real verification happens per-route via getServerUser().
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  if (isProtectedRoute(pathname) && !req.cookies.get(SESSION_COOKIE)?.value) {
+    if (pathname.startsWith("/api")) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
-});
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [

@@ -1,30 +1,24 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
-import { createAuthenticatedClient } from "@/lib/supabase-server";
+import { adminDb, deleteMealPlanCascade, getServerUser } from "@/lib/firebase-admin";
 import { revalidatePath } from "next/cache";
 
 export async function deletePlanAction(planId: string) {
-  const { userId, getToken } = await auth();
-  if (!userId) {
+  const user = await getServerUser();
+  if (!user) {
     throw new Error("Unauthorized");
   }
 
-  const supabaseAccessToken = await getToken({ template: "supabase" });
-  if (!supabaseAccessToken) {
-    throw new Error("No database access token found");
+  const planSnap = await adminDb.collection("mealPlans").doc(planId).get();
+  if (!planSnap.exists || planSnap.data()?.user_id !== user.uid) {
+    return { success: false, error: "Plan not found" };
   }
 
-  const supabase = await createAuthenticatedClient(supabaseAccessToken);
-
-  const { error } = await supabase
-    .from("meal_plans")
-    .delete()
-    .eq("id", planId);
-
-  if (error) {
-    console.error("Delete plan error:", error);
-    return { success: false, error: error.message };
+  try {
+    await deleteMealPlanCascade(planId);
+  } catch (err) {
+    console.error("Delete plan error:", err);
+    return { success: false, error: "Failed to delete plan" };
   }
 
   revalidatePath("/history");

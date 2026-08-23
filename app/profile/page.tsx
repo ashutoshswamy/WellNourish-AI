@@ -1,6 +1,5 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
+import { adminDb, getServerUser } from "@/lib/firebase-admin";
 import { ProfileForm } from "./ProfileForm";
 import { Metadata } from "next";
 
@@ -11,24 +10,15 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default async function ProfilePage() {
-  const { userId } = await auth();
-  if (!userId) redirect("/");
+  const user = await getServerUser();
+  if (!user) redirect("/");
 
-  const { data: metrics } = await supabase
-    .from("user_metrics")
-    .select("*")
-    .eq("user_id", userId)
-    .single();
+  const metricsSnap = await adminDb.collection("userMetrics").doc(user.uid).get();
 
   return (
     <div className="flex-1 flex flex-col p-6 md:p-12 w-full justify-center">
-      <ProfileForm initialData={metrics || {}} />
+      <ProfileForm initialData={metricsSnap.data() || {}} />
     </div>
   );
 }

@@ -1,6 +1,5 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { createAuthenticatedClient } from "@/lib/supabase-server";
+import { adminDb, getServerUser, loadPlanWithDays } from "@/lib/firebase-admin";
 import Link from "next/link";
 import {
   Activity,
@@ -61,38 +60,42 @@ const MEAL_COLORS: Record<string, string> = {
 };
 
 export default async function Dashboard() {
-  const { userId, getToken } = await auth();
-  const user = await currentUser();
-  if (!userId) redirect("/");
+  const user = await getServerUser();
+  if (!user) redirect("/");
+  const userId = user.uid;
 
-  const supabaseAccessToken = await getToken({ template: "supabase" });
-  if (!supabaseAccessToken) redirect("/");
-
-  const supabase = await createAuthenticatedClient(supabaseAccessToken);
-
-  const { data: metrics } = await supabase
-    .from("user_metrics")
-    .select("*")
-    .eq("user_id", userId)
-    .single();
+  const metricsSnap = await adminDb.collection("userMetrics").doc(userId).get();
+  const metrics = metricsSnap.data();
 
   if (!metrics) redirect("/profile");
 
-  const { data: activePlan } = await supabase
-    .from("meal_plans")
-    .select("*, plan_days(*, meals(*))")
-    .eq("user_id", userId)
-    .eq("status", "active")
-    .order("created_at", { ascending: false })
+  const activeSnap = await adminDb
+    .collection("mealPlans")
+    .where("user_id", "==", userId)
+    .where("status", "==", "active")
+    .orderBy("created_at", "desc")
     .limit(1)
-    .single();
+    .get();
 
-  const { data: recentPlans } = await supabase
-    .from("meal_plans")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
-    .limit(3);
+  const activePlan = activeSnap.docs[0] ? await loadPlanWithDays(activeSnap.docs[0].id) : null;
+
+  const recentSnap = await adminDb
+    .collection("mealPlans")
+    .where("user_id", "==", userId)
+    .orderBy("created_at", "desc")
+    .limit(3)
+    .get();
+
+  const recentPlans: MealPlan[] = recentSnap.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      created_at: data.created_at?.toDate?.().toISOString() ?? new Date().toISOString(),
+      status: data.status,
+      start_date: data.start_date,
+      title: data.title,
+    };
+  });
 
   const hasPlan = !!activePlan;
   const planDays = activePlan?.plan_days || [];
@@ -116,7 +119,7 @@ export default async function Dashboard() {
               Dashboard
             </p>
             <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-              Hello, {user?.firstName || "there"} 👋
+              Hello, {(user.name as string | undefined)?.split(" ")[0] || "there"} 👋
             </h1>
           </div>
           <Link

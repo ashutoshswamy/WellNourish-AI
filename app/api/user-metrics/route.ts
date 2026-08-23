@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { createAuthenticatedClient } from "@/lib/supabase-server";
+import { adminDb, getServerUser } from "@/lib/firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 import { z } from "zod";
 
 const userMetricsSchema = z.object({
@@ -78,9 +78,9 @@ function calculateDailyCalories(data: UserMetricsData) {
 
 export async function POST(req: Request) {
   try {
-    const { userId, getToken } = await auth();
+    const user = await getServerUser();
 
-    if (!userId) {
+    if (!user) {
       return NextResponse.json(
         { error: "Unauthorized", message: "You must be signed in." },
         { status: 401 }
@@ -102,42 +102,26 @@ export async function POST(req: Request) {
     }
 
     const data = validation.data;
-    const supabaseAccessToken = await getToken({ template: "supabase" });
+    const userId = user.uid;
 
-    if (!supabaseAccessToken) {
-      return NextResponse.json(
+    try {
+      // Ensure a profile document exists before writing user metrics
+      await adminDb.collection("profiles").doc(userId).set(
         {
-          error: "Auth sync failed",
-          message:
-            "Could not connect to the database. Please ensure the Supabase JWT template is configured in Clerk.",
+          user_id: userId,
+          email: user.email ?? null,
+          full_name: (user.name as string | undefined) ?? null,
+          avatar_url: (user.picture as string | undefined) ?? null,
+          updated_at: FieldValue.serverTimestamp(),
         },
-        { status: 500 }
+        { merge: true }
       );
-    }
-
-    const supabase = await createAuthenticatedClient(supabaseAccessToken);
-
-    // Ensure a profiles row exists before writing to user_metrics (FK dependency)
-    const user = await currentUser();
-    const { error: profileError } = await supabase.from("profiles").upsert(
-      {
-        user_id: userId,
-        email: user?.emailAddresses?.[0]?.emailAddress ?? null,
-        full_name:
-          [user?.firstName, user?.lastName].filter(Boolean).join(" ") || null,
-        avatar_url: user?.imageUrl ?? null,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: "user_id" }
-    );
-
-    if (profileError) {
+    } catch (profileError) {
       console.error("Profile upsert error:", profileError);
       return NextResponse.json(
         {
           error: "Profile synchronization failed",
-          message: profileError.message || "Failed to create or update your profile in the database.",
-          details: profileError.code === "23505" ? "This email may already be linked to another account." : null,
+          message: "Failed to create or update your profile in the database.",
         },
         { status: 500 }
       );
@@ -146,9 +130,8 @@ export async function POST(req: Request) {
     // Save user metrics
     const daily_calorie_target = calculateDailyCalories(data);
 
-    const { error: metricsError } = await supabase
-      .from("user_metrics")
-      .upsert(
+    try {
+      await adminDb.collection("userMetrics").doc(userId).set(
         {
           user_id: userId,
           age: data.age,
@@ -164,35 +147,26 @@ export async function POST(req: Request) {
           diet_preferences: data.diet_preferences || null,
           allergies: data.allergies || null,
           injuries: data.injuries || null,
-          updated_at: new Date().toISOString(),
+          updated_at: FieldValue.serverTimestamp(),
         },
-        { onConflict: "user_id" }
+        { merge: true }
       );
-
-    if (metricsError) {
+    } catch (metricsError) {
       console.error("Metrics upsert error:", metricsError);
       return NextResponse.json(
-        {
-          error: "Failed to save metrics",
-          message: metricsError.message,
-        },
+        { error: "Failed to save metrics", message: "Please try again." },
         { status: 500 }
       );
     }
 
     // Log weight for trend tracking (non-blocking)
-    const { error: weightLogError } = await supabase
-      .from("weight_logs")
-      .upsert(
-        {
-          user_id: userId,
-          weight: data.weight_kg,
-          logged_at: new Date().toISOString().split("T")[0],
-        },
-        { onConflict: "user_id,logged_at" }
-      );
-
-    if (weightLogError) {
+    try {
+      const loggedAt = new Date().toISOString().split("T")[0];
+      await adminDb
+        .collection("weightLogs")
+        .doc(`${userId}_${loggedAt}`)
+        .set({ user_id: userId, weight: data.weight_kg, logged_at: loggedAt }, { merge: true });
+    } catch (weightLogError) {
       console.warn("Weight log warning (non-fatal):", weightLogError);
     }
 

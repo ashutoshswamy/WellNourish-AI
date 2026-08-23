@@ -10,8 +10,8 @@
 - 📊 **Dynamic Dashboard**: A beautiful, premium dashboard to track your progress and manage your daily meals.
 - 📋 **Interactive Shopping Lists**: Automatically generated shopping lists based on your meal plans to simplify your grocery trips.
 - 👤 **In-Depth Profiling**: A comprehensive onboarding experience to capture your biometrics, activity levels, and dietary restrictions.
-- 🔒 **Secure Authentication**: Seamless login and signup experience powered by **Clerk**.
-- 🚀 **Real-time Data**: Instant updates and persistent storage using **Supabase**.
+- 🔒 **Secure Authentication**: Email/password and Google sign-in powered by **Firebase Auth**.
+- 🚀 **Real-time Data**: Persistent storage using **Firestore**.
 - 📱 **Fully Responsive**: A mobile-first design that looks stunning on every device.
 - 🎨 **Premium UI/UX**: Smooth animations with **Framer Motion** and a modern design system.
 
@@ -19,9 +19,9 @@
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
-- **Authentication**: [Clerk](https://clerk.com/)
-- **Database & Backend**: [Supabase](https://supabase.com/)
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Authentication**: [Firebase Auth](https://firebase.google.com/docs/auth)
+- **Database & Backend**: [Firestore](https://firebase.google.com/docs/firestore)
 - **AI Engine**: [Google Generative AI (Gemini Pro)](https://ai.google.dev/)
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
 - **Animations**: [Framer Motion](https://www.framer.com/motion/)
@@ -35,8 +35,8 @@
 ### Prerequisites
 
 - Node.js 18+ 
-- A Supabase account and project
-- A Clerk account and project
+- A Firebase project with Authentication (Email/Password + Google providers) and Firestore enabled
+- The [Firebase CLI](https://firebase.google.com/docs/cli) (`npm i -g firebase-tools`), for deploying Firestore rules/indexes
 - A Google AI Studio API key
 
 ### Installation
@@ -55,19 +55,30 @@
 3. **Set up environment variables:**
    Create a `.env.local` file in the root directory and add the following:
    ```env
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_pub_key
-   CLERK_SECRET_KEY=your_clerk_secret_key
-   NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+   # Firebase client SDK (Project settings > General)
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+   # Firebase Admin SDK (Project settings > Service accounts > Generate new private key)
+   FIREBASE_PROJECT_ID=your_project_id
+   FIREBASE_CLIENT_EMAIL=your_service_account_email
+   FIREBASE_PRIVATE_KEY="your_service_account_private_key"
 
-   GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_api_key
+   GEMINI_API_KEY=your_gemini_api_key
    ```
 
-4. **Run the development server:**
+4. **Deploy Firestore rules and indexes:**
+   ```bash
+   firebase login
+   firebase deploy --only firestore:rules,firestore:indexes
+   ```
+   `firebase.json` / `.firebaserc` already point at `firestore.rules` and `firestore.indexes.json` and the `wellnourishai` project — no `firebase init` needed. Composite indexes take a few minutes to build; check **Firebase Console → Firestore → Indexes** for "Enabled" before generating a plan.
+
+5. **Run the development server:**
    ```bash
    npm run dev
    ```

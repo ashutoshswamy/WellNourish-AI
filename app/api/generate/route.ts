@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { createAuthenticatedClient } from "@/lib/supabase-server";
+import { adminDb, getServerUser } from "@/lib/firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import type { Schema } from "@google/generative-ai";
 import { z } from "zod";
@@ -70,6 +70,7 @@ interface ShoppingListItem {
   plan_id: string;
   item_name: string;
   is_checked: boolean;
+  created_at: FirebaseFirestore.FieldValue;
 }
 
 const responseSchema = {
@@ -135,31 +136,37 @@ function sanitizeForPrompt(text: string | null | undefined): string {
     .slice(0, 500);
 }
 
+async function generatePlanText(prompt: string): Promise<string> {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-3.5-flash-lite",
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema,
+      temperature: 0.4,
+      topP: 0.9,
+      maxOutputTokens: 65536,
+    },
+  });
+  const result = await model.generateContent(prompt);
+  return result.response.text();
+}
+
 export async function POST() {
   try {
-    const { userId, getToken } = await auth();
-    if (!userId) return new NextResponse("Unauthorized", { status: 401 });
-
-    const supabaseAccessToken = await getToken({ template: "supabase" });
-    if (!supabaseAccessToken) {
-      return new NextResponse("Failed to synchronize authentication", {
-        status: 500,
-      });
-    }
-    const supabase = await createAuthenticatedClient(supabaseAccessToken);
+    const user = await getServerUser();
+    if (!user) return new NextResponse("Unauthorized", { status: 401 });
+    const userId = user.uid;
 
     // 1. Rate Limiting Check (Simple version: 1 plan per hour)
-    const { data: recentPlans, error: recentError } = await supabase
-      .from("meal_plans")
-      .select("created_at")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false })
-      .limit(1);
+    const recentPlansSnap = await adminDb
+      .collection("mealPlans")
+      .where("user_id", "==", userId)
+      .orderBy("created_at", "desc")
+      .limit(1)
+      .get();
 
-    if (recentError) {
-      console.error("Rate limit check error:", recentError);
-    } else if (recentPlans && recentPlans.length > 0) {
-      const lastCreated = new Date(recentPlans[0].created_at);
+    if (!recentPlansSnap.empty) {
+      const lastCreated = recentPlansSnap.docs[0].data().created_at?.toDate?.() ?? new Date(0);
       const now = new Date();
       const diffMs = now.getTime() - lastCreated.getTime();
       const diffMins = Math.floor(diffMs / 60000);
@@ -176,13 +183,10 @@ export async function POST() {
     }
 
     // 2. Fetch User Metrics for Personalization
-    const { data: metrics, error: metricsError } = await supabase
-      .from("user_metrics")
-      .select("*")
-      .eq("user_id", userId)
-      .single();
+    const metricsSnap = await adminDb.collection("userMetrics").doc(userId).get();
+    const metrics = metricsSnap.data();
 
-    if (metricsError || !metrics) {
+    if (!metrics) {
       return new NextResponse(
         "User metrics not found. Please setup your profile.",
         { status: 404 },
@@ -190,23 +194,17 @@ export async function POST() {
     }
 
     // 3. Archive previous active plans for this user
-    await supabase
-      .from("meal_plans")
-      .update({ status: "archived" })
-      .eq("user_id", userId)
-      .eq("status", "active");
+    const activePlansSnap = await adminDb
+      .collection("mealPlans")
+      .where("user_id", "==", userId)
+      .where("status", "==", "active")
+      .get();
 
-    // 4. AI Generation setup
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema,
-        temperature: 0.4,
-        topP: 0.9,
-        maxOutputTokens: 65536,
-      },
-    });
+    if (!activePlansSnap.empty) {
+      const archiveBatch = adminDb.batch();
+      activePlansSnap.forEach((doc) => archiveBatch.update(doc.ref, { status: "archived" }));
+      await archiveBatch.commit();
+    }
 
     const calorieTarget = metrics.daily_calorie_target;
     if (!calorieTarget) {
@@ -254,9 +252,7 @@ export async function POST() {
       Return only JSON matching the schema.
     `;
 
-    const result = await model.generateContent(prompt);
-
-    const responseText = result.response.text();
+    const responseText = await generatePlanText(prompt);
     let planData: GeneratedPlan;
 
     try {
@@ -354,48 +350,21 @@ export async function POST() {
 
     planData = { days: normalizedDays };
 
-    // 5. Persistence into Normalized Tables
-    const { data: newPlan, error: planError } = await supabase
-      .from("meal_plans")
-      .insert({
-        user_id: userId,
-        status: "active",
-        start_date: new Date().toISOString().split("T")[0],
-      })
-      .select()
-      .single();
+    // 5. Persistence into Firestore
+    const planRef = adminDb.collection("mealPlans").doc();
+    await planRef.set({
+      user_id: userId,
+      status: "active",
+      start_date: new Date().toISOString().split("T")[0],
+      created_at: FieldValue.serverTimestamp(),
+    });
 
-    if (planError || !newPlan) {
-      console.error("Plan creation error:", planError);
-      return new NextResponse("Failed to initialize meal plan", {
-        status: 500,
-      });
-    }
-
-    // Insert Days and Meals
+    // Write each day (with its meals embedded) and collect shopping list items
     const shoppingListItems: ShoppingListItem[] = [];
+    const daysBatch = adminDb.batch();
 
     for (const day of planData.days) {
-      const { data: insertedDay, error: dayError } = await supabase
-        .from("plan_days")
-        .insert({
-          meal_plan_id: newPlan.id,
-          day_number: day.day_number,
-          total_calories: day.total_calories,
-        })
-        .select()
-        .single();
-
-      if (dayError || !insertedDay) {
-        console.error(`Error inserting day ${day.day_number}:`, dayError);
-        return new NextResponse(
-          `Failed to save meal plan data (Day ${day.day_number})`,
-          { status: 500 },
-        );
-      }
-
-      const mealsToInsert = day.meals.map((m: GeneratedMeal) => ({
-        plan_day_id: insertedDay.id,
+      const meals = day.meals.map((m: GeneratedMeal) => ({
         meal_type: m.type,
         name: m.name,
         description: m.description,
@@ -407,39 +376,47 @@ export async function POST() {
         instructions: m.instructions,
       }));
 
-      const { error: mealsError } = await supabase
-        .from("meals")
-        .insert(mealsToInsert);
-      if (mealsError) {
-        console.error("Meals insert error:", mealsError);
-        return new NextResponse("Failed to save meals for the plan", {
-          status: 500,
-        });
-      }
+      const dayRef = planRef.collection("days").doc();
+      daysBatch.set(dayRef, {
+        day_number: day.day_number,
+        total_calories: day.total_calories,
+        meals,
+      });
 
       day.meals.forEach((m: GeneratedMeal) => {
         m.ingredients.forEach((ing: string) => {
           shoppingListItems.push({
             user_id: userId,
-            plan_id: newPlan.id,
+            plan_id: planRef.id,
             item_name: ing,
             is_checked: false,
+            created_at: FieldValue.serverTimestamp(),
           });
         });
       });
     }
 
+    try {
+      await daysBatch.commit();
+    } catch (dayError) {
+      console.error("Error saving plan days:", dayError);
+      return new NextResponse("Failed to save meal plan data", { status: 500 });
+    }
+
     if (shoppingListItems.length > 0) {
-      // Chunk inserts for shopping list to avoid limit issues
-      const chunkSize = 50;
+      // Firestore batches cap at 500 writes; chunk to stay safely under that
+      const chunkSize = 400;
       for (let i = 0; i < shoppingListItems.length; i += chunkSize) {
-        await supabase
-          .from("shopping_list")
-          .insert(shoppingListItems.slice(i, i + chunkSize));
+        const chunk = shoppingListItems.slice(i, i + chunkSize);
+        const shoppingBatch = adminDb.batch();
+        chunk.forEach((item) => {
+          shoppingBatch.set(adminDb.collection("shoppingList").doc(), item);
+        });
+        await shoppingBatch.commit();
       }
     }
 
-    return NextResponse.json({ success: true, planId: newPlan.id });
+    return NextResponse.json({ success: true, planId: planRef.id });
   } catch (error) {
     console.error("Generation pipeline failed:", error);
     return new NextResponse("Internal server error during generation", {

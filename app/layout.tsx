@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 import { Navbar } from "@/components/global/Navbar";
 import { Footer } from "@/components/global/Footer";
 import { AnimatedBackground } from "@/components/global/AnimatedBackground";
@@ -79,11 +78,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider appearance={{ baseTheme: dark }}>
+    <AuthProvider>
       <html lang="en" className="h-full antialiased" data-scroll-behavior="smooth">
         <head>
           <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-DCNQYDP6QT"
+            src="https://www.googletagmanager.com/gtag/js?id=G-1JP8VR2FSG"
             strategy="afterInteractive"
           />
           <Script id="google-analytics" strategy="afterInteractive">
@@ -92,7 +91,7 @@ export default function RootLayout({
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
 
-              gtag('config', 'G-DCNQYDP6QT');
+              gtag('config', 'G-1JP8VR2FSG');
             `}
           </Script>
         </head>
@@ -105,6 +104,6 @@ export default function RootLayout({
           <Footer />
         </body>
       </html>
-    </ClerkProvider>
+    </AuthProvider>
   );
 }

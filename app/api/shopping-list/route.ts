@@ -1,44 +1,37 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { createAuthenticatedClient } from "@/lib/supabase-server";
+import { adminDb, getServerUser } from "@/lib/firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 import { z } from "zod";
 
 const shoppingItemSchema = z.object({
   item_name: z.string().min(1).max(200),
   is_checked: z.boolean().optional(),
-  plan_id: z.string().uuid().optional(),
+  plan_id: z.string().min(1).optional(),
 });
 
 export async function POST(req: Request) {
   try {
-    const { userId, getToken } = await auth();
-    if (!userId) return new NextResponse("Unauthorized", { status: 401 });
-
-    const supabaseAccessToken = await getToken({ template: "supabase" });
-    if (!supabaseAccessToken) {
-      return new NextResponse("Failed to synchronize authentication", { status: 500 });
-    }
-    const supabase = await createAuthenticatedClient(supabaseAccessToken);
+    const user = await getServerUser();
+    if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
     const body = await req.json();
     const validated = shoppingItemSchema.parse(body);
 
-    const { data, error } = await supabase
-      .from("shopping_list")
-      .insert({
-        ...validated,
-        user_id: userId,
-        is_checked: validated.is_checked ?? false,
-      })
-      .select()
-      .single();
+    const docData = {
+      user_id: user.uid,
+      plan_id: validated.plan_id ?? null,
+      item_name: validated.item_name,
+      is_checked: validated.is_checked ?? false,
+      created_at: FieldValue.serverTimestamp(),
+    };
+    const ref = await adminDb.collection("shoppingList").add(docData);
 
-    if (error) {
-      console.error("Shopping list POST error:", error);
-      return new NextResponse("Failed to add item", { status: 500 });
-    }
-
-    return NextResponse.json(data);
+    return NextResponse.json({
+      id: ref.id,
+      item_name: docData.item_name,
+      is_checked: docData.is_checked,
+      plan_id: docData.plan_id,
+    });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return new NextResponse(JSON.stringify(err.issues), { status: 400 });
@@ -50,33 +43,22 @@ export async function POST(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
-    const { userId, getToken } = await auth();
-    if (!userId) return new NextResponse("Unauthorized", { status: 401 });
-
-    const supabaseAccessToken = await getToken({ template: "supabase" });
-    if (!supabaseAccessToken) {
-      return new NextResponse("Failed to synchronize authentication", { status: 500 });
-    }
-    const supabase = await createAuthenticatedClient(supabaseAccessToken);
+    const user = await getServerUser();
+    if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return new NextResponse("Missing item id", { status: 400 });
 
-    const body = await req.json();
-    const { is_checked } = body;
+    const { is_checked } = await req.json();
 
-    const { error } = await supabase
-      .from("shopping_list")
-      .update({ is_checked })
-      .eq("id", id)
-      .eq("user_id", userId);
-
-    if (error) {
-      console.error("Shopping list PATCH error:", error);
+    const ref = adminDb.collection("shoppingList").doc(id);
+    const snap = await ref.get();
+    if (!snap.exists || snap.data()?.user_id !== user.uid) {
       return new NextResponse("Failed to update item", { status: 500 });
     }
 
+    await ref.update({ is_checked });
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Shopping list PATCH internal error:", err);
@@ -86,30 +68,20 @@ export async function PATCH(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const { userId, getToken } = await auth();
-    if (!userId) return new NextResponse("Unauthorized", { status: 401 });
-
-    const supabaseAccessToken = await getToken({ template: "supabase" });
-    if (!supabaseAccessToken) {
-      return new NextResponse("Failed to synchronize authentication", { status: 500 });
-    }
-    const supabase = await createAuthenticatedClient(supabaseAccessToken);
+    const user = await getServerUser();
+    if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return new NextResponse("Missing item id", { status: 400 });
 
-    const { error } = await supabase
-      .from("shopping_list")
-      .delete()
-      .eq("id", id)
-      .eq("user_id", userId);
-
-    if (error) {
-      console.error("Shopping list DELETE error:", error);
+    const ref = adminDb.collection("shoppingList").doc(id);
+    const snap = await ref.get();
+    if (!snap.exists || snap.data()?.user_id !== user.uid) {
       return new NextResponse("Failed to delete item", { status: 500 });
     }
 
+    await ref.delete();
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Shopping list DELETE internal error:", err);

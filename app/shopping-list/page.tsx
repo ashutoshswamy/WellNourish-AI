@@ -1,6 +1,5 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
+import { adminDb, getServerUser } from "@/lib/firebase-admin";
 import Link from "next/link";
 import { ArrowLeft, ShoppingBasket } from "lucide-react";
 import { ShoppingListClient } from "@/components/shopping/ShoppingListClient";
@@ -14,34 +13,37 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export default async function ShoppingListPage() {
-  const { userId } = await auth();
-  if (!userId) redirect("/");
+  const user = await getServerUser();
+  if (!user) redirect("/");
 
-  const { data: activePlan } = await supabase
-    .from("meal_plans")
-    .select("id")
-    .eq("user_id", userId)
-    .eq("status", "active")
-    .order("created_at", { ascending: false })
+  const activePlanSnap = await adminDb
+    .collection("mealPlans")
+    .where("user_id", "==", user.uid)
+    .where("status", "==", "active")
+    .orderBy("created_at", "desc")
     .limit(1)
-    .single();
+    .get();
 
-  if (!activePlan) redirect("/dashboard");
+  if (activePlanSnap.empty) redirect("/dashboard");
+  const activePlanId = activePlanSnap.docs[0].id;
 
-  const { data: items, error } = await supabase
-    .from("shopping_list")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("plan_id", activePlan.id)
-    .order("created_at", { ascending: true });
+  let items: { id: string; item_name: string; is_checked: boolean }[] = [];
+  try {
+    const itemsSnap = await adminDb
+      .collection("shoppingList")
+      .where("user_id", "==", user.uid)
+      .where("plan_id", "==", activePlanId)
+      .orderBy("created_at", "asc")
+      .get();
 
-  if (error) console.error("Shopping list fetch error:", error);
+    items = itemsSnap.docs.map((doc) => {
+      const data = doc.data();
+      return { id: doc.id, item_name: data.item_name, is_checked: data.is_checked };
+    });
+  } catch (err) {
+    console.error("Shopping list fetch error:", err);
+  }
 
   return (
     <div className="flex-1 flex flex-col p-6 md:p-10 w-full">
@@ -84,7 +86,7 @@ export default async function ShoppingListPage() {
         </div>
 
         {/* Client side list handler */}
-        <ShoppingListClient initialItems={items || []} />
+        <ShoppingListClient initialItems={items} />
       </div>
     </div>
   );
