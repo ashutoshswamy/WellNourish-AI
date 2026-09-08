@@ -54,7 +54,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    await syncSessionCookie(credential.user);
     router.push("/dashboard");
     router.refresh();
   };
