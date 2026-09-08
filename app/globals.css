@@ -1,4 +1,4 @@
-@import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@200,300,400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 html {
@@ -26,7 +26,7 @@ html {
   --border:      rgba(255,255,255,0.05);
   --border-accent: rgba(180,245,90,0.14);
 
-  --font-clash: "Clash Grotesk", sans-serif;
+  --font-app: "DM Sans", sans-serif;
 
   /* Radii */
   --radius-sm: 12px;
@@ -39,7 +39,7 @@ html {
 @theme inline {
   --color-background: var(--bg);
   --color-foreground: var(--text-primary);
-  --font-sans: var(--font-clash);
+  --font-sans: var(--font-app);
 }
 
 /* ── Reset / Base ── */
@@ -50,7 +50,7 @@ html {
 body {
   background: var(--bg);
   color: var(--text-primary);
-  font-family: var(--font-clash);
+  font-family: var(--font-app);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
