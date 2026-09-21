@@ -76,6 +76,14 @@ function calculateDailyCalories(data: UserMetricsData) {
   return isNaN(result) || result <= 0 ? null : result;
 }
 
+export async function GET() {
+  const user = await getServerUser();
+  if (!user) return new NextResponse("Unauthorized", { status: 401 });
+
+  const snap = await adminDb.collection("userMetrics").doc(user.uid).get();
+  return NextResponse.json({ metrics: snap.exists ? snap.data() : null });
+}
+
 export async function POST(req: Request) {
   try {
     const user = await getServerUser();
