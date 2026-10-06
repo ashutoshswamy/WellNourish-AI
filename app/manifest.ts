@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Your Personal AI Nutritionist and Meal Planner',
     start_url: '/',
     display: 'standalone',
-    background_color: '#060b06',
-    theme_color: '#a3e635',
+    background_color: '#f3f5ef',
+    theme_color: '#1e4634',
     icons: [
       {
         src: '/favicon.ico',

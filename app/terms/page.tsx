@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { LegalDoc } from "@/components/global/LegalDoc";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | WellNourish AI",
+  title: "Terms of Service",
   description: "Read the terms and conditions for using WellNourish AI's personalized nutrition and meal planning services.",
   alternates: {
     canonical: "https://wellnourishai.ashutoshswamy.in/terms",

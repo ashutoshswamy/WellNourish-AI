@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { LegalDoc } from "@/components/global/LegalDoc";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | WellNourish AI",
+  title: "Privacy Policy",
   description: "Learn how WellNourish AI collects, uses, and protects your personal health and nutrition data.",
   alternates: {
     canonical: "https://wellnourishai.ashutoshswamy.in/privacy",

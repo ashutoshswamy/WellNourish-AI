@@ -34,6 +34,7 @@ import { GenerateButton } from "@/components/dashboard/GenerateButton";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  robots: { index: false },
   title: "Dashboard",
   description: "View and manage your AI-generated meal plans and health metrics.",
 };

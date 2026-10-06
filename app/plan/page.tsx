@@ -6,6 +6,7 @@ import { PlanClient } from "@/components/plan/PlanClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  robots: { index: false },
   title: "Meal Plan Details",
   description:
     "View the detailed recipes, nutrition information, and portions for your 7-day meal plan.",

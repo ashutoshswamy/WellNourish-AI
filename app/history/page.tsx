@@ -9,6 +9,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  robots: { index: false },
   title: "Meal Plan History",
   description: "Browse and review your past personalized 7-day meal plans.",
 };

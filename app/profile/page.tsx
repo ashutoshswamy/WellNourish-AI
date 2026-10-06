@@ -4,6 +4,7 @@ import { ProfileForm } from "./ProfileForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  robots: { index: false },
   title: "Profile Settings",
   description: "Update your target weight, height, health goals, and allergies.",
 };

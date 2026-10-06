@@ -6,6 +6,7 @@ import { ShoppingListClient } from "@/components/shopping/ShoppingListClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  robots: { index: false },
   title: "Grocery Shopping List",
   description:
     "View the auto-generated grocery shopping list for your active 7-day meal plan.",

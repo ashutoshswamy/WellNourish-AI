@@ -51,8 +51,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
+        width: 1733,
+        height: 907,
         alt: "WellNourish AI - Personalized Nutrition",
       },
     ],
@@ -61,6 +61,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "WellNourish AI | Your Personal AI Nutritionist",
     description: "Hyper-personalized 7-day meal plans and grocery lists tailored specifically to you.",
+    creator: "@ashutoshswamy_",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -73,9 +74,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  alternates: {
-    canonical: "https://wellnourishai.ashutoshswamy.in",
   },
 };
 
