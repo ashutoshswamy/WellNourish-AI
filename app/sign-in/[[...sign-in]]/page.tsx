@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { SignInClient } from "./SignInClient";
+import { AuthForm } from "@/components/global/AuthForm";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function SignInPage() {
-  return <SignInClient />;
+  return <AuthForm mode="sign-in" />;
 }

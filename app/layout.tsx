@@ -3,11 +3,18 @@ import Script from "next/script";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { Navbar } from "@/components/global/Navbar";
 import { Footer } from "@/components/global/Footer";
-import { AnimatedBackground } from "@/components/global/AnimatedBackground";
+import { Archivo, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo" });
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
+
 export const viewport: Viewport = {
-  themeColor: "#060b06",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3f5ef" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e1511" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
@@ -18,7 +25,7 @@ export const metadata: Metadata = {
     default: "WellNourish AI | Personalized AI Nutritionist & Meal Planner",
     template: "%s | WellNourish AI",
   },
-  description: "Share your goals, allergies, and lifestyle. Our AI analyzes your unique profile and generates a hyper-personalized 7-day meal plan — down to the grocery list.",
+  description: "Share your goals, allergies, and lifestyle. Our AI analyzes your unique profile and generates a hyper-personalized 7-day meal plan, down to the grocery list.",
   keywords: ["AI Nutritionist", "Meal Planner", "Personalized Nutrition", "Healthy Eating", "Meal Prep", "Dietary Assistant", "WellNourish AI", "Custom Diet Plan"],
   authors: [{ name: "WellNourish AI Team" }],
   creator: "WellNourish AI",
@@ -79,7 +86,11 @@ export default function RootLayout({
 }>) {
   return (
     <AuthProvider>
-      <html lang="en" className="h-full antialiased" data-scroll-behavior="smooth">
+      <html
+        lang="en"
+        className={`${archivo.variable} ${geist.variable} ${geistMono.variable} h-full`}
+        data-scroll-behavior="smooth"
+      >
         <head>
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-1JP8VR2FSG"
@@ -95,10 +106,9 @@ export default function RootLayout({
             `}
           </Script>
         </head>
-        <body className="grain flex flex-col min-h-screen bg-[#050a05] text-[#c4cec4]">
-          <AnimatedBackground />
+        <body className="flex flex-col min-h-dvh bg-paper text-ink font-sans">
           <Navbar />
-          <main className="flex-1 flex flex-col relative z-10 w-full max-w-7xl mx-auto">
+          <main className="flex-1 flex flex-col w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {children}
           </main>
           <Footer />

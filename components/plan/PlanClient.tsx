@@ -1,21 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  Sun,
-  Coffee,
-  Moon,
-  Cookie,
-  Flame,
-  Droplets,
-  Wheat,
-  CircleDot,
-  ChevronLeft,
-  ChevronRight,
-  Info,
-  CheckCircle2,
-} from "lucide-react";
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 
 interface Meal {
   id: string;
@@ -43,305 +29,107 @@ interface Plan {
   plan_days: PlanDay[];
 }
 
-const mealMeta = [
-  { type: "breakfast", label: "Breakfast", icon: Coffee, color: "#facc15", iconBg: "rgba(250,204,21,0.08)", iconBorder: "rgba(250,204,21,0.15)" },
-  { type: "lunch",     label: "Lunch",     icon: Sun,    color: "#b4f55a", iconBg: "rgba(180,245,90,0.08)", iconBorder: "rgba(180,245,90,0.15)" },
-  { type: "dinner",   label: "Dinner",   icon: Moon,   color: "#818cf8", iconBg: "rgba(129,140,248,0.08)", iconBorder: "rgba(129,140,248,0.15)" },
-  { type: "snacks",   label: "Snacks",   icon: Cookie, color: "#fb923c", iconBg: "rgba(251,146,60,0.08)",  iconBorder: "rgba(251,146,60,0.15)"  },
-];
-
-const macroMeta = [
-  { key: "total_calories" as const, label: "Calories", icon: Flame,     color: "#fb923c", iconBg: "rgba(251,146,60,0.08)",  iconBorder: "rgba(251,146,60,0.15)"  },
-  { key: "protein"        as const, label: "Protein",  icon: Droplets,  color: "#60a5fa", iconBg: "rgba(96,165,250,0.08)",  iconBorder: "rgba(96,165,250,0.15)"  },
-  { key: "carbs"          as const, label: "Carbs",    icon: Wheat,     color: "#fbbf24", iconBg: "rgba(251,191,36,0.08)",  iconBorder: "rgba(251,191,36,0.15)"  },
-  { key: "fat"            as const, label: "Fat",      icon: CircleDot, color: "#34d399", iconBg: "rgba(52,211,153,0.08)",  iconBorder: "rgba(52,211,153,0.15)"  },
+const mealOrder = [
+  { type: "breakfast", label: "Breakfast" },
+  { type: "lunch", label: "Lunch" },
+  { type: "snacks", label: "Snacks" },
+  { type: "dinner", label: "Dinner" },
 ];
 
 export function PlanClient({ plan }: { plan: Plan }) {
   const [activeDayIdx, setActiveDayIdx] = useState(0);
-  const [expandedMealId, setExpandedMealId] = useState<string | null>(null);
 
-  const days = (plan?.plan_days || []).sort((a, b) => a.day_number - b.day_number);
+  const days = [...(plan?.plan_days || [])].sort((a, b) => a.day_number - b.day_number);
   const currentDay = days[activeDayIdx];
 
   if (!currentDay) return null;
 
   return (
-    <div className="flex flex-col gap-8">
-      {/* Day selector */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setActiveDayIdx((p) => Math.max(0, p - 1))}
-          disabled={activeDayIdx === 0}
-          className="w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-20"
-          style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            color: "#6a7a6a",
-          }}
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-
-        <div className="flex gap-2 overflow-x-auto flex-1 justify-start sm:justify-center px-1">
+    <div className="mt-10">
+      {/* Week strip */}
+      <div className="-mx-4 overflow-x-auto px-4 pb-1">
+        <div className="flex gap-2" role="tablist" aria-label="Days">
           {days.map((day, idx) => (
             <button
               key={day.id}
-              onClick={() => {
-                setActiveDayIdx(idx);
-                setExpandedMealId(null);
-              }}
-              className="px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap"
-              style={
-                activeDayIdx === idx
-                  ? { background: "#b4f55a", color: "#050a05" }
-                  : {
-                      background: "rgba(255,255,255,0.04)",
-                      color: "#5a6a5a",
-                      border: "1px solid rgba(255,255,255,0.04)",
-                    }
-              }
+              role="tab"
+              aria-selected={activeDayIdx === idx}
+              onClick={() => setActiveDayIdx(idx)}
+              className="choice shrink-0 flex-col gap-0 px-5 py-2 leading-tight"
             >
-              Day {day.day_number}
+              <span className="font-semibold">Day {day.day_number}</span>
+              <span className="font-mono text-xs tabular-nums opacity-75">{day.total_calories} kcal</span>
             </button>
           ))}
         </div>
-
-        <button
-          onClick={() => setActiveDayIdx((p) => Math.min(days.length - 1, p + 1))}
-          disabled={activeDayIdx === days.length - 1}
-          className="w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-20"
-          style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            color: "#6a7a6a",
-          }}
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
       </div>
 
-      {/* Daily summary stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {macroMeta.map((m) => {
-          const val =
-            m.key === "total_calories"
-              ? `${currentDay.total_calories} kcal`
-              : sumMacro(currentDay.meals, m.key);
-          return (
-            <div
-              key={m.label}
-              className="p-4 rounded-xl flex items-center gap-3"
-              style={{
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.05)",
-              }}
-            >
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                style={{ background: m.iconBg, border: `1px solid ${m.iconBorder}`, color: m.color }}
-              >
-                <m.icon className="w-4 h-4" />
+      <div key={activeDayIdx} className="rise mt-8 grid gap-8 lg:grid-cols-[16rem_1fr] lg:gap-12">
+        {/* Day summary */}
+        <aside className="lg:sticky lg:top-24 lg:self-start">
+          <p className="display text-5xl">Day {currentDay.day_number}</p>
+          <dl className="mt-5 divide-y divide-line border-y border-line font-mono text-sm tabular-nums">
+            {[
+              ["Calories", `${currentDay.total_calories} kcal`],
+              ["Protein", sumMacro(currentDay.meals, "protein")],
+              ["Carbs", sumMacro(currentDay.meals, "carbs")],
+              ["Fat", sumMacro(currentDay.meals, "fat")],
+            ].map(([k, v]) => (
+              <div key={k} className="flex justify-between py-2.5">
+                <dt className="text-ink-2">{k}</dt>
+                <dd className="font-semibold">{v}</dd>
               </div>
-              <div className="min-w-0">
-                <p className="text-[9px] font-bold uppercase tracking-widest mb-0.5 truncate" style={{ color: "#2a3a2a" }}>
-                  {m.label}
-                </p>
-                <p className="text-sm font-bold text-white truncate">{val}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            ))}
+          </dl>
+        </aside>
 
-      {/* Meal cards */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeDayIdx}
-          initial={{ opacity: 0, x: 16 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -16 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-5"
-        >
-          {mealMeta.map((meta) => {
+        {/* Meals */}
+        <div className="flex flex-col gap-4">
+          {mealOrder.map((meta) => {
             const meal = currentDay.meals.find((m) => m.meal_type === meta.type);
             if (!meal) return null;
-            const isExpanded = expandedMealId === meal.id;
-
             return (
-              <motion.div
-                layout
-                key={meal.id}
-                className="p-6 rounded-3xl transition-colors duration-300"
-                style={{
-                  background: isExpanded ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.02)",
-                  border: `1px solid ${isExpanded ? "rgba(180,245,90,0.18)" : "rgba(255,255,255,0.05)"}`,
-                }}
-              >
-                {/* Meal header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-2xl flex items-center justify-center"
-                      style={{ background: meta.iconBg, border: `1px solid ${meta.iconBorder}` }}
-                    >
-                      <meta.icon className="w-5 h-5" style={{ color: meta.color }} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "#3a4a3a" }}>
-                        {meta.label}
-                      </p>
-                      <h3 className="text-lg font-bold text-white leading-tight">{meal.name}</h3>
-                    </div>
+              <details key={meal.id} className="card group p-6 open:shadow-[0_16px_40px_-24px_color-mix(in_srgb,var(--kale)_60%,transparent)]">
+                <summary className="flex cursor-pointer list-none items-start gap-4 [&::-webkit-details-marker]:hidden">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-ink-3">{meta.label}</p>
+                    <h3 className="mt-1 text-xl font-semibold leading-snug">{meal.name}</h3>
+                    <p className="mt-2 line-clamp-2 text-ink-2 group-open:line-clamp-none">{meal.description}</p>
+                    <p className="mt-3 font-mono text-sm tabular-nums text-ink-2">
+                      <span className="font-semibold text-ink">{meal.calories} kcal</span>
+                      {meal.protein && ` / ${meal.protein} P`}
+                      {meal.carbs && ` / ${meal.carbs} C`}
+                      {meal.fat && ` / ${meal.fat} F`}
+                    </p>
                   </div>
-                  <button
-                    onClick={() => setExpandedMealId(isExpanded ? null : meal.id)}
-                    className="mt-1 p-2 rounded-xl transition-all"
-                    style={
-                      isExpanded
-                        ? { background: "#b4f55a", color: "#050a05" }
-                        : {
-                            background: "rgba(255,255,255,0.04)",
-                            border: "1px solid rgba(255,255,255,0.06)",
-                            color: "#4a5a4a",
-                          }
-                    }
-                  >
-                    <Info className="w-4 h-4" />
-                  </button>
-                </div>
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line transition-transform group-open:rotate-180">
+                    <ChevronDown className="size-4" />
+                    <span className="sr-only">Show recipe</span>
+                  </span>
+                </summary>
 
-                <p className="text-sm leading-relaxed mb-5 line-clamp-2" style={{ color: "#4a5a4a" }}>
-                  {meal.description}
-                </p>
-
-                {/* Macro row */}
-                <div
-                  className="flex items-center gap-4 py-3 mb-4"
-                  style={{ borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.04)" }}
-                >
-                  <MiniMacro value={meal.protein} label="P" />
-                  <MiniMacro value={meal.carbs} label="C" />
-                  <MiniMacro value={meal.fat} label="F" />
-                  <div
-                    className="ml-auto px-3 py-1 rounded-lg text-sm font-bold text-white"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
-                  >
-                    {meal.calories} kcal
+                <div className="mt-6 grid gap-8 border-t border-line pt-6 md:grid-cols-[1fr_1.4fr]">
+                  <div>
+                    <h4 className="font-semibold">Ingredients</h4>
+                    <ul className="mt-3 space-y-1.5 text-ink-2">
+                      {meal.ingredients.map((ing, i) => (
+                        <li key={i} className="flex gap-2.5">
+                          <span className="mt-2 size-1.5 shrink-0 rounded-full bg-accent" />
+                          {ing}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">Preparation</h4>
+                    <p className="mt-3 whitespace-pre-wrap leading-relaxed text-ink-2">{meal.instructions}</p>
                   </div>
                 </div>
-
-                {/* Expanded details */}
-                <AnimatePresence>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden space-y-5 pt-2"
-                    >
-                      {/* Ingredients */}
-                      <div>
-                        <h4
-                          className="text-[10px] font-bold uppercase tracking-widest mb-3"
-                          style={{ color: "#b4f55a" }}
-                        >
-                          Ingredients
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {meal.ingredients.map((ing, i) => (
-                            <span
-                              key={i}
-                              className="px-3 py-1.5 rounded-xl text-xs"
-                              style={{
-                                background: "rgba(255,255,255,0.04)",
-                                border: "1px solid rgba(255,255,255,0.05)",
-                                color: "#c4cec4",
-                              }}
-                            >
-                              {ing}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Instructions */}
-                      <div>
-                        <h4
-                          className="text-[10px] font-bold uppercase tracking-widest mb-3"
-                          style={{ color: "#b4f55a" }}
-                        >
-                          Preparation
-                        </h4>
-                        <p
-                          className="text-sm leading-relaxed whitespace-pre-wrap"
-                          style={{ color: "#5a6a5a" }}
-                        >
-                          {meal.instructions}
-                        </p>
-                      </div>
-
-                      {/* Metabolic note */}
-                      <div
-                        className="p-4 rounded-2xl flex gap-3 items-center"
-                        style={{
-                          background: "rgba(180,245,90,0.03)",
-                          border: "1px solid rgba(180,245,90,0.08)",
-                        }}
-                      >
-                        <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: "#b4f55a" }} />
-                        <p className="text-[11px] font-medium" style={{ color: "rgba(180,245,90,0.7)" }}>
-                          Perfectly aligned with your metabolic profile and goal pace.
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+              </details>
             );
           })}
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
-}
-
-function SummaryStat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <div
-      className="p-4 rounded-2xl flex items-center gap-3"
-      style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
-    >
-      <div
-        className="p-2 rounded-xl shrink-0"
-        style={{ background: "rgba(255,255,255,0.04)" }}
-      >
-        {icon}
+        </div>
       </div>
-      <div className="min-w-0">
-        <p className="text-[9px] font-bold uppercase tracking-widest truncate" style={{ color: "#2a3a2a" }}>
-          {label}
-        </p>
-        <p className="text-sm font-bold text-white truncate">{value}</p>
-      </div>
-    </div>
-  );
-}
-
-function MiniMacro({ value, label }: { value?: string; label: string }) {
-  return (
-    <div className="flex items-center gap-1.5">
-      <div
-        className="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold"
-        style={{ background: "rgba(255,255,255,0.04)", color: "#4a5a4a" }}
-      >
-        {label}
-      </div>
-      <span className="text-xs font-semibold" style={{ color: "#8a9a8a" }}>
-        {value || "—"}
-      </span>
     </div>
   );
 }
@@ -355,5 +143,5 @@ function sumMacro(meals: Meal[], key: "protein" | "carbs" | "fat"): string {
       if (!isNaN(num)) total += num;
     }
   });
-  return total > 0 ? `${total}g` : "—";
+  return total > 0 ? `${total} g` : "-";
 }

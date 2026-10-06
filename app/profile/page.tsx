@@ -18,8 +18,6 @@ export default async function ProfilePage() {
   const initialData = JSON.parse(JSON.stringify(metricsSnap.data() || {}));
 
   return (
-    <div className="flex-1 flex flex-col p-6 md:p-12 w-full justify-center">
-      <ProfileForm initialData={initialData} />
-    </div>
+    <ProfileForm initialData={initialData} />
   );
 }

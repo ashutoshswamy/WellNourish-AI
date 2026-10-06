@@ -1,15 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Check,
-  Trash2,
-  Plus,
-  Copy,
-  CheckCircle2,
-  ClipboardList,
-  ShoppingBasket,
-} from "lucide-react";
+import { Check, Copy, Plus, Trash2 } from "lucide-react";
 
 interface ShoppingItem {
   id: string;
@@ -101,203 +93,77 @@ export function ShoppingListClient({
   const progress = items.length > 0 ? (checkedCount / items.length) * 100 : 0;
 
   return (
-    <div className="space-y-6 pb-20">
-
-      {/* Progress Card */}
-      <div
-        className="p-6 rounded-2xl relative overflow-hidden"
-        style={{
-          background: "rgba(255,255,255,0.02)",
-          border: "1px solid rgba(255,255,255,0.05)",
-        }}
-      >
-        <div className="flex items-center justify-between mb-4 relative z-10">
-          <div className="flex items-center gap-2.5">
-            <ClipboardList className="w-5 h-5" style={{ color: "#b4f55a" }} />
-            <h2 className="text-base font-semibold text-white">Shopping Progress</h2>
-          </div>
-          <span className="text-2xl font-bold text-white">{Math.round(progress)}%</span>
-        </div>
-
-        <div
-          className="h-2 w-full rounded-full overflow-hidden mb-2.5 relative z-10"
-          style={{ background: "rgba(255,255,255,0.04)" }}
-        >
-          <div
-            className="h-full rounded-full transition-all duration-700 ease-out"
-            style={{
-              width: `${progress}%`,
-              background: "linear-gradient(90deg, #b4f55a, #34d399)",
-            }}
-          />
-        </div>
-
-        <p className="text-xs relative z-10" style={{ color: "#3a4a3a" }}>
-          {checkedCount} of {items.length} items collected
-        </p>
-
-        {/* Decorative glow */}
-        <div
-          className="absolute bottom-0 right-0 w-36 h-36 rounded-full"
-          style={{
-            background: "rgba(180,245,90,0.07)",
-            filter: "blur(60px)",
-            transform: "translate(30%, 30%)",
-          }}
-        />
-      </div>
-
-      {/* Action bar */}
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-        <form onSubmit={addItem} className="flex-1 relative group">
+    <div className="mt-8">
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <form onSubmit={addItem} className="flex flex-1 gap-2">
+          <label htmlFor="new-item" className="sr-only">
+            Add an item
+          </label>
           <input
+            id="new-item"
             type="text"
             value={newItemName}
             onChange={(e) => setNewItemName(e.target.value)}
-            placeholder="Add an item..."
-            className="w-full text-white text-sm font-medium focus:outline-none"
-            style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderRadius: "16px",
-              padding: "14px 56px 14px 20px",
-              transition: "border-color 0.15s",
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = "rgba(180,245,90,0.2)";
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
-            }}
+            placeholder="Add an item, e.g. lemons"
+            className="field flex-1"
           />
-          <button
-            type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 rounded-xl transition-all"
-            style={{
-              background: "#b4f55a",
-              color: "#050a05",
-            }}
-          >
-            <Plus className="w-5 h-5" />
+          <button type="submit" className="btn btn-primary size-11 shrink-0 px-0" aria-label="Add item">
+            <Plus className="size-5" />
           </button>
         </form>
-
-        <button
-          onClick={copyToClipboard}
-          className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-sm font-medium transition-all"
-          style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            color: isCopying ? "#b4f55a" : "#6a7a6a",
-            borderColor: isCopying ? "rgba(180,245,90,0.2)" : "rgba(255,255,255,0.06)",
-          }}
-        >
-          {isCopying ? (
-            <CheckCircle2 className="w-4 h-4" style={{ color: "#b4f55a" }} />
-          ) : (
-            <Copy className="w-4 h-4" />
-          )}
-          {isCopying ? "Copied!" : "Copy List"}
+        <button onClick={copyToClipboard} className="btn btn-secondary" disabled={!items.length}>
+          {isCopying ? <Check className="size-4" /> : <Copy className="size-4" />}
+          {isCopying ? "Copied" : "Copy list"}
         </button>
       </div>
 
-      {/* List Items */}
-      <div className="space-y-2.5">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="group flex items-center gap-4 rounded-2xl transition-all duration-200"
-            style={{
-              padding: "14px 18px",
-              background: item.is_checked
-                ? "rgba(255,255,255,0.01)"
-                : "rgba(255,255,255,0.025)",
-              border: item.is_checked
-                ? "1px solid rgba(255,255,255,0.02)"
-                : "1px solid rgba(255,255,255,0.06)",
-              opacity: item.is_checked ? 0.5 : 1,
-            }}
-          >
-            {/* Checkbox */}
-            <button
-              onClick={() => toggleItem(item.id, item.is_checked)}
-              className="w-7 h-7 rounded-lg border flex items-center justify-center shrink-0 transition-all"
-              style={
-                item.is_checked
-                  ? { background: "#b4f55a", border: "1px solid #b4f55a", color: "#050a05" }
-                  : {
-                      background: "transparent",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      color: "transparent",
-                    }
-              }
-            >
-              <Check className="w-4 h-4" />
-            </button>
+      <div className="receipt mt-6 px-6 py-8 drop-shadow-[0_10px_24px_color-mix(in_srgb,var(--kale)_18%,transparent)] sm:px-9">
+        <div className="flex items-baseline justify-between font-mono text-sm tabular-nums">
+          <span className="uppercase tracking-[0.16em] text-ink-3">Collected</span>
+          <span>
+            <span className="font-semibold">{checkedCount}</span> / {items.length}
+          </span>
+        </div>
+        <div className="mt-2 h-1 overflow-hidden rounded-full bg-sunken" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}>
+          <div className="h-full rounded-full bg-accent transition-[width] duration-500" style={{ width: `${progress}%` }} />
+        </div>
 
-            {/* Label & amount */}
-            <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 overflow-hidden min-w-0">
-              <span
-                className="text-sm font-medium truncate transition-all"
-                style={{
-                  color: item.is_checked ? "#3a4a3a" : "white",
-                  textDecoration: item.is_checked ? "line-through" : "none",
-                }}
-              >
-                {item.item_name}
-              </span>
-              {item.amount && (
-                <span
-                  className="text-[11px] font-bold uppercase tracking-wider self-start px-2 py-0.5 rounded-md"
-                  style={{
-                    background: "rgba(255,255,255,0.04)",
-                    color: "#3a4a3a",
-                  }}
+        {items.length > 0 ? (
+          <ul className="mt-6 border-t border-dashed border-ink-3/60">
+            {items.map((item) => (
+              <li key={item.id} className="group flex items-center gap-3 border-b border-dashed border-line py-2.5">
+                <button
+                  onClick={() => toggleItem(item.id, item.is_checked)}
+                  role="checkbox"
+                  aria-checked={item.is_checked}
+                  className="flex min-w-0 flex-1 items-center gap-3 text-left"
                 >
-                  {item.amount}
-                </span>
-              )}
-            </div>
-
-            {/* Delete — shown on hover */}
-            <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-              <button
-                onClick={() => removeItem(item.id)}
-                className="p-2 rounded-xl transition-colors"
-                style={{ color: "#3a4a3a" }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.08)";
-                  (e.currentTarget as HTMLElement).style.color = "rgba(239,68,68,0.7)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "transparent";
-                  (e.currentTarget as HTMLElement).style.color = "#3a4a3a";
-                }}
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        ))}
-
-        {items.length === 0 && (
-          <div
-            className="text-center py-24 rounded-2xl"
-            style={{
-              background: "rgba(255,255,255,0.01)",
-              border: "1px dashed rgba(255,255,255,0.05)",
-            }}
-          >
-            <ShoppingBasket
-              className="w-12 h-12 mx-auto mb-4"
-              style={{ color: "rgba(255,255,255,0.06)" }}
-            />
-            <p className="text-sm font-medium" style={{ color: "#2a3a2a" }}>
-              Your cart is empty
-            </p>
-            <p className="text-xs mt-1" style={{ color: "#1a2a1a" }}>
-              Add items above or generate a new plan.
-            </p>
+                  <span
+                    className={`grid size-5 shrink-0 place-items-center rounded-[5px] border-[1.5px] border-ink transition-colors ${
+                      item.is_checked ? "bg-ink text-surface" : ""
+                    }`}
+                  >
+                    {item.is_checked && <Check className="size-3.5" strokeWidth={3} />}
+                  </span>
+                  <span className={`min-w-0 flex-1 truncate font-mono text-[0.9rem] ${item.is_checked ? "text-ink-3 line-through" : ""}`}>
+                    {item.item_name}
+                  </span>
+                  {item.amount && <span className="shrink-0 font-mono text-sm text-ink-3">{item.amount}</span>}
+                </button>
+                <button
+                  onClick={() => removeItem(item.id)}
+                  aria-label={`Remove ${item.item_name}`}
+                  className="grid size-8 shrink-0 place-items-center rounded-full text-ink-3 transition hover:bg-danger-soft hover:text-danger sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="mt-6 border-t border-dashed border-ink-3/60 py-12 text-center">
+            <p className="font-semibold">Nothing on the list yet</p>
+            <p className="mt-1 text-sm text-ink-2">Add items above, or generate a new plan to fill it.</p>
           </div>
         )}
       </div>

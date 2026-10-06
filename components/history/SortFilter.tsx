@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowUpAZ, ArrowDownAZ } from "lucide-react";
 
 export default function SortFilter() {
   const router = useRouter();
@@ -15,45 +14,11 @@ export default function SortFilter() {
   }
 
   return (
-    <div
-      className="flex items-center gap-1 p-1 rounded-xl"
-      style={{
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.05)",
-      }}
-    >
-      <button
-        onClick={() => setSort("desc")}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
-        style={
-          current === "desc"
-            ? {
-                background: "rgba(180,245,90,0.1)",
-                color: "#b4f55a",
-                border: "1px solid rgba(180,245,90,0.2)",
-                borderRadius: "10px",
-              }
-            : { color: "#3a4a3a" }
-        }
-      >
-        <ArrowDownAZ className="w-3.5 h-3.5" />
+    <div className="flex gap-2" role="group" aria-label="Sort plans">
+      <button className="choice" aria-pressed={current === "desc"} onClick={() => setSort("desc")}>
         Newest
       </button>
-      <button
-        onClick={() => setSort("asc")}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
-        style={
-          current === "asc"
-            ? {
-                background: "rgba(180,245,90,0.1)",
-                color: "#b4f55a",
-                border: "1px solid rgba(180,245,90,0.2)",
-                borderRadius: "10px",
-              }
-            : { color: "#3a4a3a" }
-        }
-      >
-        <ArrowUpAZ className="w-3.5 h-3.5" />
+      <button className="choice" aria-pressed={current === "asc"} onClick={() => setSort("asc")}>
         Oldest
       </button>
     </div>

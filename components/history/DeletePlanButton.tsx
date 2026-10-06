@@ -49,38 +49,24 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
     <button
       onClick={handleDelete}
       disabled={status === "deleting"}
-      className="relative flex items-center gap-1.5 px-2 py-1.5 transition-all duration-200"
-      style={{
-        borderRadius: "10px",
-        fontSize: "11px",
-        fontWeight: 600,
-        cursor: status === "deleting" ? "wait" : "pointer",
-        ...(status === "idle"
-          ? { color: "rgba(255,255,255,0.15)", background: "transparent" }
-          : status === "confirming"
-          ? { color: "white", background: "#ef4444" }
-          : status === "deleting"
-          ? { color: "white", background: "rgba(239,68,68,0.4)" }
-          : { color: "#f59e0b", background: "rgba(245,158,11,0.08)" }),
-      }}
-      title={status === "idle" ? "Delete Plan" : undefined}
+      aria-label={status === "confirming" ? "Confirm delete" : "Delete plan"}
+      className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-sm font-semibold transition-colors ${
+        status === "idle"
+          ? "text-ink-3 hover:bg-danger-soft hover:text-danger"
+          : status === "error"
+          ? "bg-danger-soft text-danger"
+          : "bg-danger text-paper"
+      }`}
     >
       {status === "deleting" ? (
-        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+        <Loader2 className="size-4 animate-spin" />
       ) : status === "error" ? (
-        <AlertCircle className="w-3.5 h-3.5" />
+        <AlertCircle className="size-4" />
       ) : (
-        <Trash2
-          className={`w-3.5 h-3.5 ${status === "confirming" ? "animate-pulse" : ""}`}
-        />
+        <Trash2 className="size-4" />
       )}
-
-      {status === "confirming" && (
-        <span className="whitespace-nowrap">Confirm?</span>
-      )}
-      {status === "error" && (
-        <span className="truncate max-w-[80px]">{errorMessage}</span>
-      )}
+      {status === "confirming" && <span>Delete?</span>}
+      {status === "error" && <span className="max-w-[9rem] truncate">{errorMessage}</span>}
     </button>
   );
 }
