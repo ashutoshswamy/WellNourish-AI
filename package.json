@@ -12,7 +12,6 @@
     "@google/generative-ai": "^0.24.1",
     "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.2.2",
-    "@remotion/player": "^4.0.445",
     "date-fns": "^4.1.0",
     "firebase": "^12.18.0",
     "firebase-admin": "^13.10.0",
@@ -22,7 +21,6 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.72.1",
-    "remotion": "^4.0.445",
     "zod": "^4.3.6"
   },
   "devDependencies": {
