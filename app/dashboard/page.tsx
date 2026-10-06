@@ -91,7 +91,7 @@ export default async function Dashboard() {
 
   return (
     <div className="py-10 md:py-14">
-      <header className="flex flex-wrap items-end justify-between gap-4">
+      <header className="rise flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="display text-[clamp(2rem,4vw,3rem)]">Hello{firstName ? `, ${firstName}` : ""}.</h1>
           <p className="mt-2 text-ink-2">
@@ -104,7 +104,7 @@ export default async function Dashboard() {
       </header>
 
       {/* Targets strip */}
-      <dl className="card mt-8 grid grid-cols-3 divide-line md:grid-cols-4 md:divide-x [&>div]:p-5">
+      <dl className="rise card mt-8 grid grid-cols-3 divide-line md:grid-cols-4 md:divide-x [&>div]:p-4 sm:[&>div]:p-5">
         <div className="col-span-3 border-b border-line md:col-span-1 md:border-b-0">
           <dt className="text-sm text-ink-2">Daily target</dt>
           <dd className="mt-1 font-mono text-3xl font-semibold tabular-nums">
@@ -117,7 +117,7 @@ export default async function Dashboard() {
         <Stat label="Weekly pace" value={metrics.weekly_goal} />
       </dl>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_22rem]">
+      <div className="rise mt-6 grid gap-6 lg:grid-cols-[1fr_22rem]">
         <div className="flex flex-col gap-6">
           {/* Day 1 menu */}
           <section className="card p-6 md:p-7">
@@ -228,7 +228,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <dt className="text-sm text-ink-2">{label}</dt>
-      <dd className="mt-1 truncate text-lg font-semibold">{value}</dd>
+      <dd className="mt-1 text-base font-semibold leading-snug sm:text-lg">{value}</dd>
     </div>
   );
 }

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { useUser } from "@/components/providers/AuthProvider";
 import { NutritionLabel } from "@/components/global/NutritionLabel";
+import { useSwap } from "@/components/global/useSwap";
 
 const goals = [
   { label: "Fat loss", cal: 1800, protein: "160 g", carbs: "160 g", fat: "60 g" },
@@ -57,6 +58,8 @@ const groceries = ["Chicken thighs, 1.2 kg", "Salmon fillets, 4", "Greek yogurt,
 export function HomeClient() {
   const { isSignedIn } = useUser();
   const [goalIdx, setGoalIdx] = useState(0);
+  const labelRef = useRef<HTMLDivElement>(null);
+  useSwap(labelRef, goalIdx);
   const goal = goals[goalIdx];
   const cta = isSignedIn ? { href: "/dashboard", label: "Open dashboard" } : { href: "/sign-up", label: "Build my plan" };
 
@@ -67,13 +70,13 @@ export function HomeClient() {
         <div>
           <h1 className="display rise text-[clamp(2.6rem,5.2vw,4.4rem)]">
             Eat for the body you{" "}
-            <span className="bg-[linear-gradient(transparent_60%,var(--accent)_60%,var(--accent)_92%,transparent_92%)] px-1">actually</span>{" "}
+            <span className="hl px-1">actually</span>{" "}
             have.
           </h1>
-          <p className="rise mt-6 max-w-lg text-lg leading-relaxed text-ink-2" style={{ "--i": 1 } as React.CSSProperties}>
+          <p className="rise mt-6 max-w-lg text-lg leading-relaxed text-ink-2">
             Share your goals, allergies and routine. Get a 7-day meal plan with exact macros and a grocery list.
           </p>
-          <div className="rise mt-9 flex flex-wrap gap-3" style={{ "--i": 2 } as React.CSSProperties}>
+          <div className="rise mt-9 flex flex-wrap gap-3">
             <Link href={cta.href} className="btn btn-primary group h-12 px-6 text-[0.95rem]">
               {cta.label}
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -84,7 +87,7 @@ export function HomeClient() {
           </div>
         </div>
 
-        <div className="rise mx-auto w-full max-w-sm lg:mr-0" style={{ "--i": 3 } as React.CSSProperties}>
+        <div ref={labelRef} className="rise mx-auto w-full max-w-sm lg:mr-0">
           <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label="Choose a goal">
             {goals.map((g, i) => (
               <button key={g.label} className="choice" aria-pressed={i === goalIdx} onClick={() => setGoalIdx(i)}>
@@ -93,7 +96,6 @@ export function HomeClient() {
             ))}
           </div>
           <NutritionLabel
-            tickKey={goalIdx}
             serving={goal.label}
             calories={goal.cal}
             rows={[
@@ -203,6 +205,8 @@ export function HomeClient() {
 
 function SampleDay() {
   const [idx, setIdx] = useState(1);
+  const panelRef = useRef<HTMLDivElement>(null);
+  useSwap(panelRef, idx);
   const meal = sampleDay[idx];
   const total = (k: "kcal" | "protein" | "carbs" | "fat") => sampleDay.reduce((s, m) => s + m[k], 0);
   const dayKcal = total("kcal");
@@ -316,7 +320,7 @@ function SampleDay() {
         </div>
 
         {/* Selected meal */}
-        <div id="sample-meal" role="tabpanel" key={idx} className="grid gap-8 p-5 sm:p-10 md:grid-cols-[1fr_17rem] md:gap-14">
+        <div ref={panelRef} id="sample-meal" role="tabpanel" className="grid gap-8 p-5 sm:p-10 md:grid-cols-[1fr_17rem] md:gap-14">
           <div className="tick">
             <p className="text-sm font-semibold text-ink-3">
               {meal.type}, {meal.time}
@@ -332,7 +336,7 @@ function SampleDay() {
             </ul>
           </div>
 
-          <dl className="tick self-start border-y-[5px] border-ink font-mono text-sm tabular-nums" style={{ animationDelay: "80ms" }}>
+          <dl className="tick self-start border-y-[5px] border-ink font-mono text-sm tabular-nums">
             <div className="flex items-baseline justify-between border-b border-ink py-2">
               <dt className="font-sans font-bold">Calories</dt>
               <dd className="text-2xl font-semibold">{meal.kcal}</dd>

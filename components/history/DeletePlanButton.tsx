@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Trash2, Loader2, AlertCircle } from "lucide-react";
 import { deletePlanAction } from "@/app/history/actions";
 
@@ -11,6 +11,8 @@ interface DeletePlanButtonProps {
 export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
   const [status, setStatus] = useState<"idle" | "confirming" | "deleting" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  // A double-click must not arm and confirm in one go
+  const armedAt = useRef(0);
 
   useEffect(() => {
     if (status === "confirming") {
@@ -24,11 +26,12 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
     e.stopPropagation();
 
     if (status === "idle") {
+      armedAt.current = Date.now();
       setStatus("confirming");
       return;
     }
 
-    if (status === "confirming") {
+    if (status === "confirming" && Date.now() - armedAt.current > 400) {
       setStatus("deleting");
       try {
         const result = await deletePlanAction(planId);

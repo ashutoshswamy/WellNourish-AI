@@ -9,7 +9,7 @@ interface LegalDocProps {
 export function LegalDoc({ title, intro, updated, sections, contactPrompt }: LegalDocProps) {
   return (
     <article className="mx-auto w-full max-w-3xl py-12 md:py-20">
-      <header className="border-b border-line pb-10">
+      <header className="rise border-b border-line pb-10">
         <h1 className="display text-[clamp(2.4rem,5vw,3.8rem)]">{title}</h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-2">{intro}</p>
         <p className="mt-4 font-mono text-sm text-ink-3">Last updated {updated}</p>
@@ -17,7 +17,7 @@ export function LegalDoc({ title, intro, updated, sections, contactPrompt }: Leg
 
       <ol className="divide-y divide-line">
         {sections.map((s, i) => (
-          <li key={s.title} className="grid gap-3 py-9 md:grid-cols-[4rem_1fr]">
+          <li key={s.title} className="reveal grid gap-3 py-9 md:grid-cols-[4rem_1fr]">
             <span className="font-mono text-sm text-ink-3">{String(i + 1).padStart(2, "0")}</span>
             <div>
               <h2 className="text-xl font-semibold">{s.title}</h2>

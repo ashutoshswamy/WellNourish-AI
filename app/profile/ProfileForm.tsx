@@ -112,12 +112,12 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
 
   return (
     <div className="mx-auto w-full max-w-4xl py-10 md:py-14">
-      <header>
+      <header className="rise">
         <h1 className="display text-[clamp(2rem,4vw,3rem)]">Your body &amp; goals</h1>
         <p className="mt-2 text-ink-2">Changes apply to the next plan you generate.</p>
       </header>
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 divide-y divide-line border-y border-line">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="rise mt-10 divide-y divide-line border-y border-line">
         <Section title="Body" hint="Used to calculate your daily calorie target.">
           <fieldset>
             <legend className="field-label">Sex</legend>

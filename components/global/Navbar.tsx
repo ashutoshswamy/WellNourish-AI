@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogOut, Menu, X } from "lucide-react";
 import { Logo } from "@/components/global/Logo";
+import { ThemeToggle } from "@/components/global/ThemeToggle";
 import { useUser } from "@/components/providers/AuthProvider";
 
 const appLinks = [
@@ -19,6 +22,23 @@ export function Navbar() {
   const { isSignedIn, signOutUser } = useUser();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (!open || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      gsap.fromTo(menuRef.current, { autoAlpha: 0, y: -8 }, { autoAlpha: 1, y: 0, duration: 0.3 });
+      gsap.fromTo("a, button", { autoAlpha: 0, y: -6 }, { autoAlpha: 1, y: 0, duration: 0.3, stagger: 0.03, delay: 0.05 });
+    },
+    { dependencies: [open], scope: menuRef },
+  );
+
+  // Close the mobile menu on navigation
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
+    setOpen(false);
+  }
 
   const linkClass = (href: string) =>
     `rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
@@ -26,11 +46,12 @@ export function Navbar() {
     }`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-line bg-paper/95">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Logo />
 
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-1 lg:flex">
+          <ThemeToggle className="mr-1 size-9" />
           {isSignedIn ? (
             <>
               {appLinks.map((l) => (
@@ -54,18 +75,21 @@ export function Navbar() {
           )}
         </div>
 
-        <button
-          onClick={() => setOpen(!open)}
-          className="btn btn-secondary size-10 px-0 md:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-        >
-          {open ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setOpen(!open)}
+            className="btn btn-secondary size-10 px-0"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+          >
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
+        </div>
       </nav>
 
       {open && (
-        <div className="border-t border-line bg-paper px-4 pb-5 pt-3 md:hidden">
+        <div ref={menuRef} className="border-t border-line bg-paper px-4 pb-5 pt-3 lg:hidden">
           <div className="flex flex-col gap-1" onClick={() => setOpen(false)}>
             {isSignedIn ? (
               <>

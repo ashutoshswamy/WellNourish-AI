@@ -3,6 +3,7 @@ import Script from "next/script";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { Navbar } from "@/components/global/Navbar";
 import { Footer } from "@/components/global/Footer";
+import { Motion } from "@/components/global/Motion";
 import { Archivo, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -89,8 +90,15 @@ export default function RootLayout({
         lang="en"
         className={`${archivo.variable} ${geist.variable} ${geistMono.variable} h-full`}
         data-scroll-behavior="smooth"
+        suppressHydrationWarning
       >
         <head>
+          {/* Apply a pinned theme before first paint so there is no flash */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`,
+            }}
+          />
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-1JP8VR2FSG"
             strategy="afterInteractive"
@@ -111,6 +119,10 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <Motion />
+          <noscript>
+            <style>{`.rise{visibility:visible!important}`}</style>
+          </noscript>
         </body>
       </html>
     </AuthProvider>

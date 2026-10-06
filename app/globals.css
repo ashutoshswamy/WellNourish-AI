@@ -24,8 +24,23 @@
   color-scheme: light;
 }
 
+/* Dark follows the system unless the navbar toggle pinned a theme via data-theme */
+:root[data-theme="dark"] {
+  --paper: #0e1511;
+  --surface: #151e18;
+  --sunken: #0a100c;
+  --ink: #e8eee7;
+  --ink-2: #a6b2aa;
+  --ink-3: #8a968e;
+  --line: #27332b;
+  --kale: #1a3b2b;
+  --danger: #f97066;
+  --danger-soft: #2a1513;
+  color-scheme: dark;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #0e1511;
     --surface: #151e18;
     --sunken: #0a100c;
@@ -37,6 +52,18 @@
     --danger: #f97066;
     --danger-soft: #2a1513;
     color-scheme: dark;
+  }
+}
+
+/* `dark:` utilities track the same rule as the tokens */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
   }
 }
 
@@ -61,6 +88,26 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+/* Taps feel instant: no double-tap zoom delay, no grey flash, no text selected on double-click */
+a,
+button,
+summary,
+[role="tab"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+summary,
+.btn,
+.choice {
+  user-select: none;
 }
 
 body {
@@ -214,33 +261,32 @@ body {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  /* Value swap on the label when the goal changes */
-  .tick {
-    animation: tick 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-  @keyframes tick {
-    from { opacity: 0; transform: translateY(0.35em); }
-    to { opacity: 1; transform: none; }
-  }
+/* Highlighter stroke behind a word; GSAP animates --hl from 0% */
+.hl {
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 85% / var(--hl, 100%) 36%;
+}
 
+/* GSAP (components/global/Motion.tsx) reveals these; hidden first to avoid a flash */
+@media (prefers-reduced-motion: no-preference) {
   .rise {
-    animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: calc(var(--i, 0) * 80ms);
-  }
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: none; }
+    visibility: hidden;
   }
 }
 
-/* Scroll reveal with zero JS; browsers without scroll timelines just show content */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: rise linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 60%;
-    }
+/* Theme switch: new theme opens as a circle from the toggle (ThemeToggle sets --tx/--ty) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-wipe 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes theme-wipe {
+  from {
+    clip-path: circle(0 at var(--tx, 50%) var(--ty, 0));
+  }
+  to {
+    clip-path: circle(150vmax at var(--tx, 50%) var(--ty, 0));
   }
 }

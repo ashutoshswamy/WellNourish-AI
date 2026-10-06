@@ -72,7 +72,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
 
   return (
     <div className="grid flex-1 items-stretch gap-6 py-10 md:py-14 lg:grid-cols-2">
-      <section className="flex flex-col justify-between gap-10 rounded-2xl bg-kale p-8 text-on-kale md:p-12">
+      <section className="rise flex flex-col justify-between gap-10 rounded-2xl bg-kale p-8 text-on-kale md:p-12">
         <div>
           <h1 className="display max-w-md text-[clamp(2.2rem,4vw,3.4rem)]">{t.heading}</h1>
           <p className="mt-4 max-w-sm text-on-kale/80">{t.sub}</p>
@@ -89,7 +89,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
         </ul>
       </section>
 
-      <section className="flex items-center justify-center">
+      <section className="rise flex items-center justify-center">
         <div className="w-full max-w-sm">
           <button type="button" onClick={handleGoogle} disabled={googleLoading} className="btn btn-secondary h-12 w-full bg-surface">
             {googleLoading ? (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Check, Copy, Plus, Trash2 } from "lucide-react";
 
 interface ShoppingItem {
@@ -19,8 +19,13 @@ export function ShoppingListClient({
   const [items, setItems] = useState<ShoppingItem[]>(initialItems);
   const [newItemName, setNewItemName] = useState("");
   const [isCopying, setIsCopying] = useState(false);
+  const [adding, setAdding] = useState(false);
+  // Ignore repeat clicks on an item while its update is in flight
+  const pending = useRef(new Set<string>());
 
   const toggleItem = async (id: string, currentStatus: boolean) => {
+    if (pending.current.has(id)) return;
+    pending.current.add(id);
     setItems((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, is_checked: !currentStatus } : item
@@ -40,12 +45,15 @@ export function ShoppingListClient({
           item.id === id ? { ...item, is_checked: currentStatus } : item
         )
       );
+    } finally {
+      pending.current.delete(id);
     }
   };
 
   const addItem = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newItemName.trim()) return;
+    if (!newItemName.trim() || adding) return;
+    setAdding(true);
     try {
       const response = await fetch("/api/shopping-list", {
         method: "POST",
@@ -58,6 +66,8 @@ export function ShoppingListClient({
       setNewItemName("");
     } catch (error) {
       console.error("Add item error:", error);
+    } finally {
+      setAdding(false);
     }
   };
 
@@ -93,7 +103,7 @@ export function ShoppingListClient({
   const progress = items.length > 0 ? (checkedCount / items.length) * 100 : 0;
 
   return (
-    <div className="mt-8">
+    <div className="rise mt-8">
       <div className="flex flex-col gap-3 sm:flex-row">
         <form onSubmit={addItem} className="flex flex-1 gap-2">
           <label htmlFor="new-item" className="sr-only">
@@ -107,7 +117,7 @@ export function ShoppingListClient({
             placeholder="Add an item, e.g. lemons"
             className="field flex-1"
           />
-          <button type="submit" className="btn btn-primary size-11 shrink-0 px-0" aria-label="Add item">
+          <button type="submit" disabled={adding} className="btn btn-primary size-11 shrink-0 px-0" aria-label="Add item">
             <Plus className="size-5" />
           </button>
         </form>

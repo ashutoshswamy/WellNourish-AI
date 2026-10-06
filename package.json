@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.2.2",
     "@remotion/player": "^4.0.445",
     "date-fns": "^4.1.0",
     "firebase": "^12.18.0",
     "firebase-admin": "^13.10.0",
+    "gsap": "^3.15.0",
     "lucide-react": "^1.7.0",
     "next": "16.2.2",
     "react": "19.2.4",

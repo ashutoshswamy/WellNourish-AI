@@ -10,6 +10,7 @@ export function GenerateButton({ className = "" }: { className?: string }) {
   const router = useRouter();
 
   const handleGenerate = async () => {
+    if (loading) return;
     setLoading(true);
     setError(null);
 

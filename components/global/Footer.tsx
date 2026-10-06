@@ -4,6 +4,7 @@ import { Logo } from "@/components/global/Logo";
 const legal = [
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
+  { href: "/cookies", label: "Cookies" },
   { href: "https://github.com/ashutoshswamy/wellnourish-ai/blob/main/LICENSE", label: "License" },
 ];
 
@@ -22,7 +23,7 @@ export function Footer() {
           <p className="max-w-xs text-sm text-ink-2">Seven days of meals, planned around your body and your kitchen.</p>
         </div>
         <div className="flex flex-col gap-4 md:items-end">
-          <div className="flex items-center gap-5 text-sm text-ink-2">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-2">
             {legal.map((l) => (
               <Link key={l.href} href={l.href} className="hover:text-ink" {...(l.href.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}>
                 {l.label}

@@ -43,10 +43,10 @@ export default async function PlanPage({
 
   return (
     <div className="py-10 md:py-14">
-      <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-sm text-ink-2 hover:text-ink">
+      <Link href="/dashboard" className="rise inline-flex items-center gap-1.5 text-sm text-ink-2 hover:text-ink">
         <ArrowLeft className="size-4" /> Dashboard
       </Link>
-      <header className="mt-4 flex flex-wrap items-end justify-between gap-4">
+      <header className="rise mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="display text-[clamp(2rem,4vw,3rem)]">Your weekly menu</h1>
           <p className="mt-2 text-ink-2">

@@ -48,7 +48,7 @@ export default async function HistoryPage({
 
   return (
     <div className="mx-auto w-full max-w-3xl py-10 md:py-14">
-      <header className="flex flex-wrap items-end justify-between gap-4">
+      <header className="rise flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="display text-[clamp(2rem,4vw,3rem)]">Plan history</h1>
           <p className="mt-2 text-ink-2">
@@ -63,15 +63,18 @@ export default async function HistoryPage({
       </header>
 
       {plans.length > 0 ? (
-        <ul className="card mt-8 divide-y divide-line">
+        <ul className="rise card mt-8 divide-y divide-line">
           {plans.map((plan) => (
             <li key={plan.id} className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-sunken/60 sm:px-6">
               <Link href={`/plan?id=${plan.id}`} className="group flex min-w-0 flex-1 items-center gap-4">
-                <span className="w-24 shrink-0 font-mono text-sm tabular-nums text-ink-3">
+                <span className="hidden w-24 shrink-0 font-mono text-sm tabular-nums text-ink-3 sm:block">
                   {format(new Date(plan.created_at), "d MMM yyyy")}
                 </span>
-                <span className="min-w-0 flex-1 truncate font-medium group-hover:underline">
-                  {plan.title || "Weekly meal plan"}
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-medium group-hover:underline">{plan.title || "Weekly meal plan"}</span>
+                  <span className="block font-mono text-xs tabular-nums text-ink-3 sm:hidden">
+                    {format(new Date(plan.created_at), "d MMM yyyy")}
+                  </span>
                 </span>
                 {plan.status === "active" && (
                   <span className="shrink-0 rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-on-accent">Active</span>
@@ -83,7 +86,7 @@ export default async function HistoryPage({
           ))}
         </ul>
       ) : (
-        <div className="mt-8 rounded-2xl border border-dashed border-line px-6 py-16 text-center">
+        <div className="rise mt-8 rounded-2xl border border-dashed border-line px-6 py-16 text-center">
           <h2 className="text-lg font-semibold">No plans yet</h2>
           <p className="mx-auto mt-2 max-w-xs text-ink-2">Generate your first plan from the dashboard and it will show up here.</p>
           <Link href="/dashboard" className="btn btn-primary mt-6">
