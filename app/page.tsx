@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "AI Nutritionist | Hyper-Personalized Meal Plans",
   description: "Get a 7-day meal plan tailored to your unique body metrics, allergies, and goals. Powered by advanced AI for precision nutrition.",
   alternates: {
-    canonical: "https://wellnourishai.in",
+    canonical: "https://wellnourishai.ashutoshswamy.in",
   },
 };
 
@@ -14,7 +14,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "WellNourish AI",
-    "url": "https://wellnourishai.in",
+    "url": "https://wellnourishai.ashutoshswamy.in",
     "description": "AI-powered personalized nutritionist and meal planner.",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "All",

@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://wellnourishai.in';
+  const baseUrl = 'https://wellnourishai.ashutoshswamy.in';
 
   // Core pages
   const routes = [

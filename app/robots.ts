@@ -18,6 +18,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://wellnourishai.in/sitemap.xml',
+    sitemap: 'https://wellnourishai.ashutoshswamy.in/sitemap.xml',
   };
 }

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Terms of Service | WellNourish AI",
   description: "Read the terms and conditions for using WellNourish AI's personalized nutrition and meal planning services.",
   alternates: {
-    canonical: "https://wellnourishai.in/terms",
+    canonical: "https://wellnourishai.ashutoshswamy.in/terms",
   },
 };
 

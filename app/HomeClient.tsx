@@ -12,12 +12,32 @@ const goals = [
   { label: "Maintenance", cal: 2200, protein: "140 g", carbs: "240 g", fat: "75 g" },
 ];
 
+// Fat derived from kcal - 4P - 4C so every row adds up.
 const sampleDay = [
-  { type: "Breakfast", time: "8:00", name: "Spinach & feta egg wrap", desc: "Whole-wheat wrap, scrambled eggs, spinach, feta, hot sauce.", kcal: 420, protein: 28, carbs: 38 },
-  { type: "Lunch", time: "12:30", name: "Grilled chicken bowl", desc: "Brown rice, chicken thigh, roasted sweet potato, avocado, lime-tahini.", kcal: 680, protein: 48, carbs: 62 },
-  { type: "Snack", time: "16:00", name: "Greek yogurt & berries", desc: "Full-fat yogurt, mixed berries, walnuts, raw honey.", kcal: 280, protein: 18, carbs: 30 },
-  { type: "Dinner", time: "19:30", name: "Salmon with roasted veg", desc: "Pan-seared salmon over broccoli, bell pepper and quinoa.", kcal: 770, protein: 48, carbs: 55 },
+  {
+    type: "Breakfast", time: "8:00", hour: 8, name: "Spinach & feta egg wrap", kcal: 420, protein: 28, carbs: 38, fat: 17,
+    desc: "Scrambled eggs and wilted spinach in a whole-wheat wrap, finished with feta and hot sauce.",
+    ingredients: ["2 eggs", "Whole-wheat wrap", "Baby spinach", "Feta, 30 g", "Hot sauce"],
+  },
+  {
+    type: "Lunch", time: "12:30", hour: 12.5, name: "Grilled chicken bowl", kcal: 680, protein: 48, carbs: 62, fat: 27,
+    desc: "Brown rice, grilled chicken thigh and roasted sweet potato with avocado and a lime-tahini dressing.",
+    ingredients: ["Chicken thigh, 150 g", "Brown rice, 1 cup", "Sweet potato", "Half an avocado", "Lime-tahini"],
+  },
+  {
+    type: "Snack", time: "16:00", hour: 16, name: "Greek yogurt & berries", kcal: 280, protein: 18, carbs: 30, fat: 10,
+    desc: "Thick yogurt with mixed berries, a handful of walnuts and a little raw honey.",
+    ingredients: ["Greek yogurt, 170 g", "Mixed berries", "Walnuts, 15 g", "Raw honey"],
+  },
+  {
+    type: "Dinner", time: "19:30", hour: 19.5, name: "Salmon with roasted veg", kcal: 770, protein: 48, carbs: 55, fat: 40,
+    desc: "Pan-seared salmon over roasted broccoli and bell pepper, served with quinoa.",
+    ingredients: ["Salmon fillet, 160 g", "Quinoa, 1 cup", "Broccoli", "Bell pepper", "Olive oil"],
+  },
 ];
+
+const DAY_START = 7;
+const DAY_END = 21;
 
 const steps = [
   { title: "Tell us about you", desc: "Age, weight, height, activity, goal, allergies and the cuisines you like. About two minutes." },
@@ -25,11 +45,6 @@ const steps = [
   { title: "Cook and shop", desc: "Follow the plan day by day and tick off the grocery list as you shop. Regenerate when your goals change." },
 ];
 
-const quotes = [
-  { quote: "The first meal planner that actually respects my dairy allergy and still gives me food I want to eat.", name: "Priya Sharma", role: "Software engineer" },
-  { quote: "I hit my protein target every day last week without thinking about it.", name: "Marcus Chen", role: "Fitness coach" },
-  { quote: "A full week of family dinners in under a minute. That alone saves my Sunday.", name: "Aisha Patel", role: "Product designer" },
-];
 
 const promises = [
   { title: "Your data stays yours", desc: "Health metrics are encrypted at rest and never sold." },
@@ -43,7 +58,6 @@ export function HomeClient() {
   const { isSignedIn } = useUser();
   const [goalIdx, setGoalIdx] = useState(0);
   const goal = goals[goalIdx];
-  const dayTotal = sampleDay.reduce((s, m) => s + m.kcal, 0);
   const cta = isSignedIn ? { href: "/dashboard", label: "Open dashboard" } : { href: "/sign-up", label: "Build my plan" };
 
   return (
@@ -93,38 +107,7 @@ export function HomeClient() {
         </div>
       </section>
 
-      {/* Sample day: column widths follow each meal's share of the day's calories */}
-      <section id="sample-day" className="reveal scroll-mt-24">
-        <p className="mb-3 font-mono text-xs uppercase tracking-[0.16em] text-ink-3">Sample day</p>
-        <h2 className="display max-w-2xl text-[clamp(2rem,3.6vw,3rem)]">A single day, fully mapped.</h2>
-        <p className="mt-4 max-w-xl text-ink-2">Every meal sized to your targets. Wider meals carry more of the day&apos;s calories.</p>
-
-        <div
-          className="mt-10 grid grid-cols-1 gap-3 md:[grid-template-columns:var(--cols)]"
-          style={{ "--cols": sampleDay.map((m) => `${m.kcal}fr`).join(" ") } as React.CSSProperties}
-        >
-          {sampleDay.map((m) => (
-            <article key={m.type} className="card flex flex-col p-5">
-              <div className="flex items-baseline justify-between gap-2 font-mono text-xs text-ink-3">
-                <span>{m.time}</span>
-                <span>{Math.round((m.kcal / dayTotal) * 100)}%</span>
-              </div>
-              <div className="mt-1.5 h-1 rounded-full bg-accent md:hidden" style={{ width: `${(m.kcal / dayTotal) * 100}%` }} />
-              <p className="mt-5 text-sm font-semibold text-ink-2">{m.type}</p>
-              <h3 className="mt-1 text-lg font-semibold leading-snug">{m.name}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-2">{m.desc}</p>
-              <p className="mt-auto pt-5 font-mono text-sm tabular-nums">
-                <span className="font-semibold">{m.kcal} kcal</span>
-                <span className="text-ink-3"> / {m.protein}g P / {m.carbs}g C</span>
-              </p>
-            </article>
-          ))}
-        </div>
-        <p className="mt-4 font-mono text-sm tabular-nums text-ink-2">
-          Daily total <span className="font-semibold text-ink">{dayTotal.toLocaleString("en-US")} kcal</span>, {sampleDay.reduce((s, m) => s + m.protein, 0)} g protein,{" "}
-          {sampleDay.reduce((s, m) => s + m.carbs, 0)} g carbs
-        </p>
-      </section>
+      <SampleDay />
 
       {/* How it works: a real sequence, so the numbers stay */}
       <section className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
@@ -195,28 +178,6 @@ export function HomeClient() {
         </div>
       </section>
 
-      {/* Testimonials: one lead quote, two supporting */}
-      <section className="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-16">
-        <figure className="reveal">
-          <blockquote className="display text-[clamp(1.6rem,2.8vw,2.4rem)] font-bold leading-tight [font-stretch:105%]">
-            &ldquo;{quotes[0].quote}&rdquo;
-          </blockquote>
-          <figcaption className="mt-6 text-ink-2">
-            <span className="font-semibold text-ink">{quotes[0].name}</span>, {quotes[0].role}
-          </figcaption>
-        </figure>
-        <div className="space-y-8 lg:border-l lg:border-line lg:pl-10">
-          {quotes.slice(1).map((q) => (
-            <figure key={q.name} className="reveal">
-              <blockquote className="leading-relaxed">&ldquo;{q.quote}&rdquo;</blockquote>
-              <figcaption className="mt-3 text-sm text-ink-2">
-                <span className="font-semibold text-ink">{q.name}</span>, {q.role}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
       {/* Closing CTA with the trust promises */}
       <section className="reveal grid gap-10 rounded-2xl bg-kale p-8 text-on-kale md:p-14 lg:grid-cols-[1.3fr_1fr]">
         <div>
@@ -237,5 +198,156 @@ export function HomeClient() {
         </dl>
       </section>
     </div>
+  );
+}
+
+function SampleDay() {
+  const [idx, setIdx] = useState(1);
+  const meal = sampleDay[idx];
+  const total = (k: "kcal" | "protein" | "carbs" | "fat") => sampleDay.reduce((s, m) => s + m[k], 0);
+  const dayKcal = total("kcal");
+  const eatenSoFar = sampleDay.slice(0, idx + 1).reduce((s, m) => s + m.kcal, 0);
+  const pos = (h: number) => `${((h - DAY_START) / (DAY_END - DAY_START)) * 100}%`;
+
+  return (
+    <section id="sample-day" className="reveal scroll-mt-24">
+      <p className="mb-3 font-mono text-xs uppercase tracking-[0.16em] text-ink-3">Sample day</p>
+      <h2 className="display max-w-2xl text-[clamp(2rem,3.6vw,3rem)]">A single day, fully mapped.</h2>
+      <p className="mt-4 max-w-xl text-ink-2">Pick a meal to see what&apos;s in it and how much of the day it covers.</p>
+
+      <div className="card mt-10 overflow-hidden">
+        {/* Clock: meals pinned to the hour they're eaten; the accent line is the day so far */}
+        <div className="border-b border-line px-6 pb-6 pt-8 sm:px-12">
+          <div
+            className="relative h-28"
+            role="tablist"
+            aria-label="Meals in the sample day"
+            onKeyDown={(e) => {
+              const step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+              if (!step) return;
+              e.preventDefault();
+              const next = (idx + step + sampleDay.length) % sampleDay.length;
+              setIdx(next);
+              e.currentTarget.querySelectorAll<HTMLElement>('[role="tab"]')[next]?.focus();
+            }}
+          >
+            {/* Axis */}
+            <div className="absolute inset-x-0 top-20 h-0.5 -translate-y-1/2 rounded-full bg-line" />
+            <div
+              className="absolute left-0 top-20 h-1 -translate-y-1/2 rounded-full bg-accent transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              style={{ width: pos(meal.hour) }}
+            />
+
+            {/* Hour ticks: every hour, labelled every two (just the ends on phones) */}
+            {Array.from({ length: DAY_END - DAY_START + 1 }, (_, i) => DAY_START + i).map((h) => (
+              <div key={h} className="absolute top-[5.4rem] -translate-x-1/2" style={{ left: pos(h) }}>
+                <div className={`mx-auto w-px bg-ink-3 ${h % 2 ? "h-2" : "h-1"}`} />
+                {h % 2 === 1 && (
+                  <span
+                    className={`absolute left-1/2 top-3 -translate-x-1/2 font-mono text-[0.7rem] tabular-nums text-ink-3 ${
+                      h === DAY_START || h === DAY_END ? "" : "hidden sm:block"
+                    }`}
+                  >
+                    {h}:00
+                  </span>
+                )}
+              </div>
+            ))}
+
+            {/* Time between meals */}
+            {sampleDay.slice(1).map((m, i) => {
+              const gap = m.hour - sampleDay[i].hour;
+              return (
+                <span
+                  key={m.type}
+                  className="absolute top-[3.6rem] hidden -translate-x-1/2 font-mono text-[0.68rem] text-ink-3 sm:block"
+                  style={{ left: pos((m.hour + sampleDay[i].hour) / 2) }}
+                >
+                  {Math.floor(gap)}h{gap % 1 ? ` ${Math.round((gap % 1) * 60)}m` : ""}
+                </span>
+              );
+            })}
+
+            {/* Stems + dots */}
+            {sampleDay.map((m, i) => (
+              <div key={m.type} className="absolute top-12 -translate-x-1/2" style={{ left: pos(m.hour) }} aria-hidden>
+                <div className={`mx-auto h-8 transition-colors ${i === idx ? "w-0.5 bg-ink" : "w-px bg-line"}`} />
+                <div
+                  className={`mx-auto -mt-[7px] size-3.5 rounded-full border-2 transition-colors duration-300 ${
+                    i === idx ? "border-ink bg-ink ring-4 ring-accent" : i < idx ? "border-accent bg-accent" : "border-ink-3 bg-surface"
+                  }`}
+                />
+              </div>
+            ))}
+
+            {/* Meal tabs */}
+            {sampleDay.map((m, i) => (
+              <button
+                key={m.type}
+                role="tab"
+                aria-selected={i === idx}
+                aria-controls="sample-meal"
+                tabIndex={i === idx ? 0 : -1}
+                onClick={() => setIdx(i)}
+                className="choice absolute top-0 min-h-0 -translate-x-1/2 flex-col gap-0 bg-surface px-3 py-1.5 leading-tight aria-selected:bg-ink sm:px-4"
+                style={{ left: pos(m.hour) }}
+              >
+                <span className="text-[0.8rem] font-semibold sm:text-sm">{m.type}</span>
+                <span className="font-mono text-[0.7rem] tabular-nums opacity-70">{m.time}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Calories: each segment is one meal, filled up to the selected one */}
+          <div className="mt-6 flex h-3 gap-1" aria-hidden>
+            {sampleDay.map((m, i) => (
+              <button
+                key={m.type}
+                tabIndex={-1}
+                onClick={() => setIdx(i)}
+                className={`h-full rounded-full transition-colors duration-300 ${i <= idx ? "bg-accent" : "bg-sunken"} ${i === idx ? "ring-2 ring-ink ring-offset-2 ring-offset-surface" : ""}`}
+                style={{ flexGrow: m.kcal }}
+              />
+            ))}
+          </div>
+          <p className="mt-3 font-mono text-sm tabular-nums text-ink-2">
+            <span className="font-semibold text-ink">{eatenSoFar.toLocaleString("en-US")}</span> of {dayKcal.toLocaleString("en-US")} kcal eaten by {meal.time}
+          </p>
+        </div>
+
+        {/* Selected meal */}
+        <div id="sample-meal" role="tabpanel" key={idx} className="grid gap-8 p-5 sm:p-10 md:grid-cols-[1fr_17rem] md:gap-14">
+          <div className="tick">
+            <p className="text-sm font-semibold text-ink-3">
+              {meal.type}, {meal.time}
+            </p>
+            <h3 className="display mt-2 text-[clamp(1.6rem,2.6vw,2.2rem)]">{meal.name}</h3>
+            <p className="mt-3 max-w-md leading-relaxed text-ink-2">{meal.desc}</p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {meal.ingredients.map((ing) => (
+                <li key={ing} className="rounded-full bg-sunken px-3 py-1 text-sm">
+                  {ing}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <dl className="tick self-start border-y-[5px] border-ink font-mono text-sm tabular-nums" style={{ animationDelay: "80ms" }}>
+            <div className="flex items-baseline justify-between border-b border-ink py-2">
+              <dt className="font-sans font-bold">Calories</dt>
+              <dd className="text-2xl font-semibold">{meal.kcal}</dd>
+            </div>
+            {(["protein", "carbs", "fat"] as const).map((k) => (
+              <div key={k} className="flex justify-between border-b border-line py-2 last:border-b-0">
+                <dt className="font-sans font-semibold capitalize">{k}</dt>
+                <dd>
+                  {meal[k]} g <span className="text-ink-3">/ {total(k)} g</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
   );
 }

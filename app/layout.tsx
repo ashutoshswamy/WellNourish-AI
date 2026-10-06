@@ -20,7 +20,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://wellnourishai.in"),
+  metadataBase: new URL("https://wellnourishai.ashutoshswamy.in"),
   title: {
     default: "WellNourish AI | Personalized AI Nutritionist & Meal Planner",
     template: "%s | WellNourish AI",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://wellnourishai.in",
+    url: "https://wellnourishai.ashutoshswamy.in",
     siteName: "WellNourish AI",
     title: "WellNourish AI | Your Personal AI Nutritionist",
     description: "Get hyper-personalized 7-day meal plans and grocery lists tailored to your unique body metrics and dietary goals.",
@@ -61,7 +61,6 @@ export const metadata: Metadata = {
     title: "WellNourish AI | Your Personal AI Nutritionist",
     description: "Hyper-personalized 7-day meal plans and grocery lists tailored specifically to you.",
     images: ["/og-image.jpg"],
-    creator: "@wellnourishai",
   },
   robots: {
     index: true,
@@ -75,7 +74,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://wellnourishai.in",
+    canonical: "https://wellnourishai.ashutoshswamy.in",
   },
 };
 
