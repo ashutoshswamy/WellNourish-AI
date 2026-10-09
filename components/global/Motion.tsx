@@ -17,6 +17,8 @@ ScrollTrigger.config({ ignoreMobileResize: true });
   .hl      highlighter swipe across a word
   [data-print] nutrition-label rules draw in like a printed panel
   Everything sits inside matchMedia, so reduced-motion users get static content.
+  A MutationObserver catches content that streams in after loading.tsx, which
+  arrives after the pathname has already changed.
 */
 export function Motion() {
   const pathname = usePathname();
@@ -24,28 +26,50 @@ export function Motion() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const tl = gsap.timeline();
-        tl.fromTo(".rise", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, stagger: 0.08 });
-        if (document.querySelector(".hl")) {
-          tl.fromTo(".hl", { "--hl": "0%" }, { "--hl": "100%", duration: 0.6, ease: "power2.inOut" }, 0.35);
-        }
-        if (document.querySelector("[data-print]")) {
-          tl.from("[data-print] .rule-xl, [data-print] .rule-md, [data-print] .rule-hair", {
-            scaleX: 0,
-            transformOrigin: "left center",
-            duration: 0.6,
-            stagger: 0.05,
-            ease: "power2.out",
-          }, 0.3);
-        }
+      mm.add("(prefers-reduced-motion: no-preference)", (ctx) => {
+        const seen = new WeakSet<Element>();
+        const fresh = (sel: string) => gsap.utils.toArray<HTMLElement>(sel).filter((el) => !seen.has(el));
 
-        gsap.set(".reveal", { autoAlpha: 0, y: 32 });
-        ScrollTrigger.batch(".reveal", {
-          start: "top 88%",
-          once: true,
-          onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, stagger: 0.1, overwrite: true }),
+        // ctx.add so tweens made later (from the observer) still revert with the matchMedia
+        const animate = () => ctx.add(() => {
+          const rise = fresh(".rise");
+          const reveal = fresh(".reveal");
+          const hl = fresh(".hl");
+          const rules = fresh("[data-print] .rule-xl, [data-print] .rule-md, [data-print] .rule-hair");
+          const all = [...rise, ...reveal, ...hl, ...rules];
+          if (!all.length) return;
+          all.forEach((el) => seen.add(el));
+
+          const tl = gsap.timeline();
+          if (rise.length) tl.fromTo(rise, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, stagger: 0.08 });
+          if (hl.length) {
+            tl.fromTo(hl, { "--hl": "0%" }, { "--hl": "100%", duration: 0.6, ease: "power2.inOut" }, 0.35);
+          }
+          if (rules.length) {
+            tl.from(rules, {
+              scaleX: 0,
+              transformOrigin: "left center",
+              duration: 0.6,
+              stagger: 0.05,
+              ease: "power2.out",
+            }, 0.3);
+          }
+
+          if (reveal.length) {
+            gsap.set(reveal, { autoAlpha: 0, y: 32 });
+            ScrollTrigger.batch(reveal, {
+              start: "top 88%",
+              once: true,
+              onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, stagger: 0.1, overwrite: true }),
+            });
+          }
         });
+
+        animate();
+        // Observer callbacks run before the next paint, so new content never shows un-animated for a frame
+        const observer = new MutationObserver(animate);
+        observer.observe(document.querySelector("main") ?? document.body, { childList: true, subtree: true });
+        return () => observer.disconnect();
       });
       return () => mm.revert();
     },

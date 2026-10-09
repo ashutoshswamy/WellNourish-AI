@@ -21,9 +21,9 @@ export function NutritionLabel({ serving, calories, rows, footnote, className = 
       <div className="rule-xl mt-1.5" />
 
       <p className="mt-1 text-xs font-bold">Amount per day</p>
-      <div className="flex items-end justify-between">
-        <span className="display text-3xl [font-stretch:100%]">Calories</span>
-        <span className="tick display font-mono text-5xl tabular-nums [font-stretch:100%]">
+      <div className="flex items-end justify-between gap-2">
+        <span className="display text-2xl [font-stretch:100%] sm:text-3xl">Calories</span>
+        <span className="tick display font-mono text-[2.5rem] tabular-nums [font-stretch:100%] sm:text-5xl">
           {typeof calories === "number" ? calories.toLocaleString("en-US") : calories}
         </span>
       </div>

@@ -293,10 +293,10 @@ function SampleDay() {
                 aria-controls="sample-meal"
                 tabIndex={i === idx ? 0 : -1}
                 onClick={() => setIdx(i)}
-                className="choice absolute top-0 min-h-0 -translate-x-1/2 flex-col gap-0 bg-surface px-3 py-1.5 leading-tight aria-selected:bg-ink sm:px-4"
+                className="choice absolute top-0 min-h-0 -translate-x-1/2 flex-col gap-0 bg-surface px-2 py-1.5 leading-tight aria-selected:bg-ink sm:px-4"
                 style={{ left: pos(m.hour) }}
               >
-                <span className="text-[0.8rem] font-semibold sm:text-sm">{m.type}</span>
+                <span className="text-[0.72rem] font-semibold sm:text-sm">{m.type}</span>
                 <span className="font-mono text-[0.7rem] tabular-nums opacity-70">{m.time}</span>
               </button>
             ))}

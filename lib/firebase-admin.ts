@@ -2,6 +2,7 @@ import { cert, getApps, initializeApp, type App } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import { cookies } from "next/headers";
+import { cache } from "react";
 import { SESSION_COOKIE } from "@/lib/session-cookie";
 
 export { SESSION_COOKIE };
@@ -25,17 +26,19 @@ export const adminDb = getFirestore(getAdminApp());
  * cookie's presence (it can't run the Admin SDK on the Edge runtime), so
  * every server route/page that needs the real user identity calls this.
  */
-export async function getServerUser() {
+export const getServerUser = cache(async () => {
   const cookieStore = await cookies();
   const session = cookieStore.get(SESSION_COOKIE)?.value;
   if (!session) return null;
 
   try {
-    return await adminAuth.verifySessionCookie(session, true);
+    // ponytail: no revocation check — it's a network round-trip on every request and
+    // nothing here revokes tokens. Pass `true` if you add revokeRefreshTokens().
+    return await adminAuth.verifySessionCookie(session);
   } catch {
     return null;
   }
-}
+});
 
 interface PlanMeal {
   id: string;

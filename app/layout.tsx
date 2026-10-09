@@ -119,7 +119,7 @@ export default function RootLayout({
           <Footer />
           <Motion />
           <noscript>
-            <style>{`.rise{visibility:visible!important}`}</style>
+            <style>{`.rise,.reveal{visibility:visible!important}`}</style>
           </noscript>
         </body>
       </html>

@@ -55,7 +55,7 @@ export default async function PlanPage({
             {new Date(activePlan.created_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <Link href="/shopping-list" className="btn btn-secondary">
             <ShoppingBasket className="size-4" /> Grocery list
           </Link>

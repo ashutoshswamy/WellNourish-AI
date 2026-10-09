@@ -42,9 +42,11 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  // Already signed in on arrival. Skipped mid-submit: the auth call navigates once the session cookie is set.
+  const busy = loading || googleLoading;
   useEffect(() => {
-    if (isLoaded && isSignedIn) router.replace("/dashboard");
-  }, [isLoaded, isSignedIn, router]);
+    if (isLoaded && isSignedIn && !busy) router.replace("/dashboard");
+  }, [isLoaded, isSignedIn, busy, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -21,22 +21,21 @@ export function GenerateButton({ className = "" }: { className?: string }) {
       });
 
       if (res.ok || res.status === 302 || res.status === 0) {
+        // Keep the spinner up until /plan replaces this page
         router.push("/plan");
-        router.refresh();
-      } else {
-        const text = await res.text();
-        try {
-          const errorData = JSON.parse(text);
-          setError(errorData.message || errorData.error || "Failed to generate plan.");
-        } catch {
-          setError(text || "Failed to generate plan. Please try again.");
-        }
+        return;
+      }
+      const text = await res.text();
+      try {
+        const errorData = JSON.parse(text);
+        setError(errorData.message || errorData.error || "Failed to generate plan.");
+      } catch {
+        setError(text || "Failed to generate plan. Please try again.");
       }
     } catch {
       setError("Couldn't reach the server. Check your connection and try again.");
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   return (

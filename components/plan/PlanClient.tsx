@@ -50,7 +50,7 @@ export function PlanClient({ plan }: { plan: Plan }) {
   return (
     <div className="rise mt-10">
       {/* Week strip */}
-      <div className="-mx-4 overflow-x-auto px-4 pb-1">
+      <div className="-mx-4 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex gap-2" role="tablist" aria-label="Days">
           {days.map((day, idx) => (
             <button

@@ -46,27 +46,27 @@ export default async function Dashboard() {
   if (!user) redirect("/");
   const userId = user.uid;
 
-  const metricsSnap = await adminDb.collection("userMetrics").doc(userId).get();
+  const [metricsSnap, activeSnap, recentSnap] = await Promise.all([
+    adminDb.collection("userMetrics").doc(userId).get(),
+    adminDb
+      .collection("mealPlans")
+      .where("user_id", "==", userId)
+      .where("status", "==", "active")
+      .orderBy("created_at", "desc")
+      .limit(1)
+      .get(),
+    adminDb
+      .collection("mealPlans")
+      .where("user_id", "==", userId)
+      .orderBy("created_at", "desc")
+      .limit(3)
+      .get(),
+  ]);
   const metrics = metricsSnap.data();
 
   if (!metrics) redirect("/profile");
 
-  const activeSnap = await adminDb
-    .collection("mealPlans")
-    .where("user_id", "==", userId)
-    .where("status", "==", "active")
-    .orderBy("created_at", "desc")
-    .limit(1)
-    .get();
-
   const activePlan = activeSnap.docs[0] ? await loadPlanWithDays(activeSnap.docs[0].id) : null;
-
-  const recentSnap = await adminDb
-    .collection("mealPlans")
-    .where("user_id", "==", userId)
-    .orderBy("created_at", "desc")
-    .limit(3)
-    .get();
 
   const recentPlans: MealPlan[] = recentSnap.docs.map((doc) => {
     const data = doc.data();
@@ -140,7 +140,7 @@ export default async function Dashboard() {
                   return (
                     <li key={type} className="grid grid-cols-[5.5rem_1fr_auto] items-baseline gap-3 py-3.5">
                       <span className="text-sm capitalize text-ink-3">{type}</span>
-                      <span className="font-medium leading-snug">{meal.name}</span>
+                      <span className="min-w-0 font-medium leading-snug">{meal.name}</span>
                       <span className="font-mono text-sm tabular-nums text-ink-2">{meal.calories} kcal</span>
                     </li>
                   );
@@ -229,16 +229,16 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <dt className="text-sm text-ink-2">{label}</dt>
-      <dd className="mt-1 text-base font-semibold leading-snug sm:text-lg">{value}</dd>
+      <dd className="mt-1 text-base font-semibold leading-snug wrap-anywhere sm:text-lg">{value}</dd>
     </div>
   );
 }
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between py-2.5">
-      <dt className="text-ink-2">{label}</dt>
-      <dd className="font-medium">{value}</dd>
+    <div className="flex justify-between gap-4 py-2.5">
+      <dt className="shrink-0 text-ink-2">{label}</dt>
+      <dd className="min-w-0 text-right font-medium wrap-anywhere">{value}</dd>
     </div>
   );
 }

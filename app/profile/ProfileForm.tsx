@@ -97,13 +97,12 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
         throw new Error(errorData.message || "Failed to save profile");
       }
 
+      // Stay in the "Saving…" state until /dashboard replaces this page
       setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
       router.push("/dashboard");
     } catch (err) {
       console.error(err);
       setSaveError("Couldn't save your profile. Check the fields and try again.");
-    } finally {
       setIsSubmitting(false);
     }
   };
