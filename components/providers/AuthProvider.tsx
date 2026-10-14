@@ -75,6 +75,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await firebaseSignOut(auth);
         throw err;
       }
+      // Drop the client router cache: a prefetched /dashboard may hold the cookieless redirect to /sign-in
+      router.refresh();
       router.push("/dashboard");
     } finally {
       authAction.current = false;
