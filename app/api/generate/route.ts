@@ -152,10 +152,22 @@ async function generatePlanText(prompt: string): Promise<string> {
 }
 
 export async function POST() {
+  let generationLock: FirebaseFirestore.DocumentReference | undefined;
   try {
     const user = await getServerUser();
     if (!user) return new NextResponse("Unauthorized", { status: 401 });
     const userId = user.uid;
+
+    generationLock = adminDb.collection("generationLocks").doc(userId);
+    await adminDb.runTransaction(async (tx) => {
+      const lockSnap = await tx.get(generationLock!);
+      const lockedUntil = lockSnap.data()?.locked_until?.toMillis?.() ?? 0;
+      if (lockedUntil > Date.now()) throw new Error("GENERATION_IN_PROGRESS");
+      tx.set(generationLock!, {
+        user_id: userId,
+        locked_until: new Date(Date.now() + 15 * 60 * 1000),
+      });
+    });
 
     // 1. Rate Limiting Check (Simple version: 1 plan per hour)
     const recentPlansSnap = await adminDb
@@ -191,19 +203,6 @@ export async function POST() {
         "User metrics not found. Please setup your profile.",
         { status: 404 },
       );
-    }
-
-    // 3. Archive previous active plans for this user
-    const activePlansSnap = await adminDb
-      .collection("mealPlans")
-      .where("user_id", "==", userId)
-      .where("status", "==", "active")
-      .get();
-
-    if (!activePlansSnap.empty) {
-      const archiveBatch = adminDb.batch();
-      activePlansSnap.forEach((doc) => archiveBatch.update(doc.ref, { status: "archived" }));
-      await archiveBatch.commit();
     }
 
     const calorieTarget = metrics.daily_calorie_target;
@@ -416,11 +415,30 @@ export async function POST() {
       }
     }
 
+    // Archive only after new plan and shopping list persist successfully.
+    const activePlansSnap = await adminDb
+      .collection("mealPlans")
+      .where("user_id", "==", userId)
+      .where("status", "==", "active")
+      .get();
+    if (!activePlansSnap.empty) {
+      const archiveBatch = adminDb.batch();
+      activePlansSnap.forEach((doc) => {
+        if (doc.id !== planRef.id) archiveBatch.update(doc.ref, { status: "archived" });
+      });
+      await archiveBatch.commit();
+    }
+
     return NextResponse.json({ success: true, planId: planRef.id });
   } catch (error) {
+    if (error instanceof Error && error.message === "GENERATION_IN_PROGRESS") {
+      return new NextResponse("Generation already in progress", { status: 409 });
+    }
     console.error("Generation pipeline failed:", error);
     return new NextResponse("Internal server error during generation", {
       status: 500,
     });
+  } finally {
+    if (generationLock) await generationLock.delete().catch(() => {});
   }
 }

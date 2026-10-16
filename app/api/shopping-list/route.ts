@@ -9,6 +9,8 @@ const shoppingItemSchema = z.object({
   plan_id: z.string().min(1).optional(),
 });
 
+const shoppingUpdateSchema = z.object({ is_checked: z.boolean() });
+
 export async function POST(req: Request) {
   try {
     const user = await getServerUser();
@@ -16,6 +18,13 @@ export async function POST(req: Request) {
 
     const body = await req.json();
     const validated = shoppingItemSchema.parse(body);
+
+    if (validated.plan_id) {
+      const planSnap = await adminDb.collection("mealPlans").doc(validated.plan_id).get();
+      if (!planSnap.exists || planSnap.data()?.user_id !== user.uid) {
+        return new NextResponse("Plan not found", { status: 404 });
+      }
+    }
 
     const docData = {
       user_id: user.uid,
@@ -50,7 +59,7 @@ export async function PATCH(req: Request) {
     const id = searchParams.get("id");
     if (!id) return new NextResponse("Missing item id", { status: 400 });
 
-    const { is_checked } = await req.json();
+    const { is_checked } = shoppingUpdateSchema.parse(await req.json());
 
     const ref = adminDb.collection("shoppingList").doc(id);
     const snap = await ref.get();
@@ -61,6 +70,9 @@ export async function PATCH(req: Request) {
     await ref.update({ is_checked });
     return NextResponse.json({ success: true });
   } catch (err) {
+    if (err instanceof z.ZodError) {
+      return new NextResponse(JSON.stringify(err.issues), { status: 400 });
+    }
     console.error("Shopping list PATCH internal error:", err);
     return new NextResponse("Internal server error", { status: 500 });
   }

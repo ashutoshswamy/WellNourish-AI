@@ -20,23 +20,28 @@ interface AuthContextValue {
   isSignedIn: boolean;
   isLoaded: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, fullName: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signUp: (email: string, password: string, fullName: string, legalAcceptance: LegalAcceptance) => Promise<void>;
+  signInWithGoogle: (legalAcceptance?: LegalAcceptance) => Promise<void>;
   signOutUser: () => Promise<void>;
+}
+
+interface LegalAcceptance {
+  isAdult: true;
+  acceptedTerms: true;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 const hasSession = () => document.cookie.split("; ").some((c) => c.startsWith(`${SESSION_MARKER}=`));
 
-async function syncSessionCookie(user: User | null, forceRefresh = false) {
+async function syncSessionCookie(user: User | null, forceRefresh = false, legalAcceptance?: LegalAcceptance) {
   if (user) {
     // Force refresh so a just-set displayName lands in the token's `name` claim
     const idToken = await user.getIdToken(forceRefresh);
     const res = await fetch("/api/auth/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idToken }),
+      body: JSON.stringify({ idToken, legalAcceptance }),
     });
     if (!res.ok) throw new Error("Failed to create session");
   } else {
@@ -64,20 +69,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, []);
 
-  const startSession = async (getUser: () => Promise<User>) => {
+  const startSession = async (getUser: () => Promise<User>, legalAcceptance?: LegalAcceptance) => {
     authAction.current = true;
     try {
       const user = await getUser();
       try {
-        await syncSessionCookie(user, true);
+        await syncSessionCookie(user, true, legalAcceptance);
       } catch (err) {
         // No server session: drop the Firebase one too, or the form would bounce to /dashboard and back
         await firebaseSignOut(auth);
         throw err;
       }
-      // Drop the client router cache: a prefetched /dashboard may hold the cookieless redirect to /sign-in
-      router.refresh();
-      router.push("/dashboard");
+      // Cookie is server-set; hard navigation avoids stale prefetched login redirects.
+      window.location.assign("/dashboard");
     } finally {
       authAction.current = false;
     }
@@ -86,15 +90,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = (email: string, password: string) =>
     startSession(async () => (await signInWithEmailAndPassword(auth, email, password)).user);
 
-  const signUp = (email: string, password: string, fullName: string) =>
+  const signUp = (email: string, password: string, fullName: string, legalAcceptance: LegalAcceptance) =>
     startSession(async () => {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       if (fullName) await updateProfile(user, { displayName: fullName });
       return user;
-    });
+    }, legalAcceptance);
 
-  const signInWithGoogle = () =>
-    startSession(async () => (await signInWithPopup(auth, new GoogleAuthProvider())).user);
+  const signInWithGoogle = (legalAcceptance?: LegalAcceptance) =>
+    startSession(async () => (await signInWithPopup(auth, new GoogleAuthProvider())).user, legalAcceptance);
 
   const signOutUser = async () => {
     await firebaseSignOut(auth);

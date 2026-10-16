@@ -38,6 +38,8 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [ageStatus, setAgeStatus] = useState<"yes" | "no" | "">("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -51,9 +53,17 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (mode === "sign-up" && ageStatus !== "yes") {
+      setError(ageStatus === "no" ? "You must be 18 or older to create an account." : "Confirm whether you are 18 or older.");
+      return;
+    }
+    if (mode === "sign-up" && !acceptedTerms) {
+      setError("Accept the Terms of Service and Privacy Policy to continue.");
+      return;
+    }
     setLoading(true);
     try {
-      if (mode === "sign-up") await signUp(email, password, fullName);
+      if (mode === "sign-up") await signUp(email, password, fullName, { isAdult: true, acceptedTerms: true });
       else await signIn(email, password);
     } catch {
       setError(t.error);
@@ -63,9 +73,17 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
 
   const handleGoogle = async () => {
     setError(null);
+    if (mode === "sign-up" && ageStatus !== "yes") {
+      setError(ageStatus === "no" ? "You must be 18 or older to create an account." : "Confirm whether you are 18 or older.");
+      return;
+    }
+    if (mode === "sign-up" && !acceptedTerms) {
+      setError("Accept the Terms of Service and Privacy Policy to continue.");
+      return;
+    }
     setGoogleLoading(true);
     try {
-      await signInWithGoogle();
+      await signInWithGoogle(mode === "sign-up" ? { isAdult: true, acceptedTerms: true } : undefined);
     } catch {
       setError(t.googleError);
       setGoogleLoading(false);
@@ -115,10 +133,27 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {mode === "sign-up" && (
-              <div>
-                <label htmlFor="name" className="field-label">Full name</label>
-                <input id="name" type="text" autoComplete="name" required value={fullName} onChange={(e) => setFullName(e.target.value)} className="field" />
-              </div>
+              <>
+                <div>
+                  <label htmlFor="name" className="field-label">Full name</label>
+                  <input id="name" type="text" autoComplete="name" required value={fullName} onChange={(e) => setFullName(e.target.value)} className="field" />
+                </div>
+                <fieldset className="space-y-2">
+                  <legend className="field-label">Are you 18 or older?</legend>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="radio" name="age" value="yes" checked={ageStatus === "yes"} onChange={() => setAgeStatus("yes")} />
+                    Yes, I am 18 or older
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="radio" name="age" value="no" checked={ageStatus === "no"} onChange={() => setAgeStatus("no")} />
+                    No, I am under 18
+                  </label>
+                </fieldset>
+                <label className="flex items-start gap-2 text-sm text-ink-2">
+                  <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="mt-0.5" />
+                  <span>I accept the <Link href="/terms" className="link">Terms of Service</Link> and <Link href="/privacy" className="link">Privacy Policy</Link>.</span>
+                </label>
+              </>
             )}
             <div>
               <label htmlFor="email" className="field-label">Email</label>
