@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { Navbar } from "@/components/global/Navbar";
 import { Footer } from "@/components/global/Footer";
 import { Motion } from "@/components/global/Motion";
+import { CookieConsent } from "@/components/global/CookieConsent";
 import { Archivo, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -97,19 +97,6 @@ export default function RootLayout({
               __html: `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`,
             }}
           />
-          <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-1JP8VR2FSG"
-            strategy="afterInteractive"
-          />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-
-              gtag('config', 'G-1JP8VR2FSG');
-            `}
-          </Script>
         </head>
         <body className="flex flex-col min-h-dvh bg-paper text-ink font-sans">
           <Navbar />
@@ -118,6 +105,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <Motion />
+          <CookieConsent />
           <noscript>
             <style>{`.rise,.reveal{visibility:visible!important}`}</style>
           </noscript>

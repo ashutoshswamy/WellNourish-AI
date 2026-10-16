@@ -13,7 +13,7 @@ export default function CookiesPage() {
   return (
     <LegalDoc
       title="Cookie Policy"
-      intro="We keep cookies to the minimum: one to keep you signed in and one set for anonymous analytics. Here is exactly what each does."
+      intro="We keep cookies to the minimum: essential sign-in cookies, plus optional analytics cookies only after you choose to accept them. Here is exactly what each does."
       updated="October 2026"
       contactPrompt="Questions about cookies? Email"
       sections={[
