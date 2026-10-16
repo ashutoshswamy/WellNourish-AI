@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/components/providers/ToastProvider";
 
 const profileSchema = z.object({
   age: z.number().int().min(1, "Must be at least 1").max(120),
@@ -45,6 +46,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const toast = useToast();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -99,10 +101,12 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
 
       // Stay in the "Saving…" state until /dashboard replaces this page
       setSaveSuccess(true);
+      toast("Profile saved");
       router.push("/dashboard");
     } catch (err) {
       console.error(err);
       setSaveError("Couldn't save your profile. Check the fields and try again.");
+      toast("Profile could not be saved", "error");
       setIsSubmitting(false);
     }
   };

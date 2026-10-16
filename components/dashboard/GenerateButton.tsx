@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Sparkles } from "lucide-react";
+import { useToast } from "@/components/providers/ToastProvider";
 
 export function GenerateButton({ className = "" }: { className?: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const toast = useToast();
 
   const handleGenerate = async () => {
     if (loading) return;
@@ -22,6 +24,7 @@ export function GenerateButton({ className = "" }: { className?: string }) {
 
       if (res.ok || res.status === 302 || res.status === 0) {
         // Keep the spinner up until /plan replaces this page
+        toast("Meal plan generated");
         router.push("/plan");
         return;
       }
@@ -32,7 +35,9 @@ export function GenerateButton({ className = "" }: { className?: string }) {
       } catch {
         setError(text || "Failed to generate plan. Please try again.");
       }
+      toast("Plan generation failed", "error");
     } catch {
+      toast("Couldn't generate your plan", "error");
       setError("Couldn't reach the server. Check your connection and try again.");
     }
     setLoading(false);

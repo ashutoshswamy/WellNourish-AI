@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Trash2, Loader2, AlertCircle } from "lucide-react";
 import { deletePlanAction } from "@/app/history/actions";
+import { useToast } from "@/components/providers/ToastProvider";
 
 interface DeletePlanButtonProps {
   planId: string;
@@ -13,6 +14,7 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
   const [errorMessage, setErrorMessage] = useState("");
   // A double-click must not arm and confirm in one go
   const armedAt = useRef(0);
+  const toast = useToast();
 
   useEffect(() => {
     if (status === "confirming") {
@@ -39,11 +41,14 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
           setStatus("error");
           setErrorMessage(result.error || "Failed to delete plan");
           setTimeout(() => setStatus("idle"), 3000);
+        } else {
+          toast("Meal plan deleted");
         }
       } catch {
         setStatus("error");
         setErrorMessage("An unexpected error occurred");
         setTimeout(() => setStatus("idle"), 3000);
+        toast("Meal plan could not be deleted", "error");
       }
     }
   }

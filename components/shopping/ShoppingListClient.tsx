@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Check, Copy, Plus, Trash2 } from "lucide-react";
+import { Check, Copy, Loader2, Plus, Trash2 } from "lucide-react";
+import { useToast } from "@/components/providers/ToastProvider";
 
 interface ShoppingItem {
   id: string;
@@ -20,12 +21,15 @@ export function ShoppingListClient({
   const [newItemName, setNewItemName] = useState("");
   const [isCopying, setIsCopying] = useState(false);
   const [adding, setAdding] = useState(false);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
+  const toast = useToast();
   // Ignore repeat clicks on an item while its update is in flight
   const pending = useRef(new Set<string>());
 
   const toggleItem = async (id: string, currentStatus: boolean) => {
     if (pending.current.has(id)) return;
     pending.current.add(id);
+    setPendingIds((current) => new Set(current).add(id));
     setItems((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, is_checked: !currentStatus } : item
@@ -38,6 +42,7 @@ export function ShoppingListClient({
         body: JSON.stringify({ is_checked: !currentStatus }),
       });
       if (!response.ok) throw new Error("Failed to update item");
+      toast("Item updated");
     } catch (error) {
       console.error("Toggle error:", error);
       setItems((prev) =>
@@ -47,6 +52,11 @@ export function ShoppingListClient({
       );
     } finally {
       pending.current.delete(id);
+      setPendingIds((current) => {
+        const next = new Set(current);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
@@ -64,14 +74,19 @@ export function ShoppingListClient({
       const newItem = await response.json();
       setItems((prev) => [...prev, newItem]);
       setNewItemName("");
+      toast("Item added");
     } catch (error) {
       console.error("Add item error:", error);
+      toast("Item could not be added", "error");
     } finally {
       setAdding(false);
     }
   };
 
   const removeItem = async (id: string) => {
+    if (pending.current.has(id)) return;
+    pending.current.add(id);
+    setPendingIds((current) => new Set(current).add(id));
     const originalItems = [...items];
     setItems((prev) => prev.filter((item) => item.id !== id));
     try {
@@ -82,6 +97,14 @@ export function ShoppingListClient({
     } catch (error) {
       console.error("Remove item error:", error);
       setItems(originalItems);
+      toast("Item could not be removed", "error");
+    } finally {
+      pending.current.delete(id);
+      setPendingIds((current) => {
+        const next = new Set(current);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
@@ -96,6 +119,7 @@ export function ShoppingListClient({
       .join("\n");
     navigator.clipboard.writeText(text);
     setIsCopying(true);
+    toast("Shopping list copied");
     setTimeout(() => setIsCopying(false), 2000);
   };
 
@@ -117,8 +141,8 @@ export function ShoppingListClient({
             placeholder="Add an item, e.g. lemons"
             className="field flex-1"
           />
-          <button type="submit" disabled={adding} className="btn btn-primary size-11 shrink-0 px-0" aria-label="Add item">
-            <Plus className="size-5" />
+          <button type="submit" disabled={adding} className="btn btn-primary size-11 shrink-0 px-0" aria-label="Add item" aria-busy={adding}>
+            {adding ? <Loader2 className="size-5 animate-spin" /> : <Plus className="size-5" />}
           </button>
         </form>
         <button onClick={copyToClipboard} className="btn btn-secondary" disabled={!items.length}>
@@ -144,6 +168,7 @@ export function ShoppingListClient({
               <li key={item.id} className="group flex items-center gap-3 border-b border-dashed border-line py-2.5">
                 <button
                   onClick={() => toggleItem(item.id, item.is_checked)}
+                  disabled={pendingIds.has(item.id)}
                   role="checkbox"
                   aria-checked={item.is_checked}
                   className="flex min-w-0 flex-1 items-center gap-3 text-left"
@@ -153,7 +178,7 @@ export function ShoppingListClient({
                       item.is_checked ? "bg-ink text-surface" : ""
                     }`}
                   >
-                    {item.is_checked && <Check className="size-3.5" strokeWidth={3} />}
+                    {pendingIds.has(item.id) ? <Loader2 className="size-3.5 animate-spin" /> : item.is_checked && <Check className="size-3.5" strokeWidth={3} />}
                   </span>
                   <span className={`min-w-0 flex-1 truncate font-mono text-[0.9rem] ${item.is_checked ? "text-ink-3 line-through" : ""}`}>
                     {item.item_name}
@@ -162,10 +187,11 @@ export function ShoppingListClient({
                 </button>
                 <button
                   onClick={() => removeItem(item.id)}
+                  disabled={pendingIds.has(item.id)}
                   aria-label={`Remove ${item.item_name}`}
                   className="grid size-8 shrink-0 place-items-center rounded-full text-ink-3 transition hover:bg-danger-soft hover:text-danger sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
                 >
-                  <Trash2 className="size-4" />
+                  {pendingIds.has(item.id) ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
                 </button>
               </li>
             ))}

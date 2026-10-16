@@ -4,6 +4,7 @@ import { Navbar } from "@/components/global/Navbar";
 import { Footer } from "@/components/global/Footer";
 import { Motion } from "@/components/global/Motion";
 import { CookieConsent } from "@/components/global/CookieConsent";
+import { ToastProvider } from "@/components/providers/ToastProvider";
 import { Archivo, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -83,7 +84,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthProvider>
+    <ToastProvider>
+      <AuthProvider>
       <html
         lang="en"
         className={`${archivo.variable} ${geist.variable} ${geistMono.variable} h-full`}
@@ -111,6 +113,7 @@ export default function RootLayout({
           </noscript>
         </body>
       </html>
-    </AuthProvider>
+      </AuthProvider>
+    </ToastProvider>
   );
 }
