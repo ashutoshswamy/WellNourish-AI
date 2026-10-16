@@ -17,11 +17,11 @@ export default function CookiesPage() {
       updated="October 2026"
       contactPrompt="Questions about cookies? Email"
       sections={[
-        { title: "What cookies are", content: "Cookies are small text files a website stores in your browser. Similar technologies, like local storage and IndexedDB, keep data on your device in the same way. This page covers all of them." },
-        { title: "Essential: staying signed in", content: "When you sign in we set a cookie named \"session\". It is HTTP-only, so page scripts can't read it, and it expires after 5 days. Without it, the dashboard, plans and grocery list can't load. Firebase Authentication also stores your sign-in state in your browser's IndexedDB." },
-        { title: "Analytics: Google Analytics", content: "We use Google Analytics to understand which pages people visit and how the site performs. It sets cookies named _ga and _ga_<id>, which last up to 2 years. The data is aggregated and is not used for advertising." },
+        { title: "What we use", content: "We use cookies and similar browser storage only for sign-in and optional analytics. Local storage also remembers your theme and whether you accepted or declined analytics; it is not a cookie." },
+        { title: "Essential: staying signed in", content: "When you sign in we set an HTTP-only cookie named \"session\" for up to 5 days, plus a readable \"has_session\" marker that helps the client avoid unnecessary session refreshes. Firebase Authentication also stores sign-in state in IndexedDB. These are required for account features." },
+        { title: "Optional: Google Analytics", content: "Google Analytics loads only after you click Accept analytics in the consent banner. It may set cookies such as _ga and _ga_<id> to measure visits and site performance. We do not use it for advertising or sell analytics data." },
         { title: "What we don't use", content: "No advertising cookies, no cross-site tracking pixels and no selling of cookie data to third parties." },
-        { title: "Managing cookies", content: "You can block or delete cookies in your browser settings. Blocking the session cookie will sign you out and stop the app from working. Blocking analytics cookies has no effect on how the site works. Google also offers an opt-out add-on at tools.google.com/dlpage/gaoptout." },
+        { title: "Managing cookies", content: "Choose Decline analytics in the banner, or delete browser storage and cookies in your browser settings. Declining analytics does not affect the app. Blocking or deleting the session cookie signs you out and stops account features. Google also offers an opt-out add-on at tools.google.com/dlpage/gaoptout." },
       ]}
     />
   );
