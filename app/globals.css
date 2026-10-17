@@ -116,6 +116,28 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* A small nutrition-marker cursor keeps the brand present without tracking the mouse. */
+@media (pointer: fine) {
+  html {
+    cursor: url("/cursor.svg") 12 12, auto;
+  }
+  a,
+  button,
+  summary,
+  select,
+  [role="button"],
+  [role="tab"] {
+    cursor: url("/cursor-hover.svg") 12 12, pointer;
+  }
+  input,
+  textarea {
+    cursor: text;
+  }
+  :disabled {
+    cursor: not-allowed;
+  }
+}
+
 ::selection {
   background: var(--accent);
   color: var(--on-accent);
