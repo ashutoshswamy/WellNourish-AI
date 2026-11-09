@@ -13,8 +13,6 @@ const socials = [
   { href: "https://x.com/ashutoshswamy_", label: "X", icon: <svg className="size-4 fill-current" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.292 19.49h2.039L6.486 3.24H4.298l13.311 17.403z" /></svg> },
 ];
 
-const days = ["tomato", "squash", "pea", "berry", "beet", "sky", "pumpkin"] as const;
-
 export function Footer() {
   return (
     <footer className="mt-24 bg-night text-on-night">
@@ -22,11 +20,6 @@ export function Footer() {
         <div className="space-y-5">
           <p className="display text-[clamp(2.75rem,7vw,5.5rem)]">Seven days. One packet.</p>
           <p className="max-w-sm text-sm text-on-night/75">Meals planned around your body and your kitchen, with the grocery list packed in.</p>
-          <div aria-hidden className="flex gap-1.5">
-            {days.map((d) => (
-              <i key={d} className="h-8 w-6 rounded-[5px]" style={{ background: `var(--c-${d})` }} />
-            ))}
-          </div>
         </div>
         <div className="flex flex-col gap-5 md:items-end md:justify-end">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-on-night/75">

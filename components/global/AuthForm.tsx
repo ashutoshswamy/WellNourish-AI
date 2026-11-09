@@ -111,7 +111,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
 
       <section className="rise flex items-center justify-center">
         <div className="w-full max-w-sm">
-          <button type="button" onClick={handleGoogle} disabled={googleLoading} className="btn btn-secondary h-12 w-full bg-surface">
+          <button type="button" onClick={handleGoogle} disabled={googleLoading} className="btn btn-secondary h-12 w-full">
             {googleLoading ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
