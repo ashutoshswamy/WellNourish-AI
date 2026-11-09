@@ -170,12 +170,16 @@ export async function POST() {
     });
 
     // 1. Rate Limiting Check (Simple version: 1 plan per hour)
-    const recentPlansSnap = await adminDb
-      .collection("mealPlans")
-      .where("user_id", "==", userId)
-      .orderBy("created_at", "desc")
-      .limit(1)
-      .get();
+    // The rate-limit lookup and the metrics read are independent, so they run together
+    const [recentPlansSnap, metricsSnap] = await Promise.all([
+      adminDb
+        .collection("mealPlans")
+        .where("user_id", "==", userId)
+        .orderBy("created_at", "desc")
+        .limit(1)
+        .get(),
+      adminDb.collection("userMetrics").doc(userId).get(),
+    ]);
 
     if (!recentPlansSnap.empty) {
       const lastCreated = recentPlansSnap.docs[0].data().created_at?.toDate?.() ?? new Date(0);
@@ -195,7 +199,6 @@ export async function POST() {
     }
 
     // 2. Fetch User Metrics for Personalization
-    const metricsSnap = await adminDb.collection("userMetrics").doc(userId).get();
     const metrics = metricsSnap.data();
 
     if (!metrics) {
@@ -405,14 +408,15 @@ export async function POST() {
     if (shoppingListItems.length > 0) {
       // Firestore batches cap at 500 writes; chunk to stay safely under that
       const chunkSize = 400;
+      const commits: Promise<unknown>[] = [];
       for (let i = 0; i < shoppingListItems.length; i += chunkSize) {
-        const chunk = shoppingListItems.slice(i, i + chunkSize);
         const shoppingBatch = adminDb.batch();
-        chunk.forEach((item) => {
+        shoppingListItems.slice(i, i + chunkSize).forEach((item) => {
           shoppingBatch.set(adminDb.collection("shoppingList").doc(), item);
         });
-        await shoppingBatch.commit();
+        commits.push(shoppingBatch.commit());
       }
+      await Promise.all(commits);
     }
 
     // Archive only after new plan and shopping list persist successfully.

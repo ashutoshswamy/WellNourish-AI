@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useToast } from "@/components/providers/ToastProvider";
+import { sileo } from "sileo";
 
 const profileSchema = z.object({
   age: z.number().int().min(1, "Must be at least 1").max(120),
@@ -46,7 +46,6 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const toast = useToast();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -101,12 +100,12 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
 
       // Stay in the "Saving…" state until /dashboard replaces this page
       setSaveSuccess(true);
-      toast("Profile saved");
+      sileo.success({ title: "Profile saved" });
       router.push("/dashboard");
     } catch (err) {
       console.error(err);
       setSaveError("Couldn't save your profile. Check the fields and try again.");
-      toast("Profile could not be saved", "error");
+      sileo.error({ title: "Profile could not be saved" });
       setIsSubmitting(false);
     }
   };
@@ -116,7 +115,7 @@ export function ProfileForm({ initialData }: { initialData: ProfileInitialData }
   return (
     <div className="mx-auto w-full max-w-4xl py-10 md:py-14">
       <header className="rise">
-        <h1 className="display text-[clamp(2rem,4vw,3rem)]">Your body &amp; goals</h1>
+        <h1 className="display text-[clamp(2.75rem,6vw,4.5rem)]">Your body &amp; goals</h1>
         <p className="mt-2 text-ink-2">Changes apply to the next plan you generate.</p>
       </header>
 

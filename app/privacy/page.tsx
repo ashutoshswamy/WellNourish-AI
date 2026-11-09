@@ -4,6 +4,7 @@ import { LegalDoc } from "@/components/global/LegalDoc";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Learn how WellNourish AI collects, uses, and protects your personal health and nutrition data.",
+  openGraph: { type: "website", siteName: "WellNourish AI", url: "https://wellnourishai.ashutoshswamy.in/privacy", title: "Privacy Policy | WellNourish AI", description: "Learn how WellNourish AI collects, uses, and protects your personal health and nutrition data.", images: ["/og-image.jpg"] },
   alternates: {
     canonical: "https://wellnourishai.ashutoshswamy.in/privacy",
   },

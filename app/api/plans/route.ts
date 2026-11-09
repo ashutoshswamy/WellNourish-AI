@@ -17,22 +17,23 @@ export async function GET(req: Request) {
       return NextResponse.json({ plan });
     }
 
-    const activeSnap = await adminDb
-      .collection("mealPlans")
-      .where("user_id", "==", user.uid)
-      .where("status", "==", "active")
-      .orderBy("created_at", "desc")
-      .limit(1)
-      .get();
+    const [activeSnap, recentSnap] = await Promise.all([
+      adminDb
+        .collection("mealPlans")
+        .where("user_id", "==", user.uid)
+        .where("status", "==", "active")
+        .orderBy("created_at", "desc")
+        .limit(1)
+        .get(),
+      adminDb
+        .collection("mealPlans")
+        .where("user_id", "==", user.uid)
+        .orderBy("created_at", "desc")
+        .limit(10)
+        .get(),
+    ]);
 
     const activePlan = activeSnap.docs[0] ? await loadPlanWithDays(activeSnap.docs[0].id) : null;
-
-    const recentSnap = await adminDb
-      .collection("mealPlans")
-      .where("user_id", "==", user.uid)
-      .orderBy("created_at", "desc")
-      .limit(10)
-      .get();
 
     const recentPlans = recentSnap.docs.map((doc) => {
       const data = doc.data();

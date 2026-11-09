@@ -1,56 +1,83 @@
 @import "tailwindcss";
 
 /*
-  WellNourish design tokens.
-  Paper + kale ink, one turmeric accent. The nutrition-facts label is the
-  signature element; everything else stays quiet.
-  Radius rule: interactive controls are pills, containers 16px, inputs 12px.
+  WellNourish design tokens: a seed-packet series.
+  Every day and every meal is a colour-drenched packet with a crimped seal ridge.
+  Quiet cool-grey rack behind, aubergine ink, tomato for the action, and a printed
+  full palette (tomato, squash, pea, sky, berry, beet, pumpkin) that stays identical
+  in light and dark because it is ink on paper, not UI chrome.
+  Radius rule: controls are pills, packets and cards 18px, inputs 12px.
+  Fonts: Bricolage Grotesque (display) and DM Sans (everything else). Nothing else.
+  Token names are kept from earlier systems so every page re-skins from here.
 */
 :root {
-  --paper: #f3f5ef;
-  --surface: #fbfcf9;
-  --sunken: #e9ede4;
-  --ink: #13201a;
-  --ink-2: #4b5951;
-  --ink-3: #64706a;
-  --line: #d7ddd2;
-  --kale: #1e4634;
-  --on-kale: #f3f5ef;
-  --accent: #f4b41a;
-  --accent-hover: #ffc53d;
-  --on-accent: #13201a;
-  --danger: #b42318;
-  --danger-soft: #fbe9e6;
+  --paper: #f3f3f6; /* the rack */
+  --surface: #fbfbfd; /* packet back, card stock */
+  --sunken: #e6e6ec;
+  --ink: #17131f;
+  --ink-2: #4a4555;
+  --ink-3: #625d6e;
+  --line: #d3d1db;
+  --night: #1c1427; /* dark blocks: footer, closing packet */
+  --on-night: #f4f1fa;
+  --accent: #d93a21; /* tomato: the action colour */
+  --accent-hover: #bd2f18;
+  --on-accent: #ffffff;
+  --danger: #b4231a;
+  --danger-soft: #fbe4e1;
+
+  /* Printed packet colours, each with the text colour that reads on it */
+  --c-tomato: #d93a21;
+  --c-tomato-fg: #ffffff;
+  --c-squash: #f3b61f;
+  --c-squash-fg: #17131f;
+  --c-pea: #86cf6e;
+  --c-pea-fg: #17131f;
+  --c-berry: #3446c4;
+  --c-berry-fg: #ffffff;
+  --c-beet: #a8204e;
+  --c-beet-fg: #ffffff;
+  --c-sky: #8ab8f5;
+  --c-sky-fg: #17131f;
+  --c-pumpkin: #f08a24;
+  --c-pumpkin-fg: #17131f;
   color-scheme: light;
 }
 
-/* Dark follows the system unless the navbar toggle pinned a theme via data-theme */
 :root[data-theme="dark"] {
-  --paper: #0e1511;
-  --surface: #151e18;
-  --sunken: #0a100c;
-  --ink: #e8eee7;
-  --ink-2: #a6b2aa;
-  --ink-3: #8a968e;
-  --line: #27332b;
-  --kale: #1a3b2b;
-  --danger: #f97066;
-  --danger-soft: #2a1513;
+  --paper: #120f1a;
+  --surface: #1b1726;
+  --sunken: #0d0b13;
+  --ink: #f2eff7;
+  --ink-2: #b3adc2;
+  --ink-3: #9690a6;
+  --line: #2c2639;
+  --night: #07050b;
+  --on-night: #f2eff7;
+  --accent: #ff6a4f;
+  --accent-hover: #ff8670;
+  --on-accent: #17131f;
+  --danger: #ff7a6e;
+  --danger-soft: #2b1512;
   color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #0e1511;
-    --surface: #151e18;
-    --sunken: #0a100c;
-    --ink: #e8eee7;
-    --ink-2: #a6b2aa;
-    --ink-3: #8a968e;
-    --line: #27332b;
-    --kale: #1a3b2b;
-    --danger: #f97066;
-    --danger-soft: #2a1513;
+    --paper: #120f1a;
+    --surface: #1b1726;
+    --sunken: #0d0b13;
+    --ink: #f2eff7;
+    --ink-2: #b3adc2;
+    --ink-3: #9690a6;
+    --line: #2c2639;
+    --night: #07050b;
+    --on-night: #f2eff7;
+    --accent: #ff6a4f;
+    --accent-hover: #ff8670;
+    --on-accent: #17131f;
+    --danger: #ff7a6e;
+    --danger-soft: #2b1512;
     color-scheme: dark;
   }
 }
@@ -75,15 +102,16 @@
   --color-ink-2: var(--ink-2);
   --color-ink-3: var(--ink-3);
   --color-line: var(--line);
-  --color-kale: var(--kale);
-  --color-on-kale: var(--on-kale);
+  --color-night: var(--night);
+  --color-on-night: var(--on-night);
   --color-accent: var(--accent);
   --color-on-accent: var(--on-accent);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  /* No monospace family: data and figures are DM Sans with tabular numerals */
+  --font-mono: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -106,7 +134,8 @@ summary,
 button,
 summary,
 .btn,
-.choice {
+.choice,
+.avoid {
   user-select: none;
 }
 
@@ -116,26 +145,23 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* A small nutrition-marker cursor keeps the brand present without tracking the mouse. */
-@media (pointer: fine) {
-  html {
-    cursor: url("/cursor.svg") 12 12, auto;
-  }
-  a,
-  button,
-  summary,
-  select,
-  [role="button"],
-  [role="tab"] {
-    cursor: url("/cursor-hover.svg") 12 12, pointer;
-  }
-  input,
-  textarea {
-    cursor: text;
-  }
-  :disabled {
-    cursor: not-allowed;
-  }
+button:disabled,
+.btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Browser surfaces themed from the palette */
+html {
+  scrollbar-color: var(--ink-3) var(--paper);
+  scrollbar-width: thin;
+}
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -144,18 +170,28 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
 }
 
 @layer components {
-  /* Expanded heavy grotesk, the voice of a printed nutrition label */
+  /* Bricolage at heavy weight and tight tracking: the name printed on the packet front */
   .display {
     font-family: var(--font-display);
-    font-stretch: 116%;
     font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.02;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Small label voice: net weight, variety, units. Never a heading kicker. */
+  .tag {
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
   }
 
   .btn {
@@ -163,53 +199,54 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    height: 2.75rem;
-    padding-inline: 1.25rem;
+    height: 3rem;
+    padding-inline: 1.5rem;
     border-radius: 999px;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 0.9375rem;
+    font-weight: 700;
     white-space: nowrap;
-    transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
   }
   .btn:active:not(:disabled) {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
   .btn:disabled {
     opacity: 0.55;
-    cursor: not-allowed;
   }
   .btn-primary {
     background: var(--accent);
     color: var(--on-accent);
+    box-shadow: 0 10px 22px -14px var(--accent);
   }
   .btn-primary:hover:not(:disabled) {
     background: var(--accent-hover);
+    transform: translateY(-2px);
   }
   .btn-secondary {
-    border: 1px solid var(--line);
+    border: 2px solid var(--ink);
     color: var(--ink);
   }
   .btn-secondary:hover:not(:disabled) {
-    border-color: var(--ink-3);
-    background: var(--surface);
+    background: var(--ink);
+    color: var(--paper);
   }
 
   .card {
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 16px;
+    border-radius: 18px;
   }
 
   .field {
     width: 100%;
-    height: 2.75rem;
-    padding-inline: 0.875rem;
+    height: 3rem;
+    padding-inline: 1rem;
     border-radius: 12px;
-    border: 1px solid var(--line);
+    border: 2px solid var(--line);
     background: var(--surface);
     color: var(--ink);
     font-size: 0.9375rem;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
   .field::placeholder {
     color: var(--ink-3);
@@ -220,34 +257,34 @@ body {
   .field:focus {
     outline: none;
     border-color: var(--ink);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
   }
 
   .field-label {
     display: block;
     margin-bottom: 0.5rem;
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--ink-2);
   }
 
-  /* Segmented choice: a pill that reads as selected via ink fill */
+  /* Segmented choice: a pill; selected reads as inked, or as its day colour on day tabs */
   .choice {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    min-height: 2.5rem;
-    padding: 0.5rem 1rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.1rem;
     border-radius: 999px;
-    border: 1px solid var(--line);
+    border: 2px solid var(--line);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 700;
     color: var(--ink-2);
     transition: background-color 0.15s, color 0.15s, border-color 0.15s;
   }
   .choice:hover {
-    border-color: var(--ink-3);
+    border-color: var(--ink);
     color: var(--ink);
   }
   .choice[aria-pressed="true"],
@@ -256,22 +293,140 @@ body {
     border-color: var(--ink);
     color: var(--paper);
   }
+  .choice[data-day][aria-selected="true"] {
+    background: var(--pk);
+    border-color: var(--pk);
+    color: var(--pk-fg);
+  }
 
   .link {
     color: var(--ink);
     text-decoration: underline;
     text-decoration-color: var(--accent);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 4px;
   }
   .link:hover {
     text-decoration-color: var(--ink);
   }
 
-  /* Nutrition-label rules: the thick/medium/hair bars of a printed panel */
-  .rule-xl { height: 10px; background: var(--ink); }
-  .rule-md { height: 5px; background: var(--ink); }
-  .rule-hair { height: 1px; background: var(--ink); }
+  /* Packet front: a colour-drenched field. --pk / --pk-fg pick the variety. */
+  .packet {
+    position: relative;
+    overflow: hidden;
+    background: var(--pk, var(--c-tomato));
+    color: var(--pk-fg, var(--c-tomato-fg));
+    border-radius: 18px;
+  }
+  /* Heat-seal ridges along the top edge */
+  .packet::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 14px;
+    background: repeating-linear-gradient(90deg, rgb(0 0 0 / 0.2) 0 2px, transparent 2px 7px);
+    border-bottom: 1px solid rgb(0 0 0 / 0.14);
+    pointer-events: none;
+  }
+  .packet-back {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+  /* Header strip on a packet back, in the variety colour */
+  .pk-band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem 1.1rem;
+    background: var(--pk, var(--c-tomato));
+    color: var(--pk-fg, var(--c-tomato-fg));
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  .perf {
+    border-top: 2px dashed var(--line);
+  }
+
+  /* Round seal stamp, e.g. FREE */
+  .seal {
+    display: grid;
+    place-items: center;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background: var(--night);
+    color: var(--on-night);
+    text-align: center;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    line-height: 1.15;
+    text-transform: uppercase;
+    outline: 2px dashed var(--on-night);
+    outline-offset: -6px;
+    transform: rotate(-12deg);
+  }
+
+  /* "I avoid" toggle: a seed-sized pill with a pictogram; avoided goes inked and struck through */
+  .avoid {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.4rem 1rem 0.4rem 0.75rem;
+    border: 2px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .avoid:hover {
+    border-color: var(--ink);
+  }
+  .avoid:active {
+    transform: scale(0.95);
+  }
+  .avoid[aria-pressed="true"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .avoid[aria-pressed="true"] span:last-child {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .avoid {
+      transition: none;
+    }
+  }
+
+  /* "Contains" print on a packet back */
+  .contains {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.7rem;
+    border: 2px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ink-3);
+  }
+  .contains[data-contains="true"] {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
 
   /* Receipt edge for the grocery list */
   .receipt {
@@ -283,16 +438,27 @@ body {
   }
 }
 
-/* Highlighter stroke behind a word; GSAP animates --hl from 0% */
-.hl {
-  background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 85% / var(--hl, 100%) 36%;
+/* GSAP (components/global/Motion.tsx) reveals these. Only hidden when JS is running
+   (the head script adds .js), so crawlers and no-JS clients see everything. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .rise,
+  .js .reveal,
+  .js [data-slap],
+  .js [data-split] .w {
+    visibility: hidden;
+  }
 }
 
-/* GSAP (components/global/Motion.tsx) reveals these; hidden first to avoid a flash */
+/* Dropdown menus ease in from their anchor corner */
 @media (prefers-reduced-motion: no-preference) {
-  .rise,
-  .reveal {
-    visibility: hidden;
+  .menu-in {
+    animation: menu-in 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
   }
 }
 
@@ -312,4 +478,18 @@ body {
   to {
     clip-path: circle(150vmax at var(--tx, 50%) var(--ty, 0));
   }
+}
+
+/* Sileo toasts: a night-coloured pill in both themes; printed colours for state */
+:root {
+  --sileo-state-success: #86cf6e;
+  --sileo-state-loading: #b3adc2;
+  --sileo-state-error: #ff7a6e;
+  --sileo-state-warning: #f3b61f;
+  --sileo-state-info: #8ab8f5;
+  --sileo-state-action: #f4f1fa;
+}
+[data-sileo-title],
+[data-sileo-description] {
+  font-family: var(--font-sans);
 }

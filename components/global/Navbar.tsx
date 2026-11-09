@@ -41,17 +41,17 @@ export function Navbar() {
   }
 
   const linkClass = (href: string) =>
-    `rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
-      pathname.startsWith(href) ? "bg-sunken text-ink" : "text-ink-2 hover:text-ink"
+    `rounded-full px-4 py-2 text-sm font-bold transition-colors ${
+      pathname.startsWith(href) ? "bg-ink text-paper" : "text-ink-2 hover:bg-sunken hover:text-ink"
     }`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-paper/95">
+    <header className="sticky top-0 z-40 border-b border-line bg-paper">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Logo />
 
         <div className="hidden items-center gap-1 lg:flex">
-          <ThemeToggle className="mr-1 size-9" />
+          <ThemeToggle className="mr-1" />
           {isSignedIn ? (
             <>
               {appLinks.map((l) => (
@@ -65,10 +65,10 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/sign-in" className="px-3.5 py-2 text-sm font-medium text-ink-2 hover:text-ink">
+              <Link href="/sign-in" className="rounded-full px-4 py-2 text-sm font-bold text-ink-2 hover:bg-sunken hover:text-ink">
                 Sign in
               </Link>
-              <Link href="/sign-up" className="btn btn-primary h-10">
+              <Link href="/sign-up" className="btn btn-primary h-11">
                 Build my plan
               </Link>
             </>

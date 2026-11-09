@@ -4,6 +4,7 @@ import { LegalDoc } from "@/components/global/LegalDoc";
 export const metadata: Metadata = {
   title: "Cookie Policy",
   description: "Which cookies WellNourish AI uses, what they do and how to control them.",
+  openGraph: { type: "website", siteName: "WellNourish AI", url: "https://wellnourishai.ashutoshswamy.in/cookies", title: "Cookie Policy | WellNourish AI", description: "Which cookies WellNourish AI uses, what they do and how to control them.", images: ["/og-image.jpg"] },
   alternates: {
     canonical: "https://wellnourishai.ashutoshswamy.in/cookies",
   },

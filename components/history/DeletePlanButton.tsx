@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Trash2, Loader2, AlertCircle } from "lucide-react";
 import { deletePlanAction } from "@/app/history/actions";
-import { useToast } from "@/components/providers/ToastProvider";
+import { sileo } from "sileo";
 
 interface DeletePlanButtonProps {
   planId: string;
@@ -14,7 +14,6 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
   const [errorMessage, setErrorMessage] = useState("");
   // A double-click must not arm and confirm in one go
   const armedAt = useRef(0);
-  const toast = useToast();
 
   useEffect(() => {
     if (status === "confirming") {
@@ -42,13 +41,13 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
           setErrorMessage(result.error || "Failed to delete plan");
           setTimeout(() => setStatus("idle"), 3000);
         } else {
-          toast("Meal plan deleted");
+          sileo.success({ title: "Meal plan deleted" });
         }
       } catch {
         setStatus("error");
         setErrorMessage("An unexpected error occurred");
         setTimeout(() => setStatus("idle"), 3000);
-        toast("Meal plan could not be deleted", "error");
+        sileo.error({ title: "Meal plan could not be deleted" });
       }
     }
   }
@@ -58,7 +57,7 @@ export default function DeletePlanButton({ planId }: DeletePlanButtonProps) {
       onClick={handleDelete}
       disabled={status === "deleting"}
       aria-label={status === "confirming" ? "Confirm delete" : "Delete plan"}
-      className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-sm font-semibold transition-colors ${
+      className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-semibold transition-colors ${
         status === "idle"
           ? "text-ink-3 hover:bg-danger-soft hover:text-danger"
           : status === "error"

@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useSwap } from "@/components/global/useSwap";
 import { ChevronDown } from "lucide-react";
+import { dayVarieties, mealVariety, variety } from "@/components/global/packet-colors";
 
 interface Meal {
   id: string;
@@ -57,6 +58,8 @@ export function PlanClient({ plan }: { plan: Plan }) {
               key={day.id}
               role="tab"
               aria-selected={activeDayIdx === idx}
+              data-day
+              style={variety(dayVarieties[idx % dayVarieties.length])}
               onClick={() => setActiveDayIdx(idx)}
               className="choice shrink-0 flex-col gap-0 px-5 py-2 leading-tight"
             >
@@ -70,7 +73,7 @@ export function PlanClient({ plan }: { plan: Plan }) {
       <div ref={dayRef} className="mt-8 grid gap-8 lg:grid-cols-[16rem_1fr] lg:gap-12">
         {/* Day summary */}
         <aside className="lg:sticky lg:top-24 lg:self-start">
-          <p className="display text-5xl">Day {currentDay.day_number}</p>
+          <p className="display text-7xl">Day {currentDay.day_number}</p>
           <dl className="mt-5 divide-y divide-line border-y border-line font-mono text-sm tabular-nums">
             {[
               ["Calories", `${currentDay.total_calories} kcal`],
@@ -92,28 +95,30 @@ export function PlanClient({ plan }: { plan: Plan }) {
             const meal = currentDay.meals.find((m) => m.meal_type === meta.type);
             if (!meal) return null;
             return (
-              <details key={meal.id} className="card group p-6 open:shadow-[0_16px_40px_-24px_color-mix(in_srgb,var(--kale)_60%,transparent)]">
-                <summary className="flex cursor-pointer list-none items-start gap-4 [&::-webkit-details-marker]:hidden">
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-ink-3">{meta.label}</p>
-                    <h3 className="mt-1 text-xl font-semibold leading-snug">{meal.name}</h3>
-                    <p className="mt-2 line-clamp-2 text-ink-2 group-open:line-clamp-none">{meal.description}</p>
-                    <p className="mt-3 font-mono text-sm tabular-nums text-ink-2">
-                      <span className="font-semibold text-ink">{meal.calories} kcal</span>
-                      {meal.protein && ` / ${meal.protein} P`}
-                      {meal.carbs && ` / ${meal.carbs} C`}
-                      {meal.fat && ` / ${meal.fat} F`}
-                    </p>
+              <details key={meal.id} className="packet-back group">
+                <summary className="block cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                  <div className="pk-band" style={variety(mealVariety[meta.type] ?? "tomato")}>
+                    <span>{meta.label}</span>
+                    <span className="tabular-nums">{meal.calories} kcal</span>
                   </div>
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line transition-transform group-open:rotate-180">
-                    <ChevronDown className="size-4" />
-                    <span className="sr-only">Show recipe</span>
-                  </span>
+                  <div className="flex items-start gap-4 p-5">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="display text-[1.9rem]">{meal.name}</h3>
+                      <p className="mt-2 line-clamp-2 text-ink-2 group-open:line-clamp-none">{meal.description}</p>
+                      <p className="mt-3 font-mono text-sm tabular-nums text-ink-2">
+                        {[meal.protein && `${meal.protein} P`, meal.carbs && `${meal.carbs} C`, meal.fat && `${meal.fat} F`].filter(Boolean).join(" / ")}
+                      </p>
+                    </div>
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full border-2 border-line transition-transform group-open:rotate-180">
+                      <ChevronDown className="size-4" />
+                      <span className="sr-only">Show recipe</span>
+                    </span>
+                  </div>
                 </summary>
 
-                <div className="mt-6 grid gap-8 border-t border-line pt-6 md:grid-cols-[1fr_1.4fr]">
+                <div className="perf mx-5 mb-5 grid gap-8 pt-5 md:grid-cols-[1fr_1.4fr]">
                   <div>
-                    <h4 className="font-semibold">Ingredients</h4>
+                    <h4 className="tag text-ink-3">Ingredients</h4>
                     <ul className="mt-3 space-y-1.5 text-ink-2">
                       {meal.ingredients.map((ing, i) => (
                         <li key={i} className="flex gap-2.5">
@@ -124,7 +129,7 @@ export function PlanClient({ plan }: { plan: Plan }) {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold">Preparation</h4>
+                    <h4 className="tag text-ink-3">Preparation</h4>
                     <p className="mt-3 whitespace-pre-wrap leading-relaxed text-ink-2">{meal.instructions}</p>
                   </div>
                 </div>

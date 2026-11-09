@@ -3,13 +3,24 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Sparkles } from "lucide-react";
-import { useToast } from "@/components/providers/ToastProvider";
+import { sileo } from "sileo";
+
+async function generatePlan() {
+  const res = await fetch("/api/generate", { method: "POST", redirect: "manual" });
+  if (res.ok || res.status === 302 || res.status === 0) return;
+  const text = await res.text();
+  let message = text || "Failed to generate plan. Please try again.";
+  try {
+    const data = JSON.parse(text);
+    message = data.message || data.error || "Failed to generate plan.";
+  } catch {}
+  throw new Error(message);
+}
 
 export function GenerateButton({ className = "" }: { className?: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const toast = useToast();
 
   const handleGenerate = async () => {
     if (loading) return;
@@ -17,28 +28,19 @@ export function GenerateButton({ className = "" }: { className?: string }) {
     setError(null);
 
     try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        redirect: "manual",
+      await sileo.promise(generatePlan(), {
+        loading: { title: "Generating your week" },
+        success: { title: "Meal plan generated" },
+        error: (err) => ({
+          title: "Plan generation failed",
+          description: err instanceof TypeError ? "Check your connection and try again." : (err as Error).message,
+        }),
       });
-
-      if (res.ok || res.status === 302 || res.status === 0) {
-        // Keep the spinner up until /plan replaces this page
-        toast("Meal plan generated");
-        router.push("/plan");
-        return;
-      }
-      const text = await res.text();
-      try {
-        const errorData = JSON.parse(text);
-        setError(errorData.message || errorData.error || "Failed to generate plan.");
-      } catch {
-        setError(text || "Failed to generate plan. Please try again.");
-      }
-      toast("Plan generation failed", "error");
-    } catch {
-      toast("Couldn't generate your plan", "error");
-      setError("Couldn't reach the server. Check your connection and try again.");
+      // Keep the spinner up until /plan replaces this page
+      router.push("/plan");
+      return;
+    } catch (err) {
+      setError(err instanceof TypeError ? "Couldn't reach the server. Check your connection and try again." : (err as Error).message);
     }
     setLoading(false);
   };

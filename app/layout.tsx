@@ -4,18 +4,18 @@ import { Navbar } from "@/components/global/Navbar";
 import { Footer } from "@/components/global/Footer";
 import { Motion } from "@/components/global/Motion";
 import { CookieConsent } from "@/components/global/CookieConsent";
-import { ToastProvider } from "@/components/providers/ToastProvider";
-import { Archivo, Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sileo";
+import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo" });
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
+// The site uses exactly two families: Bricolage Grotesque for display, DM Sans for everything else.
+const bricolage = Bricolage_Grotesque({ subsets: ["latin"], axes: ["opsz", "wdth"], variable: "--font-bricolage" });
+const dmSans = DM_Sans({ subsets: ["latin"], axes: ["opsz"], variable: "--font-dm-sans" });
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f3f5ef" },
-    { media: "(prefers-color-scheme: dark)", color: "#0e1511" },
+    { media: "(prefers-color-scheme: light)", color: "#e8ecee" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0d0f" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -38,22 +38,24 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/logo.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
     shortcut: "/favicon-32x32.png",
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://wellnourishai.ashutoshswamy.in",
     siteName: "WellNourish AI",
     title: "WellNourish AI | Your Personal AI Nutritionist",
     description: "Get hyper-personalized 7-day meal plans and grocery lists tailored to your unique body metrics and dietary goals.",
     images: [
       {
         url: "/og-image.jpg",
-        width: 1733,
-        height: 907,
+        width: 1200,
+        height: 630,
         alt: "WellNourish AI - Personalized Nutrition",
       },
     ],
@@ -84,11 +86,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ToastProvider>
-      <AuthProvider>
+    <AuthProvider>
       <html
         lang="en"
-        className={`${archivo.variable} ${geist.variable} ${geistMono.variable} h-full`}
+        className={`${bricolage.variable} ${dmSans.variable} h-full`}
         data-scroll-behavior="smooth"
         suppressHydrationWarning
       >
@@ -96,7 +97,7 @@ export default function RootLayout({
           {/* Apply a pinned theme before first paint so there is no flash */}
           <script
             dangerouslySetInnerHTML={{
-              __html: `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`,
+              __html: `document.documentElement.classList.add("js");try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`,
             }}
           />
         </head>
@@ -108,12 +109,9 @@ export default function RootLayout({
           <Footer />
           <Motion />
           <CookieConsent />
-          <noscript>
-            <style>{`.rise,.reveal{visibility:visible!important}`}</style>
-          </noscript>
+          <Toaster position="top-center" options={{ fill: "#1c1427" }} />
         </body>
       </html>
-      </AuthProvider>
-    </ToastProvider>
+    </AuthProvider>
   );
 }

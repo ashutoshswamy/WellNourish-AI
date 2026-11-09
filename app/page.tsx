@@ -3,6 +3,7 @@ import { HomeClient } from './HomeClient';
 
 export const metadata: Metadata = {
   description: "Get a 7-day meal plan tailored to your unique body metrics, allergies, and goals. Powered by advanced AI for precision nutrition.",
+  openGraph: { type: "website", siteName: "WellNourish AI", url: "https://wellnourishai.ashutoshswamy.in", title: "WellNourish AI | Your Personal AI Nutritionist", description: "Get hyper-personalized 7-day meal plans and grocery lists tailored to your unique body metrics and dietary goals.", images: ["/og-image.jpg"] },
   alternates: {
     canonical: "https://wellnourishai.ashutoshswamy.in",
   },

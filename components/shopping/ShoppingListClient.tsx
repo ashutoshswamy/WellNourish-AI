@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Check, Copy, Loader2, Plus, Trash2 } from "lucide-react";
-import { useToast } from "@/components/providers/ToastProvider";
+import { sileo } from "sileo";
 
 interface ShoppingItem {
   id: string;
@@ -22,7 +22,6 @@ export function ShoppingListClient({
   const [isCopying, setIsCopying] = useState(false);
   const [adding, setAdding] = useState(false);
   const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
-  const toast = useToast();
   // Ignore repeat clicks on an item while its update is in flight
   const pending = useRef(new Set<string>());
 
@@ -42,9 +41,9 @@ export function ShoppingListClient({
         body: JSON.stringify({ is_checked: !currentStatus }),
       });
       if (!response.ok) throw new Error("Failed to update item");
-      toast("Item updated");
     } catch (error) {
       console.error("Toggle error:", error);
+      sileo.error({ title: "Item could not be updated" });
       setItems((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, is_checked: currentStatus } : item
@@ -74,10 +73,10 @@ export function ShoppingListClient({
       const newItem = await response.json();
       setItems((prev) => [...prev, newItem]);
       setNewItemName("");
-      toast("Item added");
+      sileo.success({ title: "Item added" });
     } catch (error) {
       console.error("Add item error:", error);
-      toast("Item could not be added", "error");
+      sileo.error({ title: "Item could not be added" });
     } finally {
       setAdding(false);
     }
@@ -97,7 +96,7 @@ export function ShoppingListClient({
     } catch (error) {
       console.error("Remove item error:", error);
       setItems(originalItems);
-      toast("Item could not be removed", "error");
+      sileo.error({ title: "Item could not be removed" });
     } finally {
       pending.current.delete(id);
       setPendingIds((current) => {
@@ -119,7 +118,7 @@ export function ShoppingListClient({
       .join("\n");
     navigator.clipboard.writeText(text);
     setIsCopying(true);
-    toast("Shopping list copied");
+    sileo.success({ title: "Shopping list copied" });
     setTimeout(() => setIsCopying(false), 2000);
   };
 
@@ -151,7 +150,7 @@ export function ShoppingListClient({
         </button>
       </div>
 
-      <div className="receipt mt-6 px-6 py-8 drop-shadow-[0_10px_24px_color-mix(in_srgb,var(--kale)_18%,transparent)] sm:px-9">
+      <div className="receipt mt-6 px-6 py-8 drop-shadow-[0_10px_24px_color-mix(in_srgb,var(--night)_18%,transparent)] sm:px-9">
         <div className="flex items-baseline justify-between font-mono text-sm tabular-nums">
           <span className="uppercase tracking-[0.16em] text-ink-3">Collected</span>
           <span>
@@ -159,7 +158,7 @@ export function ShoppingListClient({
           </span>
         </div>
         <div className="mt-2 h-1 overflow-hidden rounded-full bg-sunken" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}>
-          <div className="h-full rounded-full bg-accent transition-[width] duration-500" style={{ width: `${progress}%` }} />
+          <div className="h-full bg-accent transition-[width] duration-500" style={{ width: `${progress}%` }} />
         </div>
 
         {items.length > 0 ? (
@@ -174,7 +173,7 @@ export function ShoppingListClient({
                   className="flex min-w-0 flex-1 items-center gap-3 text-left"
                 >
                   <span
-                    className={`grid size-5 shrink-0 place-items-center rounded-[5px] border-[1.5px] border-ink transition-colors ${
+                    className={`grid size-5 shrink-0 place-items-center rounded-full border-2 border-ink transition-colors ${
                       item.is_checked ? "bg-ink text-surface" : ""
                     }`}
                   >

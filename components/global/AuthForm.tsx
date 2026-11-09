@@ -92,15 +92,15 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
 
   return (
     <div className="grid flex-1 items-stretch gap-6 py-10 md:py-14 lg:grid-cols-2">
-      <section className="rise flex flex-col justify-between gap-10 rounded-2xl bg-kale p-8 text-on-kale md:p-12">
+      <section className="rise packet flex flex-col justify-between gap-10 p-8 pt-14 md:p-12 md:pt-16">
         <div>
           <h1 className="display max-w-md text-[clamp(2.2rem,4vw,3.4rem)]">{t.heading}</h1>
-          <p className="mt-4 max-w-sm text-on-kale/80">{t.sub}</p>
+          <p className="mt-4 max-w-sm opacity-90">{t.sub}</p>
         </div>
         <ul className="hidden space-y-3 sm:block">
           {perks.map((p) => (
             <li key={p} className="flex items-center gap-3">
-              <span className="grid size-6 place-items-center rounded-full bg-accent text-on-accent">
+              <span className="grid size-6 place-items-center rounded-full bg-surface text-ink">
                 <Check className="size-3.5" strokeWidth={3} />
               </span>
               {p}
@@ -175,7 +175,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
               {mode === "sign-up" && <p id="pw-hint" className="mt-1.5 text-sm text-ink-3">At least 6 characters.</p>}
             </div>
             {error && (
-              <p role="alert" className="rounded-xl bg-danger-soft px-3.5 py-2.5 text-sm text-danger">
+              <p role="alert" className="rounded-xl border-2 border-danger bg-danger-soft px-3.5 py-2.5 text-sm text-danger">
                 {error}
               </p>
             )}

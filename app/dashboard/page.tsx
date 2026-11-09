@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import { adminDb, getServerUser, loadPlanWithDays } from "@/lib/firebase-admin";
 import Link from "next/link";
 import { ArrowRight, ShoppingBasket } from "lucide-react";
-import { NutritionLabel } from "@/components/global/NutritionLabel";
+import { Packet } from "@/components/global/Packet";
+import { mealVariety, variety } from "@/components/global/packet-colors";
 
 interface MealPlan {
   id: string;
@@ -94,7 +95,7 @@ export default async function Dashboard() {
     <div className="py-10 md:py-14">
       <header className="rise flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="display text-[clamp(2rem,4vw,3rem)]">Hello{firstName ? `, ${firstName}` : ""}.</h1>
+          <h1 className="display text-[clamp(2.75rem,6vw,4.5rem)]">Hello{firstName ? `, ${firstName}` : ""}.</h1>
           <p className="mt-2 text-ink-2">
             {hasPlan ? `Your current plan started ${fmtDate(activePlan.start_date)}.` : "No active plan yet. Generate one to fill your week."}
           </p>
@@ -105,12 +106,12 @@ export default async function Dashboard() {
       </header>
 
       {/* Targets strip */}
-      <dl className="rise card mt-8 grid grid-cols-3 divide-line md:grid-cols-4 md:divide-x [&>div]:p-4 sm:[&>div]:p-5">
-        <div className="col-span-3 border-b border-line md:col-span-1 md:border-b-0">
-          <dt className="text-sm text-ink-2">Daily target</dt>
-          <dd className="mt-1 font-mono text-3xl font-semibold tabular-nums">
+      <dl className="rise card mt-8 grid grid-cols-2 divide-line sm:grid-cols-3 md:grid-cols-4 md:divide-x [&>div]:p-4 sm:[&>div]:p-5">
+        <div className="col-span-2 border-b border-line sm:col-span-3 md:col-span-1 md:border-b-0">
+          <dt className="tag text-ink-3">Daily target</dt>
+          <dd className="display mt-1 text-4xl">
             {metrics.daily_calorie_target ? Number(metrics.daily_calorie_target).toLocaleString("en-US") : "-"}
-            <span className="ml-1 text-base font-normal text-ink-3">kcal</span>
+            <span className="tag ml-1.5 text-ink-3">kcal</span>
           </dd>
         </div>
         <Stat label="Weight" value={`${metrics.weight_kg} kg`} />
@@ -133,21 +134,25 @@ export default async function Dashboard() {
             </div>
 
             {hasPlan && todayPlan ? (
-              <ul className="mt-4 divide-y divide-line">
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {mealOrder.map((type) => {
                   const meal = todayMeals.find((m: Meal) => m.meal_type === type);
                   if (!meal) return null;
                   return (
-                    <li key={type} className="grid grid-cols-[5.5rem_1fr_auto] items-baseline gap-3 py-3.5">
-                      <span className="text-sm capitalize text-ink-3">{type}</span>
-                      <span className="min-w-0 font-medium leading-snug">{meal.name}</span>
-                      <span className="font-mono text-sm tabular-nums text-ink-2">{meal.calories} kcal</span>
+                    <li key={type} className="packet flex min-h-36 flex-col justify-between gap-4 p-4 pt-8" style={variety(mealVariety[type])}>
+                      <div>
+                        <span className="tag capitalize opacity-80">{type}</span>
+                        <p className="mt-1 font-bold leading-snug">{meal.name}</p>
+                      </div>
+                      <p className="display text-3xl">
+                        {meal.calories} <span className="tag opacity-80">kcal</span>
+                      </p>
                     </li>
                   );
                 })}
               </ul>
             ) : (
-              <div className="mt-6 rounded-xl bg-sunken p-6 md:p-8">
+              <div className="mt-6 rounded-2xl bg-sunken p-6 md:p-8">
                 <p className="max-w-sm text-ink-2">
                   We&apos;ll turn your targets into seven days of meals, recipes and a grocery list. Takes under a minute.
                 </p>
@@ -173,7 +178,7 @@ export default async function Dashboard() {
                         <span className="text-sm text-ink-3">{fmtDate(plan.created_at)}</span>
                       </span>
                       {plan.status === "active" && (
-                        <span className="shrink-0 rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-on-accent">Active</span>
+                        <span className="tag shrink-0 rounded-full bg-accent px-3 py-1 text-on-accent">Active</span>
                       )}
                     </Link>
                   </li>
@@ -185,7 +190,7 @@ export default async function Dashboard() {
 
         <aside className="flex flex-col gap-6">
           {hasPlan && todayPlan && (
-            <NutritionLabel
+            <Packet
               serving="Day 1"
               calories={todayPlan.total_calories}
               rows={[
@@ -204,7 +209,7 @@ export default async function Dashboard() {
               <Row label="Activity" value={metrics.activity_level} />
             </dl>
             {metrics.allergies && (
-              <div className="mt-4 rounded-xl bg-danger-soft p-3.5 text-sm">
+              <div className="mt-4 rounded-xl border-2 border-danger bg-danger-soft p-3.5 text-sm">
                 <p className="font-semibold text-danger">Allergies</p>
                 <p className="mt-0.5 text-ink">{metrics.allergies}</p>
               </div>
@@ -228,7 +233,7 @@ export default async function Dashboard() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-sm text-ink-2">{label}</dt>
+      <dt className="tag text-ink-3">{label}</dt>
       <dd className="mt-1 text-base font-semibold leading-snug wrap-anywhere sm:text-lg">{value}</dd>
     </div>
   );

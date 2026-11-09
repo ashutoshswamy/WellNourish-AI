@@ -10,7 +10,7 @@ export function LegalDoc({ title, intro, updated, sections, contactPrompt }: Leg
   return (
     <article className="mx-auto w-full max-w-3xl py-12 md:py-20">
       <header className="rise border-b border-line pb-10">
-        <h1 className="display text-[clamp(2.4rem,5vw,3.8rem)]">{title}</h1>
+        <h1 className="display text-[clamp(3rem,7vw,5rem)]">{title}</h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-2">{intro}</p>
         <p className="mt-4 font-mono text-sm text-ink-3">Last updated {updated}</p>
       </header>

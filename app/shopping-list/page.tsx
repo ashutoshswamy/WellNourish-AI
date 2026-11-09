@@ -51,7 +51,7 @@ export default async function ShoppingListPage() {
       <Link href="/plan" className="rise inline-flex items-center gap-1.5 text-sm text-ink-2 hover:text-ink">
         <ArrowLeft className="size-4" /> Weekly plan
       </Link>
-      <h1 className="rise display mt-4 text-[clamp(2rem,4vw,3rem)]">Grocery list</h1>
+      <h1 className="rise display mt-4 text-[clamp(2.75rem,6vw,4.5rem)]">Grocery list</h1>
       <p className="rise mt-2 text-ink-2">Everything for this week&apos;s meals. Tick items off as you shop.</p>
 
       <ShoppingListClient initialItems={items} />

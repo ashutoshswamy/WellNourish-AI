@@ -51,7 +51,7 @@ export default async function HistoryPage({
     <div className="mx-auto w-full max-w-3xl py-10 md:py-14">
       <header className="rise flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="display text-[clamp(2rem,4vw,3rem)]">Plan history</h1>
+          <h1 className="display text-[clamp(2.75rem,6vw,4.5rem)]">Plan history</h1>
           <p className="mt-2 text-ink-2">
             {plans.length ? `${plans.length} plan${plans.length === 1 ? "" : "s"} so far.` : "Every plan you generate is kept here."}
           </p>
@@ -78,7 +78,7 @@ export default async function HistoryPage({
                   </span>
                 </span>
                 {plan.status === "active" && (
-                  <span className="shrink-0 rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-on-accent">Active</span>
+                  <span className="tag shrink-0 rounded-full bg-accent px-3 py-1 text-on-accent">Active</span>
                 )}
                 <ArrowRight className="size-4 shrink-0 text-ink-3 transition-transform group-hover:translate-x-0.5 group-hover:text-ink" />
               </Link>
@@ -87,7 +87,7 @@ export default async function HistoryPage({
           ))}
         </ul>
       ) : (
-        <div className="rise mt-8 rounded-2xl border border-dashed border-line px-6 py-16 text-center">
+        <div className="rise mt-8 rounded-2xl border-2 border-dashed border-line px-6 py-16 text-center">
           <h2 className="text-lg font-semibold">No plans yet</h2>
           <p className="mx-auto mt-2 max-w-xs text-ink-2">Generate your first plan from the dashboard and it will show up here.</p>
           <Link href="/dashboard" className="btn btn-primary mt-6">

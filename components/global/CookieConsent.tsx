@@ -55,7 +55,7 @@ export function CookieConsent() {
           aria-label="Cookie consent"
           className="fixed inset-x-4 bottom-4 z-50 rounded-2xl border border-line bg-surface p-5 shadow-lg sm:inset-x-auto sm:right-6 sm:max-w-md"
         >
-          <h2 className="font-semibold">Cookies, your way</h2>
+          <p className="font-semibold">Cookies, your way</p>
           <p className="mt-2 text-sm leading-relaxed text-ink-2">
             We use essential cookies to keep you signed in. Optional Google Analytics cookies help us understand site usage. Read our <Link href="/cookies" className="link">Cookie Policy</Link>.
           </p>

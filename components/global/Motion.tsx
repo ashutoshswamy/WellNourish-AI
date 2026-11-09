@@ -14,8 +14,6 @@ ScrollTrigger.config({ ignoreMobileResize: true });
   Site-wide motion, re-run on every route:
   .rise    page entrance, staggered in DOM order (hidden by CSS until this runs)
   .reveal  fades up once when scrolled into view
-  .hl      highlighter swipe across a word
-  [data-print] nutrition-label rules draw in like a printed panel
   Everything sits inside matchMedia, so reduced-motion users get static content.
   A MutationObserver catches content that streams in after loading.tsx, which
   arrives after the pathname has already changed.
@@ -34,27 +32,12 @@ export function Motion() {
         const animate = () => ctx.add(() => {
           const rise = fresh(".rise");
           const reveal = fresh(".reveal");
-          const hl = fresh(".hl");
-          const rules = fresh("[data-print] .rule-xl, [data-print] .rule-md, [data-print] .rule-hair");
-          const all = [...rise, ...reveal, ...hl, ...rules];
+          const all = [...rise, ...reveal];
           if (!all.length) return;
           all.forEach((el) => seen.add(el));
 
           const tl = gsap.timeline();
           if (rise.length) tl.fromTo(rise, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, stagger: 0.08 });
-          if (hl.length) {
-            tl.fromTo(hl, { "--hl": "0%" }, { "--hl": "100%", duration: 0.6, ease: "power2.inOut" }, 0.35);
-          }
-          if (rules.length) {
-            tl.from(rules, {
-              scaleX: 0,
-              transformOrigin: "left center",
-              duration: 0.6,
-              stagger: 0.05,
-              ease: "power2.out",
-            }, 0.3);
-          }
-
           if (reveal.length) {
             gsap.set(reveal, { autoAlpha: 0, y: 32 });
             ScrollTrigger.batch(reveal, {

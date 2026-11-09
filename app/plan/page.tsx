@@ -49,7 +49,7 @@ export default async function PlanPage({
       </Link>
       <header className="rise mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="display text-[clamp(2rem,4vw,3rem)]">Your weekly menu</h1>
+          <h1 className="display text-[clamp(2.75rem,6vw,4.5rem)]">Your weekly menu</h1>
           <p className="mt-2 text-ink-2">
             Generated{" "}
             {new Date(activePlan.created_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}

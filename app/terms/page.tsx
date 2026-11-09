@@ -4,6 +4,7 @@ import { LegalDoc } from "@/components/global/LegalDoc";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: "Read the terms and conditions for using WellNourish AI's personalized nutrition and meal planning services.",
+  openGraph: { type: "website", siteName: "WellNourish AI", url: "https://wellnourishai.ashutoshswamy.in/terms", title: "Terms of Service | WellNourish AI", description: "Read the terms and conditions for using WellNourish AI's personalized nutrition and meal planning services.", images: ["/og-image.jpg"] },
   alternates: {
     canonical: "https://wellnourishai.ashutoshswamy.in/terms",
   },

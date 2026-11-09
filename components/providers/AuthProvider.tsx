@@ -1,18 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  onIdTokenChanged,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut as firebaseSignOut,
-  updateProfile,
-  type User,
-} from "firebase/auth";
+import type { User } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase-client";
 import { SESSION_MARKER } from "@/lib/session-cookie";
 
 interface AuthContextValue {
@@ -31,6 +21,9 @@ interface LegalAcceptance {
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+
+// Firebase's client SDK is large and only needed once auth is touched, so it stays out of the initial bundle.
+const loadAuth = () => Promise.all([import("firebase/auth"), import("@/lib/firebase-client")]);
 
 const hasSession = () => document.cookie.split("; ").some((c) => c.startsWith(`${SESSION_MARKER}=`));
 
@@ -57,16 +50,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onIdTokenChanged(auth, async (nextUser) => {
-      // Only hit the server when the cookie and the Firebase user disagree,
-      // not on every page load and hourly token refresh.
-      if (!authAction.current && !!nextUser !== hasSession()) {
-        await syncSessionCookie(nextUser).catch(() => {});
-      }
-      setUser(nextUser);
-      setIsLoaded(true);
+    let cancelled = false;
+    let unsubscribe: (() => void) | undefined;
+    loadAuth().then(([{ onIdTokenChanged }, { auth }]) => {
+      if (cancelled) return;
+      unsubscribe = onIdTokenChanged(auth, async (nextUser) => {
+        // Only hit the server when the cookie and the Firebase user disagree,
+        // not on every page load and hourly token refresh.
+        if (!authAction.current && !!nextUser !== hasSession()) {
+          await syncSessionCookie(nextUser).catch(() => {});
+        }
+        setUser(nextUser);
+        setIsLoaded(true);
+      });
     });
-    return unsubscribe;
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
   }, []);
 
   const startSession = async (getUser: () => Promise<User>, legalAcceptance?: LegalAcceptance) => {
@@ -77,7 +78,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await syncSessionCookie(user, true, legalAcceptance);
       } catch (err) {
         // No server session: drop the Firebase one too, or the form would bounce to /dashboard and back
-        await firebaseSignOut(auth);
+        const [{ signOut }, { auth }] = await loadAuth();
+        await signOut(auth);
         throw err;
       }
       // Cookie is server-set; hard navigation avoids stale prefetched login redirects.
@@ -88,20 +90,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signIn = (email: string, password: string) =>
-    startSession(async () => (await signInWithEmailAndPassword(auth, email, password)).user);
+    startSession(async () => {
+      const [{ signInWithEmailAndPassword }, { auth }] = await loadAuth();
+      return (await signInWithEmailAndPassword(auth, email, password)).user;
+    });
 
   const signUp = (email: string, password: string, fullName: string, legalAcceptance: LegalAcceptance) =>
     startSession(async () => {
+      const [{ createUserWithEmailAndPassword, updateProfile }, { auth }] = await loadAuth();
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       if (fullName) await updateProfile(user, { displayName: fullName });
       return user;
     }, legalAcceptance);
 
   const signInWithGoogle = (legalAcceptance?: LegalAcceptance) =>
-    startSession(async () => (await signInWithPopup(auth, new GoogleAuthProvider())).user, legalAcceptance);
+    startSession(async () => {
+      const [{ signInWithPopup, GoogleAuthProvider }, { auth }] = await loadAuth();
+      return (await signInWithPopup(auth, new GoogleAuthProvider())).user;
+    }, legalAcceptance);
 
   const signOutUser = async () => {
-    await firebaseSignOut(auth);
+    const [{ signOut }, { auth }] = await loadAuth();
+    await signOut(auth);
     router.push("/");
     router.refresh();
   };
