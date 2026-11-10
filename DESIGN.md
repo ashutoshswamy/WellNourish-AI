@@ -236,7 +236,7 @@ A 28 by 36px tomato mini packet with a ridge and one cream seed, beside the word
 - **Do** keep the 14px ridge on every packet front and use the pill / 18px / 12px radius ladder.
 - **Do** show figures in Bricolage 800 with tabular numerals.
 - **Do** keep the focus ring: 3px aubergine outline with a 3px offset.
-- **Do** honour reduced motion; GSAP reveals are skipped and content stays visible without JS.
+- **Do** honour reduced motion; motion is skipped and content stays visible.
 
 ### Don't:
 - **Don't** introduce a third font family or a monospace face.

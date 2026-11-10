@@ -438,17 +438,6 @@ p {
   }
 }
 
-/* GSAP (components/global/Motion.tsx) reveals these. Only hidden when JS is running
-   (the head script adds .js), so crawlers and no-JS clients see everything. */
-@media (prefers-reduced-motion: no-preference) {
-  .js .rise,
-  .js .reveal,
-  .js [data-slap],
-  .js [data-split] .w {
-    visibility: hidden;
-  }
-}
-
 /* Dropdown menus ease in from their anchor corner */
 @media (prefers-reduced-motion: no-preference) {
   .menu-in {

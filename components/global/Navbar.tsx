@@ -1,8 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogOut, Menu, X } from "lucide-react";
@@ -22,16 +20,6 @@ export function Navbar() {
   const { isSignedIn, signOutUser } = useUser();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      if (!open || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      gsap.fromTo(menuRef.current, { autoAlpha: 0, y: -8 }, { autoAlpha: 1, y: 0, duration: 0.3 });
-      gsap.fromTo("a, button", { autoAlpha: 0, y: -6 }, { autoAlpha: 1, y: 0, duration: 0.3, stagger: 0.03, delay: 0.05 });
-    },
-    { dependencies: [open], scope: menuRef },
-  );
 
   // Close the mobile menu on navigation
   const [lastPath, setLastPath] = useState(pathname);
@@ -89,7 +77,7 @@ export function Navbar() {
       </nav>
 
       {open && (
-        <div ref={menuRef} className="border-t border-line bg-paper px-4 pb-5 pt-3 lg:hidden">
+        <div className="menu-in border-t border-line bg-paper px-4 pb-5 pt-3 lg:hidden">
           <div className="flex flex-col gap-1" onClick={() => setOpen(false)}>
             {isSignedIn ? (
               <>

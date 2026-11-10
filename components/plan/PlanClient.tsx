@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { useSwap } from "@/components/global/useSwap";
+import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { dayVarieties, mealVariety, variety } from "@/components/global/packet-colors";
 
@@ -40,8 +39,6 @@ const mealOrder = [
 
 export function PlanClient({ plan }: { plan: Plan }) {
   const [activeDayIdx, setActiveDayIdx] = useState(0);
-  const dayRef = useRef<HTMLDivElement>(null);
-  useSwap(dayRef, activeDayIdx, "aside, details");
 
   const days = [...(plan?.plan_days || [])].sort((a, b) => a.day_number - b.day_number);
   const currentDay = days[activeDayIdx];
@@ -70,7 +67,7 @@ export function PlanClient({ plan }: { plan: Plan }) {
         </div>
       </div>
 
-      <div ref={dayRef} className="mt-8 grid gap-8 lg:grid-cols-[16rem_1fr] lg:gap-12">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[16rem_1fr] lg:gap-12">
         {/* Day summary */}
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <p className="display text-7xl">Day {currentDay.day_number}</p>

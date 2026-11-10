@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { Navbar } from "@/components/global/Navbar";
 import { Footer } from "@/components/global/Footer";
-import { Motion } from "@/components/global/Motion";
 import { CookieConsent } from "@/components/global/CookieConsent";
 import { Toaster } from "sileo";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
@@ -97,7 +96,7 @@ export default function RootLayout({
           {/* Apply a pinned theme before first paint so there is no flash */}
           <script
             dangerouslySetInnerHTML={{
-              __html: `document.documentElement.classList.add("js");try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`,
+              __html: `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`,
             }}
           />
         </head>
@@ -107,7 +106,6 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-          <Motion />
           <CookieConsent />
           <Toaster position="top-center" options={{ fill: "#1c1427" }} />
         </body>

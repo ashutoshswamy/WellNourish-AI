@@ -1,13 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Egg, Fish, Milk, Nut, Shell, Sprout, Squirrel, Bean, Wheat, type LucideIcon } from "lucide-react";
 import { useUser } from "@/components/providers/AuthProvider";
 import { Packet } from "@/components/global/Packet";
 import { variety, mealVariety, type Variety } from "@/components/global/packet-colors";
-import { useSwap } from "@/components/global/useSwap";
-import { useLandingMotion } from "@/components/global/useLandingMotion";
 
 const goals = [
   { label: "Fat loss", cal: 1800, protein: "160 g", carbs: "160 g", fat: "60 g" },
@@ -101,20 +99,16 @@ const headline = ["Your", "week", "of", "meals,", "in", "one", "packet."];
 export function HomeClient() {
   const { isSignedIn } = useUser();
   const [goalIdx, setGoalIdx] = useState(0);
-  const labelRef = useRef<HTMLDivElement>(null);
-  const rootRef = useRef<HTMLDivElement>(null);
-  useSwap(labelRef, goalIdx);
-  useLandingMotion(rootRef);
   const goal = goals[goalIdx];
   const cta = isSignedIn ? { href: "/dashboard", label: "Open dashboard" } : { href: "/sign-up", label: "Build my plan" };
 
   return (
-    <div ref={rootRef} className="flex flex-col gap-24 pb-8 pt-6 md:gap-32 md:pt-10">
+    <div className="flex flex-col gap-24 pb-8 pt-6 md:gap-32 md:pt-10">
       {/* Hero: the page opens as one enormous packet front */}
       <section className="packet px-5 pb-10 pt-14 sm:px-10 sm:pb-14 sm:pt-16 lg:px-14" style={variety("tomato")}>
         <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:items-end">
           <div>
-            <h1 data-split aria-label="Your week of meals, in one packet." className="display text-[clamp(3rem,7.4vw,6.5rem)]">
+            <h1 aria-label="Your week of meals, in one packet." className="display text-[clamp(3rem,7.4vw,6.5rem)]">
               {headline.map((w) => (
                 <span key={w} aria-hidden className="mr-[0.2em] inline-block overflow-hidden pb-[0.1em] align-bottom">
                   <span className="w inline-block">{w}</span>
@@ -135,7 +129,7 @@ export function HomeClient() {
             </div>
           </div>
 
-          <div ref={labelRef} data-slap className="packet-back p-4 sm:p-5">
+          <div className="packet-back p-4 sm:p-5">
             <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label="Choose a goal">
               {goals.map((g, i) => (
                 <button key={g.label} className="choice" aria-pressed={i === goalIdx} onClick={() => setGoalIdx(i)}>
@@ -207,7 +201,7 @@ export function HomeClient() {
             <h2 className="display text-[clamp(2.25rem,4vw,3.5rem)]">Your grocery list writes itself.</h2>
             <p className="mt-3 max-w-sm">Every ingredient across the week, combined into one list you can tick off in the store.</p>
           </div>
-          <div data-receipt className="receipt mx-auto w-full max-w-xs px-6 py-7 text-sm text-ink shadow-[0_24px_40px_-24px_rgb(23_19_31/0.6)]">
+          <div className="receipt mx-auto w-full max-w-xs px-6 py-7 text-sm text-ink shadow-[0_24px_40px_-24px_rgb(23_19_31/0.6)]">
             <p className="tag text-center text-ink-3">Week of groceries</p>
             <ul className="mt-4 space-y-2 font-medium">
               {groceries.map((g, i) => (
@@ -240,13 +234,12 @@ export function HomeClient() {
 
       {/* Closing: a night-coloured packet */}
       <section
-        data-closer
         className="packet grid gap-10 p-6 pt-14 sm:p-10 sm:pt-16 lg:grid-cols-[1.3fr_1fr] lg:p-14 lg:pt-16"
         style={{ "--pk": "var(--night)", "--pk-fg": "var(--on-night)" } as React.CSSProperties}
       >
         <div className="flex flex-col justify-between gap-10">
-          <h2 data-closer-item className="display text-[clamp(3rem,6vw,5.5rem)]">Stop guessing. Start eating to plan.</h2>
-          <div data-closer-item>
+          <h2 className="display text-[clamp(3rem,6vw,5.5rem)]">Stop guessing. Start eating to plan.</h2>
+          <div>
             <p className="mb-6 max-w-md text-lg opacity-90">Your first plan is free, no credit card needed.</p>
             <Link href={cta.href} className="btn btn-primary group h-14 px-7 text-base">
               {cta.label}
@@ -256,7 +249,7 @@ export function HomeClient() {
         </div>
         <dl className="flex flex-col justify-center divide-y-2 divide-white/15 self-center">
           {promises.map((p) => (
-            <div key={p.title} data-closer-item className="py-5 first:pt-0 last:pb-0">
+            <div key={p.title} className="py-5 first:pt-0 last:pb-0">
               <dt className="display text-2xl">{p.title}</dt>
               <dd className="mt-1 opacity-80">{p.desc}</dd>
             </div>
@@ -270,8 +263,6 @@ export function HomeClient() {
 function SampleDay() {
   const [idx, setIdx] = useState(1);
   const [avoid, setAvoid] = useState<Set<Allergen>>(new Set());
-  const panelRef = useRef<HTMLDivElement>(null);
-  useSwap(panelRef, `${idx}:${[...avoid].join()}`);
   const clashOf = (m: Meal) => m.contains.filter((a) => avoid.has(a));
   // What the planner would actually serve: the sample meal, or its safe alternative
   const day = sampleDay.map((m) => {
@@ -367,7 +358,7 @@ function SampleDay() {
           })}
         </div>
 
-        <div ref={panelRef} id="sample-meal" role="tabpanel" aria-live="polite" className="packet-back">
+        <div id="sample-meal" role="tabpanel" aria-live="polite" className="packet-back">
           <div className="pk-band" style={variety(mealVariety[meal.type.toLowerCase()])}>
             <span>{meal.type}</span>
             <span className="tick">{meal.time}</span>
